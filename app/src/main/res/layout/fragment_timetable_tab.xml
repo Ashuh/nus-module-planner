@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.ashuh.nusmoduleplanner.ui.timetable.TimetableView
+        android:id="@+id/revolving_weekview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:dayBackgroundColor="#05000000"
+        app:eventTextColor="@android:color/white"
+        app:headerColumnPadding="8dp"
+        app:headerColumnTextColor="?android:attr/textColorPrimary"
+        app:headerRowBackgroundColor="?android:attr/colorBackground"
+        app:headerRowPadding="12dp"
+        app:hourHeight="60dp"
+        app:hourSeparatorColor="#00FFFFFF"
+        app:layout_constraintBottom_toTopOf="@id/timetable_recycler_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:noOfVisibleDays="5"
+        app:showHeaderBottomLine="true"
+        app:todayBackgroundColor="#1848adff"
+        tools:weekendHeaderTextColor="#FFFFFF" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/timetable_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/revolving_weekview" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">NUSModulePlanner</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_timetable">Timetable</string>
+    <string name="menu_modules">Modules</string>
+
+    <string name="search_hint">Search for a moduleDetail code</string>
+
+    <string name="module_card_title">%1$s %2$s</string>
+    <string name="module_card_description">%1$s • %2$.1f MCs</string>
+    <string name="add_button">Add to timetable</string>
+
+    <string name="preclusion_heading">Preclusion</string>
+    <string name="corequisite_heading">Corequisite</string>
+    <string name="prerequisite_heading">Prerequisite</string>
+
+    <string name="sem1_exam_heading">Semester 1 Exam</string>
+    <string name="sem2_exam_heading">Semester 2 Exam</string>
+    <string name="sem3_exam_heading">Special Term I Exam</string>
+    <string name="sem4_exam_heading">Special Term II Exam</string>
+</resources>

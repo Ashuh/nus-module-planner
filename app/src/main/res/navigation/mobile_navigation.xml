@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/nav_timetable">
+
+    <fragment
+        android:id="@+id/nav_timetable"
+        android:name="com.ashuh.nusmoduleplanner.ui.timetable.TimetableFragment"
+        android:label="@string/menu_timetable"
+        tools:layout="@layout/fragment_timetable" />
+
+    <fragment
+        android:id="@+id/nav_modules"
+        android:name="com.ashuh.nusmoduleplanner.ui.modules.ModuleListFragment"
+        android:label="@string/menu_modules"
+        tools:layout="@layout/fragment_modules" >
+        <action
+            android:id="@+id/action_nav_modules_to_nav_module_detail"
+            app:destination="@id/nav_module_detail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_module_detail"
+        android:name="com.ashuh.nusmoduleplanner.ui.moduledetail.ModuleDetailFragment"
+        tools:layout="@layout/fragment_module_detail">
+        <argument
+            android:name="moduleCode"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_nav_module_detail_self"
+            app:destination="@id/nav_module_detail" />
+    </fragment>
+</navigation>
