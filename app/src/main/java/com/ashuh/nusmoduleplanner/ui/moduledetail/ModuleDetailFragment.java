@@ -20,11 +20,14 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashuh.nusmoduleplanner.MainActivity;
 import com.ashuh.nusmoduleplanner.R;
 import com.ashuh.nusmoduleplanner.data.AcademicYear;
 import com.ashuh.nusmoduleplanner.data.ModulesRepository;
+import com.ashuh.nusmoduleplanner.data.DisqusRepository;
 import com.ashuh.nusmoduleplanner.data.module.SemesterDetail;
 import com.ashuh.nusmoduleplanner.data.module.SemesterType;
 import com.ashuh.nusmoduleplanner.timetable.AssignedModule;
@@ -48,7 +51,6 @@ public class ModuleDetailFragment extends Fragment {
         viewModel = new ViewModelProvider(this,
                 new ModuleDetailViewModelFactory(AcademicYear.getCurrent(), moduleCode))
                 .get(ModuleDetailViewModel.class);
-
         observeViewModel(root);
         return root;
     }
@@ -120,11 +122,18 @@ public class ModuleDetailFragment extends Fragment {
         final TextView sem4ExamHeadingTextView = root.findViewById(R.id.module_exam_4_heading);
 
         final Button button = root.findViewById(R.id.button);
+        final RecyclerView recyclerView = root.findViewById(R.id.disqus_posts);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        DisqusPostAdapter adapter = new DisqusPostAdapter();
+        recyclerView.setAdapter(adapter);
 
         viewModel.getModuleObservable().observe(getViewLifecycleOwner(), m -> {
             if (m == null) {
                 return;
             }
+
+            DisqusRepository.getPosts(m.getModuleCode()).observe(getViewLifecycleOwner(),
+                    postList -> adapter.setPosts(postList.getPosts()));
 
             codeTextView.setText(m.getModuleCode());
             titleTextView.setText(m.getTitle());
