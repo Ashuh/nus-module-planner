@@ -24,8 +24,17 @@ public class DisqusRepository {
     private static final String FORUM = "nusmods-prod";
     private static final String TAG = "DisqusRepository";
 
+    private static DisqusRepository instance;
+
+    public static DisqusRepository getInstance() {
+        if (instance == null) {
+            instance = new DisqusRepository();
+        }
+        return instance;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static LiveData<ThreadDetails> getThreadDetails(String moduleCode) {
+    public LiveData<ThreadDetails> getThreadDetails(String moduleCode) {
         MutableLiveData<ThreadDetails> threadDetailsLiveData = new MutableLiveData<>();
         DisqusApiInterface api = DisqusApiInterfaceBuilder.getApiInterface();
         Call<ThreadDetails> call = api.getThreadDetails(KEY, FORUM, moduleCode);
@@ -46,7 +55,7 @@ public class DisqusRepository {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static LiveData<PostList> getPosts(String moduleCode) {
+    public LiveData<PostList> getPosts(String moduleCode) {
         MutableLiveData<PostList> postListLiveData = new MutableLiveData<>();
         getThreadDetails(moduleCode).observeForever(threadDetails -> {
             DisqusApiInterface api = DisqusApiInterfaceBuilder.getApiInterface();

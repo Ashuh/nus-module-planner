@@ -132,8 +132,9 @@ public class ModuleDetailFragment extends Fragment {
                 return;
             }
 
-            DisqusRepository.getPosts(m.getModuleCode()).observe(getViewLifecycleOwner(),
-                    postList -> adapter.setPosts(postList.getPosts()));
+            DisqusRepository.getInstance().getPosts(m.getModuleCode())
+                    .observe(getViewLifecycleOwner(),
+                            postList -> adapter.setPosts(postList.getPosts()));
 
             codeTextView.setText(m.getModuleCode());
             titleTextView.setText(m.getTitle());
