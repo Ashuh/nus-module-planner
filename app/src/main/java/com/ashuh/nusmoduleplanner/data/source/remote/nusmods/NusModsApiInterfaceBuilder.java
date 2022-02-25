@@ -12,14 +12,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class NusModsApiInterfaceBuilder {
     private static final String BASE_URL = "https://api.nusmods.com/v2/";
 
-    public static Retrofit getRetrofitInstance(Type type, Object typeAdapter) {
+    public static Retrofit getApiInterface(Type type, Object typeAdapter) {
         return new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(createGsonConverter(type, typeAdapter))
                 .build();
     }
 
-    public static Retrofit getRetrofitInstance() {
+    public static Retrofit getApiInterface() {
         return new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())

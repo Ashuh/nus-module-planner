@@ -18,11 +18,11 @@ import retrofit2.Response;
 public class ModuleDataSource {
     private static final NusModsApiInterface MODULE_API =
             NusModsApiInterfaceBuilder
-                    .getRetrofitInstance(ModuleDetail.class, new ModuleDeserializer())
+                    .getApiInterface(ModuleDetail.class, new ModuleDeserializer())
                     .create(NusModsApiInterface.class);
 
     private static final NusModsApiInterface MODULE_INFORMATION_API =
-            NusModsApiInterfaceBuilder.getRetrofitInstance().create(NusModsApiInterface.class);
+            NusModsApiInterfaceBuilder.getApiInterface().create(NusModsApiInterface.class);
 
     public void getModules(AcademicYear acadYear,
                            ResponseListener<List<ModuleCondensed>> listener) {
