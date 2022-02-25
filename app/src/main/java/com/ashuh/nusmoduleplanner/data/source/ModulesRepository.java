@@ -3,28 +3,31 @@ package com.ashuh.nusmoduleplanner.data.source;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.ashuh.nusmoduleplanner.data.model.nusmods.ModuleCondensed;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.ModuleDetail;
+import com.ashuh.nusmoduleplanner.data.source.remote.nusmods.ModuleDeserializer;
+import com.ashuh.nusmoduleplanner.data.source.remote.nusmods.NusModsApiInterface;
+import com.ashuh.nusmoduleplanner.data.source.remote.nusmods.NusModsApiInterfaceBuilder;
 import com.ashuh.nusmoduleplanner.util.AcademicYear;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ModulesRepository {
-    private static ModulesRepository instance;
-    private final MutableLiveData<List<ModuleCondensed>> moduleInfoRequests =
-            new MutableLiveData<>();
-    private final Map<String, MutableLiveData<ModuleDetail>> moduleDetailRequests = new HashMap<>();
-    private final ModuleDataSource source;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-    private ModulesRepository() {
-        source = new ModuleDataSource();
-    }
+public class ModulesRepository {
+    private static final String TAG = "ModulesRepository";
+
+    private static ModulesRepository instance;
+    private final MutableLiveData<List<ModuleCondensed>> moduleInfoCache = new MutableLiveData<>();
+    private final Map<String, MutableLiveData<ModuleDetail>> moduleDetailCache = new HashMap<>();
 
     public static ModulesRepository getInstance() {
         if (instance == null) {
@@ -34,53 +37,58 @@ public class ModulesRepository {
     }
 
     public LiveData<List<ModuleCondensed>> getModules(AcademicYear acadYear) {
-        if (moduleInfoRequests.getValue() == null) {
-
-            source.getModules(acadYear,
-                    new ModuleDataSource.ResponseListener<List<ModuleCondensed>>() {
-                        @Override
-                        public void onError(String message) {
-                            Log.e("getModules", message);
-                        }
-
-                        @Override
-                        public void onResponse(List<ModuleCondensed> response) {
-                            List<ModuleCondensed> filtered = new ArrayList<>();
-
-                            for (int i = 0; i < response.size(); i++) {
-                                if (!response.get(i).getCondensedSemesters().isEmpty()) {
-                                    filtered.add(response.get(i));
-                                }
-                            }
-                            moduleInfoRequests.setValue(filtered);
-                        }
-                    });
+        if (moduleInfoCache.getValue() != null) {
+            return moduleInfoCache;
         }
 
-        return moduleInfoRequests;
+        MutableLiveData<List<ModuleCondensed>> modules = new MutableLiveData<>();
+        NusModsApiInterface api =
+                NusModsApiInterfaceBuilder.getApiInterface().create(NusModsApiInterface.class);
+
+        Call<List<ModuleCondensed>> call = api.getModuleInfo(acadYear.toString());
+        call.enqueue(new Callback<List<ModuleCondensed>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<ModuleCondensed>> call,
+                                   @NonNull Response<List<ModuleCondensed>> response) {
+                modules.setValue(response.body());
+                moduleInfoCache.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<ModuleCondensed>> call, @NonNull Throwable t) {
+                Log.d(TAG, "onFailure: " + t);
+            }
+        });
+
+        return modules;
     }
 
     public LiveData<ModuleDetail> getModuleDetail(AcademicYear acadYear, String moduleCode) {
-        if (moduleDetailRequests.containsKey(moduleCode)) {
-            return moduleDetailRequests.get(moduleCode);
+        if (moduleDetailCache.containsKey(moduleCode)) {
+            return moduleDetailCache.get(moduleCode);
         }
 
-        final MutableLiveData<ModuleDetail> data = new MutableLiveData<>();
-        source.getModule(acadYear, moduleCode,
-                new ModuleDataSource.ResponseListener<ModuleDetail>() {
-                    @Override
-                    public void onError(String message) {
-                        Log.e("getModule", message);
-                    }
+        MutableLiveData<ModuleDetail> module = new MutableLiveData<>();
+        NusModsApiInterface api = NusModsApiInterfaceBuilder
+                .getApiInterface(ModuleDetail.class, new ModuleDeserializer())
+                .create(NusModsApiInterface.class);
 
-                    @Override
-                    public void onResponse(ModuleDetail response) {
-                        data.setValue(response);
-                        moduleDetailRequests.put(moduleCode, data);
-                    }
-                });
+        Call<ModuleDetail> call = api.getModule(acadYear.toString(), moduleCode);
+        call.enqueue(new Callback<ModuleDetail>() {
+            @Override
+            public void onResponse(@NonNull Call<ModuleDetail> call,
+                                   @NonNull Response<ModuleDetail> response) {
+                module.setValue(response.body());
+                moduleDetailCache.put(moduleCode, module);
+            }
 
-        return data;
+            @Override
+            public void onFailure(@NonNull Call<ModuleDetail> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t);
+            }
+        });
+
+        return module;
     }
 
     public boolean hasModule(AcademicYear acadYear, String moduleCode) {
