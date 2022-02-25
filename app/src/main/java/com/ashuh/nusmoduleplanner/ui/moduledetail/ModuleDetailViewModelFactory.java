@@ -3,7 +3,7 @@ package com.ashuh.nusmoduleplanner.ui.moduledetail;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.ashuh.nusmoduleplanner.data.AcademicYear;
+import com.ashuh.nusmoduleplanner.util.AcademicYear;
 
 import org.jetbrains.annotations.NotNull;
 

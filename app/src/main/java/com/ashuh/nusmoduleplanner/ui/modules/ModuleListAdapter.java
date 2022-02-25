@@ -13,7 +13,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashuh.nusmoduleplanner.R;
-import com.ashuh.nusmoduleplanner.data.module.ModuleCondensed;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.ModuleCondensed;
 
 import java.util.ArrayList;
 import java.util.List;

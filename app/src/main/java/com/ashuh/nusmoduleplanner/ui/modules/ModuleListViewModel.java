@@ -3,9 +3,9 @@ package com.ashuh.nusmoduleplanner.ui.modules;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.ashuh.nusmoduleplanner.data.AcademicYear;
-import com.ashuh.nusmoduleplanner.data.ModulesRepository;
-import com.ashuh.nusmoduleplanner.data.module.ModuleCondensed;
+import com.ashuh.nusmoduleplanner.util.AcademicYear;
+import com.ashuh.nusmoduleplanner.data.source.ModulesRepository;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.ModuleCondensed;
 
 import java.util.List;
 

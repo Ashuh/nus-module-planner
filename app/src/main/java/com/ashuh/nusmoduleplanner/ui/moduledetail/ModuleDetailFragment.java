@@ -25,13 +25,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashuh.nusmoduleplanner.MainActivity;
 import com.ashuh.nusmoduleplanner.R;
-import com.ashuh.nusmoduleplanner.data.AcademicYear;
-import com.ashuh.nusmoduleplanner.data.ModulesRepository;
-import com.ashuh.nusmoduleplanner.data.DisqusRepository;
-import com.ashuh.nusmoduleplanner.data.module.SemesterDetail;
-import com.ashuh.nusmoduleplanner.data.module.SemesterType;
-import com.ashuh.nusmoduleplanner.timetable.AssignedModule;
-import com.ashuh.nusmoduleplanner.timetable.TimetableDataSource;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.SemesterDetail;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.SemesterType;
+import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
+import com.ashuh.nusmoduleplanner.data.source.DisqusRepository;
+import com.ashuh.nusmoduleplanner.data.source.ModulesRepository;
+import com.ashuh.nusmoduleplanner.data.source.TimetableDataSource;
+import com.ashuh.nusmoduleplanner.util.AcademicYear;
 
 import java.util.List;
 import java.util.StringJoiner;

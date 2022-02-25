@@ -3,9 +3,9 @@ package com.ashuh.nusmoduleplanner.ui.moduledetail;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.ashuh.nusmoduleplanner.data.AcademicYear;
-import com.ashuh.nusmoduleplanner.data.ModulesRepository;
-import com.ashuh.nusmoduleplanner.data.module.ModuleDetail;
+import com.ashuh.nusmoduleplanner.util.AcademicYear;
+import com.ashuh.nusmoduleplanner.data.source.ModulesRepository;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.ModuleDetail;
 
 public class ModuleDetailViewModel extends ViewModel {
     private final LiveData<ModuleDetail> module;
