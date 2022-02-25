@@ -11,7 +11,7 @@ public class ModuleDetailViewModel extends ViewModel {
     private final LiveData<ModuleDetail> module;
 
     public ModuleDetailViewModel(AcademicYear acadYear, String moduleCode) {
-        module = ModulesRepository.getInstance().getModule(acadYear, moduleCode);
+        module = ModulesRepository.getInstance().getModuleDetail(acadYear, moduleCode);
     }
 
     public LiveData<ModuleDetail> getModuleObservable() {

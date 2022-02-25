@@ -60,7 +60,7 @@ public class ModulesRepository {
         return moduleInfoRequests;
     }
 
-    public LiveData<ModuleDetail> getModule(AcademicYear acadYear, String moduleCode) {
+    public LiveData<ModuleDetail> getModuleDetail(AcademicYear acadYear, String moduleCode) {
         if (moduleDetailRequests.containsKey(moduleCode)) {
             return moduleDetailRequests.get(moduleCode);
         }
