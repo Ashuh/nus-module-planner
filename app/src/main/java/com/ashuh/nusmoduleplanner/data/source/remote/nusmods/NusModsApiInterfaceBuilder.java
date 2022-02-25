@@ -9,7 +9,7 @@ import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class NusModsServiceGenerator {
+public class NusModsApiInterfaceBuilder {
     private static final String BASE_URL = "https://api.nusmods.com/v2/";
 
     public static Retrofit getRetrofitInstance(Type type, Object typeAdapter) {

@@ -9,7 +9,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
-public interface NusModsService {
+public interface NusModsApiInterface {
     @GET("{acadYear}/moduleInfo.json")
     Call<List<ModuleCondensed>> getModuleInfo(@Path("acadYear") String acadYear);
 

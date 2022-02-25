@@ -2,8 +2,8 @@ package com.ashuh.nusmoduleplanner.data.source;
 
 import androidx.annotation.NonNull;
 
-import com.ashuh.nusmoduleplanner.data.source.remote.nusmods.NusModsService;
-import com.ashuh.nusmoduleplanner.data.source.remote.nusmods.NusModsServiceGenerator;
+import com.ashuh.nusmoduleplanner.data.source.remote.nusmods.NusModsApiInterface;
+import com.ashuh.nusmoduleplanner.data.source.remote.nusmods.NusModsApiInterfaceBuilder;
 import com.ashuh.nusmoduleplanner.data.source.remote.nusmods.ModuleDeserializer;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.ModuleCondensed;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.ModuleDetail;
@@ -16,13 +16,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ModuleDataSource {
-    private static final NusModsService MODULE_API =
-            NusModsServiceGenerator
+    private static final NusModsApiInterface MODULE_API =
+            NusModsApiInterfaceBuilder
                     .getRetrofitInstance(ModuleDetail.class, new ModuleDeserializer())
-                    .create(NusModsService.class);
+                    .create(NusModsApiInterface.class);
 
-    private static final NusModsService MODULE_INFORMATION_API =
-            NusModsServiceGenerator.getRetrofitInstance().create(NusModsService.class);
+    private static final NusModsApiInterface MODULE_INFORMATION_API =
+            NusModsApiInterfaceBuilder.getRetrofitInstance().create(NusModsApiInterface.class);
 
     public void getModules(AcademicYear acadYear,
                            ResponseListener<List<ModuleCondensed>> listener) {
