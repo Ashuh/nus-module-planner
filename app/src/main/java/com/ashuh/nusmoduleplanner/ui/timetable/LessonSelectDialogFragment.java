@@ -28,7 +28,7 @@ public class LessonSelectDialogFragment extends DialogFragment {
 
     public LessonSelectDialogFragment(TimetableEvent event) {
         semType = event.getSemType();
-        moduleCode = event.getAssignedModule().getModuleDetail().getModuleCode();
+        moduleCode = event.getModuleCode();
         lessonType = event.getLesson().getType();
         altLessonCodes = event.getAlternateLessonCodes();
     }

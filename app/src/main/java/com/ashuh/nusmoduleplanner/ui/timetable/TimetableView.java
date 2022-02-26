@@ -148,7 +148,7 @@ public class TimetableView extends WeekView {
                         DayTime startTime = lesson.getStartDayTime();
                         DayTime endTime = lesson.getEndDayTime();
 
-                        TimetableEvent event = new TimetableEvent(assignedModule,
+                        TimetableEvent event = new TimetableEvent(timetable,
                                 lesson, semType, startTime, endTime);
 
                         event.setLocation(lesson.getVenue());
