@@ -1,8 +1,13 @@
 package com.ashuh.nusmoduleplanner.util;
 
-import android.icu.util.Calendar;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.time.LocalDateTime;
+import java.time.Month;
 
 public class AcademicYear {
     private final int startYear;
@@ -11,12 +16,13 @@ public class AcademicYear {
         this.startYear = startYear;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public static AcademicYear getCurrent() {
-        Calendar c = Calendar.getInstance();
-        int month = c.get(Calendar.MONTH);
-        int year = c.get(Calendar.YEAR);
+        LocalDateTime now = LocalDateTime.now();
+        int year = now.getYear();
+        Month month = now.getMonth();
 
-        if (month >= 5) {
+        if (month.getValue() >= Month.MAY.getValue()) {
             return new AcademicYear(year);
         } else {
             return new AcademicYear(year - 1);
