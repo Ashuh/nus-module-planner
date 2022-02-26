@@ -10,8 +10,9 @@ import androidx.fragment.app.DialogFragment;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.Lesson;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.Semester;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.SemesterDetail;
-import com.ashuh.nusmoduleplanner.data.source.TimetableDataSource;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.Timetable;
 import com.ashuh.nusmoduleplanner.data.model.timetable.TimetableEvent;
+import com.ashuh.nusmoduleplanner.data.source.TimetableDataSource;
 
 import org.threeten.bp.format.TextStyle;
 
@@ -54,9 +55,9 @@ public class LessonSelectDialogFragment extends DialogFragment {
                         .getModuleDetail()
                         .getSemesterDetail(semType);
 
+        Timetable timetable = new Timetable(semData.getLessons());
         for (String code : altLessonCodes) {
-            List<Lesson> lessons = semData.getLessons(lessonType, code);
-            dialogItems.add(getDialogString(lessons));
+            dialogItems.add(getDialogString(timetable.getLessons(lessonType, code)));
         }
 
         return dialogItems.toArray(new CharSequence[0]);

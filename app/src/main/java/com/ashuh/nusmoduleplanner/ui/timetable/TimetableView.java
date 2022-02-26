@@ -13,6 +13,7 @@ import com.ashuh.nusmoduleplanner.MainActivity;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.Lesson;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.Semester;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.SemesterDetail;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.Timetable;
 import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
 import com.ashuh.nusmoduleplanner.data.model.timetable.TimetableEvent;
 
@@ -129,15 +130,17 @@ public class TimetableView extends WeekView {
                 return events;
             }
 
+
             for (AssignedModule assignedModule : assignedModules) {
                 SemesterDetail semData =
                         assignedModule.getModuleDetail().getSemesterDetail(semType);
+                Timetable timetable = new Timetable(semData.getLessons());
 
-                for (Lesson.Type lessonType : semData.getLessonTypes()) {
+                for (Lesson.Type lessonType : timetable.getLessonTypes()) {
                     String assignedLessonCode = assignedModule.getAssignedLessons()
                             .get(lessonType);
 
-                    List<Lesson> lessons = semData.getLessons(lessonType, assignedLessonCode);
+                    List<Lesson> lessons = timetable.getLessons(lessonType, assignedLessonCode);
                     int color = getRandomColor();
 
                     for (Lesson lesson : lessons) {

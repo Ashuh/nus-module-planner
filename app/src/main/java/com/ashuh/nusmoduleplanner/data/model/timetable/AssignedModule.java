@@ -7,8 +7,10 @@ import androidx.room.Entity;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.Lesson;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.ModuleDetail;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.Semester;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.Timetable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Entity(tableName = "assigned_modules", primaryKeys = {"semType", "moduleCode"})
@@ -26,13 +28,13 @@ public class AssignedModule {
         this.semType = semType;
         this.moduleDetail = moduleDetail;
         assignedLessons = new HashMap<>();
+        List<Lesson> lessons = moduleDetail.getSemesterDetail(semType).getLessons();
+        Timetable timetable = new Timetable(lessons);
 
-        for (Lesson lesson : moduleDetail.getSemesterDetail(semType).getTimetable()) {
+        for (Lesson lesson : lessons) {
             Lesson.Type lessonType = lesson.getType();
-            assignedLessons
-                    .put(lessonType,
-                            moduleDetail.getSemesterDetail(semType).getLessons(lessonType).get(0)
-                                    .getClassNo());
+            Lesson firstLesson = timetable.getLessons(lessonType).get(0);
+            assignedLessons.put(lessonType, firstLesson.getClassNo());
         }
     }
 

@@ -2,6 +2,7 @@ package com.ashuh.nusmoduleplanner.data.model.timetable;
 
 import com.ashuh.nusmoduleplanner.data.model.nusmods.Lesson;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.Semester;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.Timetable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +29,9 @@ public class TimetableEvent extends WeekViewEvent {
         this.lesson = lesson;
         this.semType = semType;
         altLessonsCodes = new TreeSet<>();
-
-        for (Lesson l : assignedModule.getModuleDetail().getSemesterDetail(semType)
-                .getLessons(lesson.getType())) {
+        List<Lesson> lessons = assignedModule.getModuleDetail().getSemesterDetail(semType).getLessons();
+        Timetable timetable = new Timetable(lessons);
+        for (Lesson l : timetable.getLessons(lesson.getType())) {
             if (!lesson.getClassNo().equals(l.getClassNo())) {
                 altLessonsCodes.add(l.getClassNo());
             }
