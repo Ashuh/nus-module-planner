@@ -16,7 +16,7 @@ public class SemesterDetail extends SemesterCondensed {
     @Ignore
     private transient final boolean isInitialized = false;
     @Ignore
-    private transient Map<Lesson.Type, Map<String, List<Lesson>>> lessonCodeMap = null;
+    private transient Map<Lesson.Type, Map<String, List<Lesson>>> lessonTypeMap = null;
 
     public SemesterDetail(Semester semester, String examDate, int examDuration,
                           List<Lesson> timetable) {
@@ -25,19 +25,19 @@ public class SemesterDetail extends SemesterCondensed {
     }
 
     private void init() {
-        lessonCodeMap = new HashMap<>();
+        lessonTypeMap = new HashMap<>();
 
         for (Lesson lesson : timetable) {
             Lesson.Type type = lesson.getType();
-            if (!lessonCodeMap.containsKey(type)) {
-                lessonCodeMap.put(type, new HashMap<>());
+            if (!lessonTypeMap.containsKey(type)) {
+                lessonTypeMap.put(type, new HashMap<>());
             }
 
-            if (!lessonCodeMap.get(type).containsKey(lesson.getClassNo())) {
-                lessonCodeMap.get(type).put(lesson.getClassNo(), new ArrayList<>());
+            if (!lessonTypeMap.get(type).containsKey(lesson.getClassNo())) {
+                lessonTypeMap.get(type).put(lesson.getClassNo(), new ArrayList<>());
             }
 
-            lessonCodeMap.get(type).get(lesson.getClassNo()).add(lesson);
+            lessonTypeMap.get(type).get(lesson.getClassNo()).add(lesson);
         }
     }
 
@@ -50,7 +50,7 @@ public class SemesterDetail extends SemesterCondensed {
             init();
         }
 
-        return lessonCodeMap.keySet();
+        return lessonTypeMap.keySet();
     }
 
     public List<Lesson> getLessons(Lesson.Type lessonType) {
@@ -59,7 +59,7 @@ public class SemesterDetail extends SemesterCondensed {
         }
 
         List<Lesson> lessons = new ArrayList<>();
-        for (List<Lesson> values : lessonCodeMap.get(lessonType).values()) {
+        for (List<Lesson> values : lessonTypeMap.get(lessonType).values()) {
             lessons.addAll(values);
         }
 
@@ -70,8 +70,7 @@ public class SemesterDetail extends SemesterCondensed {
         if (!isInitialized) {
             init();
         }
-
-        return lessonCodeMap.get(lessonType).get(lessonCode);
+        return lessonTypeMap.get(lessonType).get(lessonCode);
     }
 
     @Override
