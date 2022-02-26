@@ -41,24 +41,6 @@ public class AssignedModule {
     }
 
     public void setAssignedLesson(Lesson.Type lessonType, String lessonCode) {
-        boolean isValid = false;
-
-        for (Lesson l : moduleDetail.getSemesterDetail(semType).getLessons(lessonType)) {
-            if (l.getClassNo().equals(lessonCode)) {
-                isValid = true;
-                break;
-            }
-        }
-
-        if (!isValid) {
-            System.out.println("INVALID LESSON CODE");
-            System.out.println("AVAILABLE: ");
-            System.out.println(moduleDetail.getSemesterDetail(semType).getLessons(lessonType));
-            return;
-        } else {
-            System.out.println("VALID");
-        }
-
         assignedLessons.put(lessonType, lessonCode);
     }
 
