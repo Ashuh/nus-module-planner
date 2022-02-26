@@ -5,9 +5,7 @@ import androidx.room.Ignore;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,31 +16,21 @@ public class SemesterDetail extends SemesterCondensed {
     @Ignore
     private transient final boolean isInitialized = false;
     @Ignore
-    private transient Set<Lesson.Type> lessonTypes = null;
-
-    @Ignore
-    private transient Map<Lesson.Type, List<Lesson>> lessons = null;
-
-    @Ignore
     private transient Map<Lesson.Type, Map<String, List<Lesson>>> lessonCodeMap = null;
 
-    public SemesterDetail(Semester semester, String examDate, int examDuration, List<Lesson> timetable) {
+    public SemesterDetail(Semester semester, String examDate, int examDuration,
+                          List<Lesson> timetable) {
         super(semester, examDate, examDuration);
         this.timetable = timetable;
     }
 
     private void init() {
-        lessonTypes = new HashSet<>();
-        lessons = new HashMap<>();
         lessonCodeMap = new HashMap<>();
 
         for (Lesson lesson : timetable) {
             Lesson.Type type = lesson.getType();
-            if (lessonTypes.add(type)) {
+            if (!lessonCodeMap.containsKey(type)) {
                 lessonCodeMap.put(type, new HashMap<>());
-                lessons.put(type, new ArrayList<>(Collections.singletonList(lesson)));
-            } else {
-                lessons.get(type).add(lesson);
             }
 
             if (!lessonCodeMap.get(type).containsKey(lesson.getClassNo())) {
@@ -62,7 +50,7 @@ public class SemesterDetail extends SemesterCondensed {
             init();
         }
 
-        return lessonTypes;
+        return lessonCodeMap.keySet();
     }
 
     public List<Lesson> getLessons(Lesson.Type lessonType) {
@@ -70,7 +58,12 @@ public class SemesterDetail extends SemesterCondensed {
             init();
         }
 
-        return lessons.get(lessonType);
+        List<Lesson> lessons = new ArrayList<>();
+        for (List<Lesson> values : lessonCodeMap.get(lessonType).values()) {
+            lessons.addAll(values);
+        }
+
+        return lessons;
     }
 
     public List<Lesson> getLessons(Lesson.Type lessonType, String lessonCode) {
