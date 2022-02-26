@@ -134,7 +134,8 @@ public class TimetableView extends WeekView {
             for (AssignedModule assignedModule : assignedModules) {
                 SemesterDetail semData =
                         assignedModule.getModuleDetail().getSemesterDetail(semType);
-                Timetable timetable = new Timetable(semData.getLessons());
+                Timetable timetable = new Timetable(semData.getLessons(),
+                        assignedModule.getModuleDetail().getModuleCode(), semType);
 
                 for (Lesson.Type lessonType : timetable.getLessonTypes()) {
                     String assignedLessonCode = assignedModule.getAssignedLessons()

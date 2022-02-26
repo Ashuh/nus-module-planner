@@ -55,7 +55,7 @@ public class LessonSelectDialogFragment extends DialogFragment {
                         .getModuleDetail()
                         .getSemesterDetail(semType);
 
-        Timetable timetable = new Timetable(semData.getLessons());
+        Timetable timetable = new Timetable(semData.getLessons(), moduleCode, semType);
         for (String code : altLessonCodes) {
             dialogItems.add(getDialogString(timetable.getLessons(lessonType, code)));
         }

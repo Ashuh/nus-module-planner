@@ -29,7 +29,7 @@ public class AssignedModule {
         this.moduleDetail = moduleDetail;
         assignedLessons = new HashMap<>();
         List<Lesson> lessons = moduleDetail.getSemesterDetail(semType).getLessons();
-        Timetable timetable = new Timetable(lessons);
+        Timetable timetable = new Timetable(lessons, moduleDetail.getModuleCode(), semType);
 
         for (Lesson lesson : lessons) {
             Lesson.Type lessonType = lesson.getType();

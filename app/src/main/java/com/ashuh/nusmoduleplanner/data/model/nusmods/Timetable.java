@@ -8,9 +8,13 @@ import java.util.Set;
 
 public class Timetable {
 
+    private final String moduleCode;
+    private final Semester semester;
     private final Map<Lesson.Type, Map<String, List<Lesson>>> lessonTypeMap = new HashMap<>();
 
-    public Timetable(List<Lesson> lessons) {
+    public Timetable(List<Lesson> lessons, String moduleCode, Semester semester) {
+        this.moduleCode = moduleCode;
+        this.semester = semester;
 
         for (Lesson lesson : lessons) {
             Lesson.Type type = lesson.getType();
@@ -24,6 +28,14 @@ public class Timetable {
 
             lessonTypeMap.get(type).get(lesson.getClassNo()).add(lesson);
         }
+    }
+
+    public String getModuleCode() {
+        return moduleCode;
+    }
+
+    public Semester getSemester() {
+        return semester;
     }
 
     public Set<Lesson.Type> getLessonTypes() {
