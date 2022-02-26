@@ -26,7 +26,7 @@ public class SemesterDetail extends SemesterCondensed {
     @Ignore
     private transient Map<Lesson.Type, Map<String, List<Lesson>>> lessonCodeMap = null;
 
-    public SemesterDetail(int semester, String examDate, int examDuration, List<Lesson> timetable) {
+    public SemesterDetail(Semester semester, String examDate, int examDuration, List<Lesson> timetable) {
         super(semester, examDate, examDuration);
         this.timetable = timetable;
     }

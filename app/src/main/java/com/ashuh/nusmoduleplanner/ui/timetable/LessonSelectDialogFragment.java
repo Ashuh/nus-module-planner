@@ -8,8 +8,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import com.ashuh.nusmoduleplanner.data.model.nusmods.Lesson;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.Semester;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.SemesterDetail;
-import com.ashuh.nusmoduleplanner.data.model.nusmods.SemesterType;
 import com.ashuh.nusmoduleplanner.data.source.TimetableDataSource;
 import com.ashuh.nusmoduleplanner.data.model.timetable.TimetableEvent;
 
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class LessonSelectDialogFragment extends DialogFragment {
-    private final SemesterType semType;
+    private final Semester semType;
     private final String moduleCode;
     private final Lesson.Type lessonType;
     private final List<String> altLessonCodes;

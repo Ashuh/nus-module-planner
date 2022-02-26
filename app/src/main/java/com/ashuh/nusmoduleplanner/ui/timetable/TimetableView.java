@@ -11,8 +11,8 @@ import androidx.fragment.app.FragmentManager;
 
 import com.ashuh.nusmoduleplanner.MainActivity;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.Lesson;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.Semester;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.SemesterDetail;
-import com.ashuh.nusmoduleplanner.data.model.nusmods.SemesterType;
 import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
 import com.ashuh.nusmoduleplanner.data.model.timetable.TimetableEvent;
 
@@ -29,7 +29,7 @@ import me.jlurena.revolvingweekview.WeekView;
 import me.jlurena.revolvingweekview.WeekViewEvent;
 
 public class TimetableView extends WeekView {
-    private SemesterType semType = null;
+    private Semester semType = null;
     private List<AssignedModule> assignedModules;
 
     public TimetableView(Context context) {
@@ -47,7 +47,7 @@ public class TimetableView extends WeekView {
         init(context);
     }
 
-    public void setSemType(SemesterType semType) {
+    public void setSemType(Semester semType) {
         this.semType = semType;
     }
 

@@ -6,7 +6,7 @@ import androidx.room.Entity;
 
 import com.ashuh.nusmoduleplanner.data.model.nusmods.Lesson;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.ModuleDetail;
-import com.ashuh.nusmoduleplanner.data.model.nusmods.SemesterType;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.Semester;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +14,7 @@ import java.util.Map;
 @Entity(tableName = "assigned_modules", primaryKeys = {"semType", "moduleCode"})
 public class AssignedModule {
     @NonNull
-    private SemesterType semType;
+    private Semester semType;
 
     @NonNull
     @Embedded
@@ -22,7 +22,7 @@ public class AssignedModule {
 
     private Map<Lesson.Type, String> assignedLessons;
 
-    public AssignedModule(SemesterType semType, ModuleDetail moduleDetail) {
+    public AssignedModule(Semester semType, ModuleDetail moduleDetail) {
         this.semType = semType;
         this.moduleDetail = moduleDetail;
         assignedLessons = new HashMap<>();
@@ -62,11 +62,11 @@ public class AssignedModule {
         assignedLessons.put(lessonType, lessonCode);
     }
 
-    public SemesterType getSemType() {
+    public Semester getSemType() {
         return semType;
     }
 
-    public void setSemType(SemesterType semType) {
+    public void setSemType(Semester semType) {
         this.semType = semType;
     }
 

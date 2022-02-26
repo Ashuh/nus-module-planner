@@ -13,8 +13,8 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashuh.nusmoduleplanner.R;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.Semester;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.SemesterDetail;
-import com.ashuh.nusmoduleplanner.data.model.nusmods.SemesterType;
 import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
 import com.ashuh.nusmoduleplanner.data.source.TimetableDataSource;
 
@@ -39,7 +39,7 @@ public class TimetableEntryAdapter extends RecyclerView.Adapter<TimetableEntryAd
         Resources res = viewHolder.titleTextView.getContext().getResources();
 
         AssignedModule assignedModule = assignedModules.get(position);
-        SemesterType semType = assignedModule.getSemType();
+        Semester semType = assignedModule.getSemType();
         SemesterDetail semData = assignedModule.getModuleDetail().getSemesterDetail(semType);
 
         String title = String.format(res.getString(R.string.module_card_title),

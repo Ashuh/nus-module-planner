@@ -1,7 +1,7 @@
 package com.ashuh.nusmoduleplanner.data.model.timetable;
 
 import com.ashuh.nusmoduleplanner.data.model.nusmods.Lesson;
-import com.ashuh.nusmoduleplanner.data.model.nusmods.SemesterType;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.Semester;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +12,11 @@ import me.jlurena.revolvingweekview.WeekViewEvent;
 
 public class TimetableEvent extends WeekViewEvent {
     private final AssignedModule assignedModule;
-    private final SemesterType semType;
+    private final Semester semType;
     private final SortedSet<String> altLessonsCodes;
     private final Lesson lesson;
 
-    public TimetableEvent(AssignedModule assignedModule, Lesson lesson, SemesterType semType,
+    public TimetableEvent(AssignedModule assignedModule, Lesson lesson, Semester semType,
                           me.jlurena.revolvingweekview.DayTime startTime,
                           me.jlurena.revolvingweekview.DayTime endTime) {
 
@@ -45,7 +45,7 @@ public class TimetableEvent extends WeekViewEvent {
         return lesson;
     }
 
-    public SemesterType getSemType() {
+    public Semester getSemType() {
         return semType;
     }
 

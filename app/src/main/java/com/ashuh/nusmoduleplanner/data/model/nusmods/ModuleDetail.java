@@ -25,7 +25,7 @@ public class ModuleDetail extends Module {
         return detailedSemesters;
     }
 
-    public SemesterDetail getSemesterDetail(SemesterType semester) {
+    public SemesterDetail getSemesterDetail(Semester semester) {
 
         for (SemesterDetail data : detailedSemesters) {
             if (data.getSemester() == semester) {

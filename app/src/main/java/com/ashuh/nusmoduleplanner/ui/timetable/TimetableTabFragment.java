@@ -14,11 +14,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashuh.nusmoduleplanner.R;
-import com.ashuh.nusmoduleplanner.data.model.nusmods.SemesterType;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.Semester;
 
 public class TimetableTabFragment extends Fragment {
     public static final String ARG_SEMESTER = "semester";
-    private SemesterType semType;
+    private Semester semType;
     private TimetableViewModel viewModel;
     private TimetableEntryAdapter adapter;
 
@@ -27,7 +27,7 @@ public class TimetableTabFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         assert args != null;
-        semType = SemesterType.fromId(args.getInt(ARG_SEMESTER));
+        semType = Semester.fromId(args.getInt(ARG_SEMESTER));
         viewModel = new ViewModelProvider(this, new TimetableViewModelFactory(semType))
                 .get(TimetableViewModel.class);
     }

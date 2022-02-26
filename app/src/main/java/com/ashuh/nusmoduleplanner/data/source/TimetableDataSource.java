@@ -2,11 +2,11 @@ package com.ashuh.nusmoduleplanner.data.source;
 
 import androidx.lifecycle.LiveData;
 
+import com.ashuh.nusmoduleplanner.data.model.nusmods.Semester;
 import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
 import com.ashuh.nusmoduleplanner.data.source.local.TimetableDAO;
 import com.ashuh.nusmoduleplanner.data.source.local.TimetableDatabase;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.Lesson;
-import com.ashuh.nusmoduleplanner.data.model.nusmods.SemesterType;
 
 import java.util.List;
 
@@ -30,19 +30,19 @@ public class TimetableDataSource {
         dao.insert(entry);
     }
 
-    public LiveData<List<AssignedModule>> getSemesterAssignedModules(SemesterType sem) {
+    public LiveData<List<AssignedModule>> getSemesterAssignedModules(Semester sem) {
         return dao.getAssignedModules(sem);
     }
 
-    public AssignedModule getAssignedModule(String moduleCode, SemesterType semType) {
+    public AssignedModule getAssignedModule(String moduleCode, Semester semType) {
         return dao.getAssignedModule(moduleCode, semType);
     }
 
-    public void delete(SemesterType semType, String moduleCode) {
+    public void delete(Semester semType, String moduleCode) {
         dao.delete(semType, moduleCode);
     }
 
-    public void updateAssignedLesson(String moduleCode, SemesterType semType,
+    public void updateAssignedLesson(String moduleCode, Semester semType,
                                      Lesson.Type lessonType, String newLessonCode) {
         AssignedModule assignedModule = getAssignedModule(moduleCode, semType);
         assignedModule.setAssignedLesson(lessonType, newLessonCode);

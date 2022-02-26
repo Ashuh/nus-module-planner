@@ -25,8 +25,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashuh.nusmoduleplanner.MainActivity;
 import com.ashuh.nusmoduleplanner.R;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.Semester;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.SemesterDetail;
-import com.ashuh.nusmoduleplanner.data.model.nusmods.SemesterType;
 import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
 import com.ashuh.nusmoduleplanner.data.source.DisqusRepository;
 import com.ashuh.nusmoduleplanner.data.source.ModulesRepository;
@@ -205,7 +205,7 @@ public class ModuleDetailFragment extends Fragment {
                 PopupMenu popupMenu = new PopupMenu(getActivity(), button);
 
                 for (SemesterDetail data : semData) {
-                    SemesterType sem = data.getSemester();
+                    Semester sem = data.getSemester();
                     popupMenu.getMenu()
                             .add(Menu.NONE, sem.getId(), Menu.NONE, sem.toString());
                 }
@@ -213,7 +213,7 @@ public class ModuleDetailFragment extends Fragment {
                 popupMenu.setOnMenuItemClickListener(
                         menuItem -> {
                             TimetableDataSource.getInstance().insert(new AssignedModule(
-                                    SemesterType.fromId(menuItem.getItemId()),
+                                    Semester.fromId(menuItem.getItemId()),
                                     m));
                             return true;
                         });

@@ -4,6 +4,7 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.ashuh.nusmoduleplanner.data.model.nusmods.Semester;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.Weeks;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -22,17 +23,21 @@ public class NusModsApiInterfaceBuilder {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static Retrofit getApiInterface() {
-        Gson gson = new GsonBuilder().registerTypeAdapter(Weeks.class,
-                (JsonDeserializer<Weeks>) (json, typeOfT, context) -> {
-                    if (!json.isJsonArray()) {
-                        json = json.getAsJsonObject().get("weeks");
-                    }
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Weeks.class,
+                        (JsonDeserializer<Weeks>) (json, typeOfT, context) -> {
+                            if (!json.isJsonArray()) {
+                                json = json.getAsJsonObject().get("weeks");
+                            }
 
-                    Type listType = new TypeToken<ArrayList<Integer>>() {
-                    }.getType();
-                    List<Integer> weeks = new Gson().fromJson(json, listType);
-                    return new Weeks(weeks);
-                })
+                            Type listType = new TypeToken<ArrayList<Integer>>() {
+                            }.getType();
+                            List<Integer> weeks = new Gson().fromJson(json, listType);
+                            return new Weeks(weeks);
+                        })
+                .registerTypeAdapter(Semester.class,
+                        (JsonDeserializer<Semester>) (json, typeOfT, context) -> Semester
+                                .fromId(json.getAsInt()))
                 .create();
 
         return new Retrofit.Builder()

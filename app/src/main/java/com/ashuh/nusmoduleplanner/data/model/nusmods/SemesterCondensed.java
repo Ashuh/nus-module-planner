@@ -14,7 +14,7 @@ import java.util.Optional;
 
 public class SemesterCondensed {
     @SerializedName("semester")
-    protected final int semester;
+    protected final Semester semester;
 
     @SerializedName("examDate")
     protected final String examDate;
@@ -22,14 +22,14 @@ public class SemesterCondensed {
     @SerializedName("examDuration")
     protected final int examDuration;
 
-    public SemesterCondensed(int semester, String examDate, int examDuration) {
+    public SemesterCondensed(Semester semester, String examDate, int examDuration) {
         this.semester = semester;
         this.examDate = examDate;
         this.examDuration = examDuration;
     }
 
-    public SemesterType getSemester() {
-        return SemesterType.fromId(semester);
+    public Semester getSemester() {
+        return semester;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

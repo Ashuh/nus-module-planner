@@ -1,6 +1,8 @@
 package com.ashuh.nusmoduleplanner.data.model.nusmods;
 
-public enum SemesterType {
+import androidx.annotation.NonNull;
+
+public enum Semester {
     SEMESTER_1(1, "Semester 1"),
     SEMESTER_2(2, "Semester 2"),
     SPECIAL_TERM_1(3, "Special Term I"),
@@ -9,12 +11,12 @@ public enum SemesterType {
     private final int id;
     private final String name;
 
-    SemesterType(int id, String name) {
+    Semester(int id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public static SemesterType fromId(int id) {
+    public static Semester fromId(int id) {
         switch (id) {
             case 1:
                 return SEMESTER_1;
@@ -29,6 +31,7 @@ public enum SemesterType {
         }
     }
 
+    @NonNull
     @Override
     public String toString() {
         return name;
