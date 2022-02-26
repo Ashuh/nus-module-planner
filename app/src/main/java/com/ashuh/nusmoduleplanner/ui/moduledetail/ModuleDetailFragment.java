@@ -141,33 +141,21 @@ public class ModuleDetailFragment extends Fragment {
             infoTextView.setText(generateInfoText(m.getDepartment(), m.getFaculty(),
                     m.getCredit()));
             semestersTextView.setText(generateSemestersText(m.getDetailedSemesters()));
+
             setTextView(descriptionTextView, m.getDescription());
 
+            setTextView(prerequisiteTextView, generateClickableString(m.getPrerequisite()),
+                    prerequisiteHeaderTextView);
+            prerequisiteTextView.setMovementMethod(LinkMovementMethod.getInstance());
 
-            if (m.hasPrerequisite()) {
-                prerequisiteTextView.setText(generateClickableString(m.getPrerequisite()));
-                prerequisiteTextView.setMovementMethod(LinkMovementMethod.getInstance());
-            } else {
-                prerequisiteHeaderTextView.setVisibility(View.GONE);
-                prerequisiteTextView.setVisibility(View.GONE);
-            }
 
-            if (m.hasCorequisite()) {
-                corequisiteTextView
-                        .setText(generateClickableString(m.getCorequisite()));
-                corequisiteTextView.setMovementMethod(LinkMovementMethod.getInstance());
-            } else {
-                corequisiteHeaderTextView.setVisibility(View.GONE);
-                corequisiteTextView.setVisibility(View.GONE);
-            }
+            setTextView(corequisiteTextView, generateClickableString(m.getCorequisite()),
+                    corequisiteHeaderTextView);
+            corequisiteTextView.setMovementMethod(LinkMovementMethod.getInstance());
 
-            if (m.hasPreclusion()) {
-                preclusionTextView.setText(generateClickableString(m.getPreclusion()));
-                preclusionTextView.setMovementMethod(LinkMovementMethod.getInstance());
-            } else {
-                preclusionHeaderTextView.setVisibility(View.GONE);
-                preclusionTextView.setVisibility(View.GONE);
-            }
+            setTextView(preclusionTextView, generateClickableString(m.getPreclusion()),
+                    preclusionHeaderTextView);
+            preclusionTextView.setMovementMethod(LinkMovementMethod.getInstance());
 
             TextView[] examViews = new TextView[]{sem1ExamTextView, sem2ExamTextView,
                     sem3ExamTextView, sem4ExamTextView};
@@ -223,10 +211,13 @@ public class ModuleDetailFragment extends Fragment {
         });
     }
 
-    private void setTextView(TextView view, String text) {
-        if (text == null || text.isEmpty()) {
+    private void setTextView(TextView view, CharSequence text, TextView... dependentViews) {
+        if (text == null || text.length() == 0) {
             view.setVisibility(View.GONE);
 
+            for (TextView dependentView : dependentViews) {
+                dependentView.setVisibility(View.GONE);
+            }
         } else {
             view.setText(text);
         }
