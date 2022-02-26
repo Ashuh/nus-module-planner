@@ -59,7 +59,8 @@ public class SemesterDetail extends SemesterCondensed {
         }
 
         List<Lesson> lessons = new ArrayList<>();
-        for (List<Lesson> values : lessonTypeMap.get(lessonType).values()) {
+        for (List<Lesson> values : lessonTypeMap.getOrDefault(lessonType, new HashMap<>())
+                .values()) {
             lessons.addAll(values);
         }
 
@@ -70,7 +71,8 @@ public class SemesterDetail extends SemesterCondensed {
         if (!isInitialized) {
             init();
         }
-        return lessonTypeMap.get(lessonType).get(lessonCode);
+        return lessonTypeMap.getOrDefault(lessonType, new HashMap<>())
+                .getOrDefault(lessonCode, new ArrayList<>());
     }
 
     @Override
