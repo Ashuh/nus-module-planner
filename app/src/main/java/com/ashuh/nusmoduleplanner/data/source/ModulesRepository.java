@@ -1,15 +1,16 @@
 package com.ashuh.nusmoduleplanner.data.source;
 
 
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.ashuh.nusmoduleplanner.data.model.nusmods.ModuleCondensed;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.ModuleDetail;
-import com.ashuh.nusmoduleplanner.data.source.remote.nusmods.ModuleDeserializer;
 import com.ashuh.nusmoduleplanner.data.source.remote.nusmods.NusModsApiInterface;
 import com.ashuh.nusmoduleplanner.data.source.remote.nusmods.NusModsApiInterfaceBuilder;
 import com.ashuh.nusmoduleplanner.util.AcademicYear;
@@ -36,6 +37,7 @@ public class ModulesRepository {
         return instance;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public LiveData<List<ModuleCondensed>> getModules(AcademicYear acadYear) {
         if (moduleInfoCache.getValue() != null) {
             return moduleInfoCache;
@@ -63,15 +65,15 @@ public class ModulesRepository {
         return modules;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public LiveData<ModuleDetail> getModuleDetail(AcademicYear acadYear, String moduleCode) {
         if (moduleDetailCache.containsKey(moduleCode)) {
             return moduleDetailCache.get(moduleCode);
         }
 
         MutableLiveData<ModuleDetail> module = new MutableLiveData<>();
-        NusModsApiInterface api = NusModsApiInterfaceBuilder
-                .getApiInterface(ModuleDetail.class, new ModuleDeserializer())
-                .create(NusModsApiInterface.class);
+        NusModsApiInterface api =
+                NusModsApiInterfaceBuilder.getApiInterface().create(NusModsApiInterface.class);
 
         Call<ModuleDetail> call = api.getModule(acadYear.toString(), moduleCode);
         call.enqueue(new Callback<ModuleDetail>() {
@@ -83,7 +85,7 @@ public class ModulesRepository {
             }
 
             @Override
-            public void onFailure(@NonNull Call<ModuleDetail> call, Throwable t) {
+            public void onFailure(@NonNull Call<ModuleDetail> call, @NonNull Throwable t) {
                 Log.d(TAG, "onFailure: " + t);
             }
         });
@@ -91,6 +93,7 @@ public class ModulesRepository {
         return module;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public boolean hasModule(AcademicYear acadYear, String moduleCode) {
         for (ModuleCondensed m : getModules(acadYear).getValue()) {
             if (m.getModuleCode().equals(moduleCode)) {

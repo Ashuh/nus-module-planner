@@ -1,5 +1,7 @@
 package com.ashuh.nusmoduleplanner.data.model.nusmods;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 import org.threeten.bp.DayOfWeek;
@@ -19,7 +21,7 @@ public class Lesson {
     @SerializedName("endTime")
     private final String endTime;
     @SerializedName("weeks")
-    private final List<Integer> weeks;
+    private final Weeks weeks;
     @SerializedName("venue")
     private final String venue;
     @SerializedName("day")
@@ -30,7 +32,7 @@ public class Lesson {
     private final int size;
 
     public Lesson(String classNo, String startTime, String endTime, String venue, String day,
-                  String lessonType, int size, List<Integer> weeks) {
+                  String lessonType, int size, Weeks weeks) {
         this.classNo = classNo;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -45,7 +47,7 @@ public class Lesson {
         return size;
     }
 
-    public List<Integer> getWeeks() {
+    public Weeks getWeeks() {
         return weeks;
     }
 
@@ -114,19 +116,20 @@ public class Lesson {
         return Integer.parseInt(getEndTime().substring(2, 4));
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "[" + getType().getShortName() + "] " + classNo;
     }
 
     public boolean isOccurringEveryWeek() {
-        return getWeeks().size() == 13;
+        return getWeeks().getWeeks().size() == 13;
     }
 
     public String getWeeksString() {
         StringJoiner joiner = new StringJoiner(", ");
 
-        for (Number i : getWeeks()) {
+        for (Number i : getWeeks().getWeeks()) {
             joiner.add(String.valueOf(i.intValue()));
         }
 
@@ -175,6 +178,7 @@ public class Lesson {
             return shortName;
         }
 
+        @NonNull
         @Override
         public String toString() {
             return name;
