@@ -1,4 +1,4 @@
-package com.ashuh.nusmoduleplanner.data.model.nusmods;
+package com.ashuh.nusmoduleplanner.data.model.module;
 
 import com.google.gson.annotations.SerializedName;
 

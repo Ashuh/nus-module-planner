@@ -13,8 +13,8 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashuh.nusmoduleplanner.R;
-import com.ashuh.nusmoduleplanner.data.model.nusmods.Semester;
-import com.ashuh.nusmoduleplanner.data.model.nusmods.SemesterDetail;
+import com.ashuh.nusmoduleplanner.data.model.module.Semester;
+import com.ashuh.nusmoduleplanner.data.model.module.SemesterDetail;
 import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
 import com.ashuh.nusmoduleplanner.data.source.TimetableDataSource;
 

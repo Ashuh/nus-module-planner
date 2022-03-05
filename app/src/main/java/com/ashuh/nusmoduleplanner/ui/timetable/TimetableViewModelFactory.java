@@ -3,7 +3,7 @@ package com.ashuh.nusmoduleplanner.ui.timetable;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.ashuh.nusmoduleplanner.data.model.nusmods.Semester;
+import com.ashuh.nusmoduleplanner.data.model.module.Semester;
 
 import org.jetbrains.annotations.NotNull;
 

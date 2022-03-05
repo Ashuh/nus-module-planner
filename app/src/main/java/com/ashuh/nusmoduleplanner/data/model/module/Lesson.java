@@ -1,4 +1,4 @@
-package com.ashuh.nusmoduleplanner.data.model.nusmods;
+package com.ashuh.nusmoduleplanner.data.model.module;
 
 import androidx.annotation.NonNull;
 
@@ -7,7 +7,6 @@ import com.google.gson.annotations.SerializedName;
 import org.threeten.bp.DayOfWeek;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 

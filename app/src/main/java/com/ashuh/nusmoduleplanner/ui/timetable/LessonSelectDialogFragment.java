@@ -7,10 +7,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
-import com.ashuh.nusmoduleplanner.data.model.nusmods.Lesson;
-import com.ashuh.nusmoduleplanner.data.model.nusmods.Semester;
-import com.ashuh.nusmoduleplanner.data.model.nusmods.SemesterDetail;
-import com.ashuh.nusmoduleplanner.data.model.nusmods.Timetable;
+import com.ashuh.nusmoduleplanner.data.model.module.Lesson;
+import com.ashuh.nusmoduleplanner.data.model.module.Semester;
+import com.ashuh.nusmoduleplanner.data.model.module.SemesterDetail;
+import com.ashuh.nusmoduleplanner.data.model.module.Timetable;
 import com.ashuh.nusmoduleplanner.data.model.timetable.TimetableEvent;
 import com.ashuh.nusmoduleplanner.data.source.TimetableDataSource;
 

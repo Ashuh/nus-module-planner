@@ -2,11 +2,11 @@ package com.ashuh.nusmoduleplanner.data.source;
 
 import androidx.lifecycle.LiveData;
 
-import com.ashuh.nusmoduleplanner.data.model.nusmods.Semester;
+import com.ashuh.nusmoduleplanner.data.model.module.Semester;
 import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
 import com.ashuh.nusmoduleplanner.data.source.local.TimetableDAO;
 import com.ashuh.nusmoduleplanner.data.source.local.TimetableDatabase;
-import com.ashuh.nusmoduleplanner.data.model.nusmods.Lesson;
+import com.ashuh.nusmoduleplanner.data.model.module.Lesson;
 
 import java.util.List;
 
