@@ -4,8 +4,8 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
-import com.ashuh.nusmoduleplanner.data.model.module.Semester;
-import com.ashuh.nusmoduleplanner.data.model.module.Weeks;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.Semester;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.Weeks;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;

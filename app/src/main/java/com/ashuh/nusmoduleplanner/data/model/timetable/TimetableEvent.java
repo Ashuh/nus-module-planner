@@ -1,8 +1,8 @@
 package com.ashuh.nusmoduleplanner.data.model.timetable;
 
-import com.ashuh.nusmoduleplanner.data.model.module.Lesson;
-import com.ashuh.nusmoduleplanner.data.model.module.Semester;
-import com.ashuh.nusmoduleplanner.data.model.module.Timetable;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.Lesson;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.Semester;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.Timetable;
 
 import java.util.ArrayList;
 import java.util.List;

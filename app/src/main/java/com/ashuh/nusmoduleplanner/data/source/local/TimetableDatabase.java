@@ -8,8 +8,8 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 
-import com.ashuh.nusmoduleplanner.data.model.module.Lesson;
-import com.ashuh.nusmoduleplanner.data.model.module.SemesterDetail;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.Lesson;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.SemesterDetail;
 import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

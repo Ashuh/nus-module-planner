@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.ashuh.nusmoduleplanner.util.AcademicYear;
 import com.ashuh.nusmoduleplanner.data.source.ModulesRepository;
-import com.ashuh.nusmoduleplanner.data.model.module.ModuleDetail;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.ModuleDetail;
 
 public class ModuleDetailViewModel extends ViewModel {
     private final LiveData<ModuleDetail> module;

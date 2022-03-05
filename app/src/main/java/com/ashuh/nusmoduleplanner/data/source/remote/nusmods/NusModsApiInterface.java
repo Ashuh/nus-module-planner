@@ -1,7 +1,7 @@
 package com.ashuh.nusmoduleplanner.data.source.remote.nusmods;
 
-import com.ashuh.nusmoduleplanner.data.model.module.ModuleCondensed;
-import com.ashuh.nusmoduleplanner.data.model.module.ModuleDetail;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.ModuleCondensed;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.ModuleDetail;
 
 import java.util.List;
 

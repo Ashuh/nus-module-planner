@@ -7,7 +7,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.ashuh.nusmoduleplanner.data.model.module.Semester;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.Semester;
 import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
 
 import java.util.List;

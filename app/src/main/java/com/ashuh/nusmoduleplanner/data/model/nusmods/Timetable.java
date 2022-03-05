@@ -1,4 +1,4 @@
-package com.ashuh.nusmoduleplanner.data.model.module;
+package com.ashuh.nusmoduleplanner.data.model.nusmods;
 
 import java.util.ArrayList;
 import java.util.HashMap;

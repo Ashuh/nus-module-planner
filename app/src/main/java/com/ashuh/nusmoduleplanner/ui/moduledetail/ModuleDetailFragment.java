@@ -25,8 +25,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashuh.nusmoduleplanner.MainActivity;
 import com.ashuh.nusmoduleplanner.R;
-import com.ashuh.nusmoduleplanner.data.model.module.Semester;
-import com.ashuh.nusmoduleplanner.data.model.module.SemesterDetail;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.Semester;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.SemesterDetail;
 import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
 import com.ashuh.nusmoduleplanner.data.source.DisqusRepository;
 import com.ashuh.nusmoduleplanner.data.source.ModulesRepository;

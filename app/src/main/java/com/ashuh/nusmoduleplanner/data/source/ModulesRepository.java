@@ -9,8 +9,8 @@ import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.ashuh.nusmoduleplanner.data.model.module.ModuleCondensed;
-import com.ashuh.nusmoduleplanner.data.model.module.ModuleDetail;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.ModuleCondensed;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.ModuleDetail;
 import com.ashuh.nusmoduleplanner.data.source.remote.nusmods.NusModsApiInterface;
 import com.ashuh.nusmoduleplanner.data.source.remote.nusmods.NusModsApiInterfaceBuilder;
 import com.ashuh.nusmoduleplanner.util.AcademicYear;
