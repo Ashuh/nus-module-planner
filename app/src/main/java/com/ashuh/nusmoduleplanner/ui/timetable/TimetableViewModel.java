@@ -3,9 +3,9 @@ package com.ashuh.nusmoduleplanner.ui.timetable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.ashuh.nusmoduleplanner.data.module.SemesterType;
-import com.ashuh.nusmoduleplanner.timetable.AssignedModule;
-import com.ashuh.nusmoduleplanner.timetable.TimetableDataSource;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.SemesterType;
+import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
+import com.ashuh.nusmoduleplanner.data.source.timetable.TimetableDataSource;
 
 import java.util.List;
 

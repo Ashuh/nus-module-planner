@@ -1,6 +1,6 @@
 package com.ashuh.nusmoduleplanner.api.disqus;
 
-import com.ashuh.nusmoduleplanner.data.disqus.PostList;
+import com.ashuh.nusmoduleplanner.data.model.disqus.PostList;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

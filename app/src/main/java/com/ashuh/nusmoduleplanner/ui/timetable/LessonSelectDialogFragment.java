@@ -1,17 +1,20 @@
 package com.ashuh.nusmoduleplanner.ui.timetable;
 
 import android.app.Dialog;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
-import com.ashuh.nusmoduleplanner.data.module.Lesson;
-import com.ashuh.nusmoduleplanner.data.module.SemesterDetail;
-import com.ashuh.nusmoduleplanner.data.module.SemesterType;
-import com.ashuh.nusmoduleplanner.timetable.TimetableDataSource;
-import com.ashuh.nusmoduleplanner.timetable.TimetableEvent;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.ModuleSemesterDatum;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.SemesterType;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.Lesson;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.LessonType;
+import com.ashuh.nusmoduleplanner.data.source.timetable.TimetableDataSource;
+import com.ashuh.nusmoduleplanner.data.model.timetable.TimetableEvent;
 
 import org.threeten.bp.format.TextStyle;
 
@@ -22,16 +25,17 @@ import java.util.Locale;
 public class LessonSelectDialogFragment extends DialogFragment {
     private final SemesterType semType;
     private final String moduleCode;
-    private final Lesson.Type lessonType;
+    private final LessonType lessonType;
     private final List<String> altLessonCodes;
 
     public LessonSelectDialogFragment(TimetableEvent event) {
         semType = event.getSemType();
-        moduleCode = event.getAssignedModule().getModuleDetail().getModuleCode();
+        moduleCode = event.getAssignedModule().getModuleCode();
         lessonType = event.getLesson().getType();
         altLessonCodes = event.getAlternateLessonCodes();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -47,21 +51,22 @@ public class LessonSelectDialogFragment extends DialogFragment {
         return builder.create();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private CharSequence[] getDialogItems() {
         List<String> dialogItems = new ArrayList<>();
-        SemesterDetail semData =
+        ModuleSemesterDatum semData =
                 TimetableDataSource.getInstance().getAssignedModule(moduleCode, semType)
-                        .getModuleDetail()
-                        .getSemesterDetail(semType);
+                        .getSemesterDatum();
 
         for (String code : altLessonCodes) {
-            List<Lesson> lessons = semData.getLessons(lessonType, code);
+            List<Lesson> lessons = semData.getTimetable(lessonType, code);
             dialogItems.add(getDialogString(lessons));
         }
 
         return dialogItems.toArray(new CharSequence[0]);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private String getDialogString(List<Lesson> lessons) {
         StringBuilder sb =
                 new StringBuilder().append('[').append(lessonType.getShortName()).append("] ")
@@ -72,11 +77,7 @@ public class LessonSelectDialogFragment extends DialogFragment {
                     lesson.getDay().getDisplayName(TextStyle.SHORT, Locale.getDefault()) + " "
                             + lesson.getStartTime() + "-" + lesson.getEndTime();
             sb.append(dayTime).append(' ');
-
-            if (!lesson.isOccurringEveryWeek()) {
-                sb.append("Weeks: ").append(lesson.getWeeksString());
-            }
-
+            sb.append(lesson.getScheduleDescription());
             sb.append('\n');
         }
 

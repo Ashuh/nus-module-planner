@@ -12,7 +12,7 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashuh.nusmoduleplanner.R;
-import com.ashuh.nusmoduleplanner.data.disqus.Post;
+import com.ashuh.nusmoduleplanner.data.model.disqus.Post;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;

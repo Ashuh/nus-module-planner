@@ -13,14 +13,14 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashuh.nusmoduleplanner.R;
-import com.ashuh.nusmoduleplanner.data.module.ModuleCondensed;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.module.ModuleInformation;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.ViewHolder> implements Filterable {
-    private final List<ModuleCondensed> modules = new ArrayList<>();
-    private List<ModuleCondensed> filteredModules = new ArrayList<>();
+    private final List<ModuleInformation> modules = new ArrayList<>();
+    private List<ModuleInformation> filteredModules = new ArrayList<>();
 
     @NonNull
     @Override
@@ -34,7 +34,7 @@ public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ModuleListAdapter.ViewHolder viewHolder, int position) {
         Resources res = viewHolder.titleTextView.getContext().getResources();
-        ModuleCondensed module = filteredModules.get(position);
+        ModuleInformation module = filteredModules.get(position);
 
         String title =
                 String.format(res.getString(R.string.module_card_title), module.getModuleCode(),
@@ -42,7 +42,7 @@ public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.Vi
 
         String desc = String.format(res.getString(R.string.module_card_description),
                 module.getDepartment(),
-                module.getCredit());
+                module.getModuleCredit());
 
         viewHolder.getTitleTextView().setText(title);
         viewHolder.getDescriptionTextView().setText(desc);
@@ -60,7 +60,7 @@ public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.Vi
         return filteredModules == null ? 0 : filteredModules.size();
     }
 
-    public void setModules(List<ModuleCondensed> m) {
+    public void setModules(List<ModuleInformation> m) {
         this.modules.clear();
         this.modules.addAll(m);
         filteredModules.clear();
@@ -74,11 +74,11 @@ public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.Vi
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
                 String charString = charSequence.toString();
-                List<ModuleCondensed> filteredList = new ArrayList<>();
+                List<ModuleInformation> filteredList = new ArrayList<>();
                 if (charString.isEmpty()) {
                     filteredList = modules;
                 } else {
-                    for (ModuleCondensed m : modules) {
+                    for (ModuleInformation m : modules) {
                         if (m.getModuleCode().contains(charString.toUpperCase())) {
                             filteredList.add(m);
                         }
@@ -92,7 +92,7 @@ public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.Vi
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                filteredModules = (ArrayList<ModuleCondensed>) filterResults.values;
+                filteredModules = (ArrayList<ModuleInformation>) filterResults.values;
                 notifyDataSetChanged();
             }
         };

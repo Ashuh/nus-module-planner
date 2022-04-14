@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashuh.nusmoduleplanner.R;
-import com.ashuh.nusmoduleplanner.data.module.SemesterType;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.SemesterType;
 
 public class TimetableTabFragment extends Fragment {
     public static final String ARG_SEMESTER = "semester";
