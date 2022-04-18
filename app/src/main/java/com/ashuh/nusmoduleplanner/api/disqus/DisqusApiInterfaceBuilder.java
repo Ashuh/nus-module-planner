@@ -1,10 +1,6 @@
 package com.ashuh.nusmoduleplanner.api.disqus;
 
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
@@ -21,7 +17,6 @@ public class DisqusApiInterfaceBuilder {
     private static final String BASE_URL = "https://disqus.com/api/3.0/";
     private static DisqusApiInterface instance;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public static DisqusApiInterface getApiInterface() {
         if (instance == null) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")

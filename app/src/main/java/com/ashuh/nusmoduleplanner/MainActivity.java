@@ -11,7 +11,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.ashuh.nusmoduleplanner.timetable.TimetableDatabase;
+import com.ashuh.nusmoduleplanner.data.source.timetable.TimetableDatabase;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {

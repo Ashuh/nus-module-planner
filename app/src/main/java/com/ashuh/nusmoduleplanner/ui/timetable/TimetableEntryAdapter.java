@@ -2,27 +2,24 @@ package com.ashuh.nusmoduleplanner.ui.timetable;
 
 import android.annotation.SuppressLint;
 import android.content.res.Resources;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashuh.nusmoduleplanner.R;
-import com.ashuh.nusmoduleplanner.data.module.SemesterDetail;
-import com.ashuh.nusmoduleplanner.data.module.SemesterType;
-import com.ashuh.nusmoduleplanner.timetable.AssignedModule;
-import com.ashuh.nusmoduleplanner.timetable.TimetableDataSource;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.ModuleSemesterDatum;
+import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
+import com.ashuh.nusmoduleplanner.data.source.timetable.TimetableDataSource;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class TimetableEntryAdapter extends RecyclerView.Adapter<TimetableEntryAdapter.ViewHolder> {
+
     private final List<AssignedModule> assignedModules = new ArrayList<>();
 
     @NonNull
@@ -33,25 +30,21 @@ public class TimetableEntryAdapter extends RecyclerView.Adapter<TimetableEntryAd
         return new TimetableEntryAdapter.ViewHolder(view);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         Resources res = viewHolder.titleTextView.getContext().getResources();
 
         AssignedModule assignedModule = assignedModules.get(position);
-        SemesterType semType = assignedModule.getSemType();
-        SemesterDetail semData = assignedModule.getModuleDetail().getSemesterDetail(semType);
+        ModuleSemesterDatum semData = assignedModule.getSemesterDatum();
 
         String title = String.format(res.getString(R.string.module_card_title),
-                assignedModule.getModuleDetail().getModuleCode(),
-                assignedModule.getModuleDetail().getTitle());
+                assignedModule.getModuleCode(),
+                assignedModule.getTitle());
 
-        Optional<String> examDate = semData.getExamDate();
-        String examString = examDate.map(s -> "Exam: " + s).orElse("No Exam");
-
+        String examString = semData.getExamInfo();
         String description =
                 String.format(res.getString(R.string.module_card_description), examString,
-                        assignedModule.getModuleDetail().getCredit());
+                        assignedModule.getModuleCredit());
 
         viewHolder.getTitleTextView().setText(title);
         viewHolder.getDescriptionTextView().setText(description);
@@ -73,7 +66,7 @@ public class TimetableEntryAdapter extends RecyclerView.Adapter<TimetableEntryAd
         AssignedModule deleted = assignedModules.get(id);
         assignedModules.remove(id);
         TimetableDataSource.getInstance()
-                .delete(deleted.getSemType(), deleted.getModuleDetail().getModuleCode());
+                .delete(deleted.getSemType(), deleted.getModuleCode());
         notifyItemChanged(id);
     }
 

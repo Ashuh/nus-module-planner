@@ -3,6 +3,7 @@ package com.ashuh.nusmoduleplanner.ui.timetable;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.RectF;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 
@@ -10,11 +11,12 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.ashuh.nusmoduleplanner.MainActivity;
-import com.ashuh.nusmoduleplanner.data.module.Lesson;
-import com.ashuh.nusmoduleplanner.data.module.SemesterDetail;
-import com.ashuh.nusmoduleplanner.data.module.SemesterType;
-import com.ashuh.nusmoduleplanner.timetable.AssignedModule;
-import com.ashuh.nusmoduleplanner.timetable.TimetableEvent;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.Lesson;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.ModuleSemesterDatum;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.SemesterType;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.LessonType;
+import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
+import com.ashuh.nusmoduleplanner.data.model.timetable.TimetableEvent;
 
 import org.threeten.bp.DayOfWeek;
 
@@ -130,14 +132,13 @@ public class TimetableView extends WeekView {
             }
 
             for (AssignedModule assignedModule : assignedModules) {
-                SemesterDetail semData =
-                        assignedModule.getModuleDetail().getSemesterDetail(semType);
+                ModuleSemesterDatum semData = assignedModule.getSemesterDatum();
 
-                for (Lesson.Type lessonType : semData.getLessonTypes()) {
+                for (LessonType lessonType : assignedModule.getAssignedLessons().keySet()) {
                     String assignedLessonCode = assignedModule.getAssignedLessons()
                             .get(lessonType);
 
-                    List<Lesson> lessons = semData.getLessons(lessonType, assignedLessonCode);
+                    List<Lesson> lessons = semData.getTimetable(lessonType, assignedLessonCode);
                     int color = getRandomColor();
 
                     for (Lesson lesson : lessons) {
