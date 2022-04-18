@@ -1,18 +1,16 @@
 package com.ashuh.nusmoduleplanner.data.source.timetable;
 
 import android.content.Context;
-import android.os.Build;
 
-import androidx.annotation.RequiresApi;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 
+import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.ModuleSemesterDatum;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.LessonType;
 import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
-import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.ModuleSemesterDatum;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -45,7 +43,6 @@ public abstract class TimetableDatabase extends RoomDatabase {
     public static class Converter {
         private static final Gson gson = new Gson();
 
-        @RequiresApi(api = Build.VERSION_CODES.O)
         @TypeConverter
         public static ModuleSemesterDatum toModuleSemesterDatum(String string) {
             if (string == null) {

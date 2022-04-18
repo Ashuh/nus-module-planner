@@ -1,9 +1,6 @@
 package com.ashuh.nusmoduleplanner.data.model.nusmods.module;
 
-import android.os.Build;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.ModuleInformationSemesterDatum;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.SemesterType;
@@ -33,7 +30,6 @@ public class ModuleInformation extends BaseDetailedModule {
         return semesterData;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public Optional<ModuleInformationSemesterDatum> getSemesterDatum(SemesterType semType) {
         for (ModuleInformationSemesterDatum datum : semesterData) {
             if (datum.getSemester() == semType) {

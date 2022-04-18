@@ -1,11 +1,9 @@
 package com.ashuh.nusmoduleplanner.ui.timetable;
 
 import android.app.Dialog;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
@@ -13,8 +11,8 @@ import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.Module
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.SemesterType;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.Lesson;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.LessonType;
-import com.ashuh.nusmoduleplanner.data.source.timetable.TimetableDataSource;
 import com.ashuh.nusmoduleplanner.data.model.timetable.TimetableEvent;
+import com.ashuh.nusmoduleplanner.data.source.timetable.TimetableDataSource;
 
 import org.threeten.bp.format.TextStyle;
 
@@ -35,7 +33,6 @@ public class LessonSelectDialogFragment extends DialogFragment {
         altLessonCodes = event.getAlternateLessonCodes();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -51,7 +48,6 @@ public class LessonSelectDialogFragment extends DialogFragment {
         return builder.create();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private CharSequence[] getDialogItems() {
         List<String> dialogItems = new ArrayList<>();
         ModuleSemesterDatum semData =
@@ -66,7 +62,6 @@ public class LessonSelectDialogFragment extends DialogFragment {
         return dialogItems.toArray(new CharSequence[0]);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private String getDialogString(List<Lesson> lessons) {
         StringBuilder sb =
                 new StringBuilder().append('[').append(lessonType.getShortName()).append("] ")

@@ -1,6 +1,5 @@
 package com.ashuh.nusmoduleplanner.ui.moduledetail;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -43,7 +41,6 @@ import java.util.regex.Pattern;
 public class ModuleDetailFragment extends Fragment {
     private ModuleDetailViewModel viewModel;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Module Details");
@@ -62,7 +59,6 @@ public class ModuleDetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void observeViewModel(View root) {
         final TextView titleTextView = root.findViewById(R.id.module_title);
         final TextView codeTextView = root.findViewById(R.id.module_code);

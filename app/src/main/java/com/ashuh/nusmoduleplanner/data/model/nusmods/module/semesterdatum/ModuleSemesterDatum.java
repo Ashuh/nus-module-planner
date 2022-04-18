@@ -2,10 +2,7 @@ package com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum;
 
 import static java.util.Objects.requireNonNull;
 
-import android.os.Build;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.Lesson;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.LessonType;
@@ -13,7 +10,6 @@ import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequiresApi(api = Build.VERSION_CODES.O)
 public class ModuleSemesterDatum extends ModuleInformationSemesterDatum {
     @NonNull
     private List<Lesson> timetable;

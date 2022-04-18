@@ -1,9 +1,6 @@
 package com.ashuh.nusmoduleplanner.data.model.nusmods.module;
 
-import android.os.Build;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.prereqtree.PrereqTree;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.ModuleInformationSemesterDatum;
@@ -35,7 +32,6 @@ public class Module extends BaseDetailedModule {
         this.fulfillRequirements = fulfillRequirements;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public Optional<Set<SemesterType>> getSemesters() {
         if (!hasSemesters()) {
             return Optional.empty();
@@ -61,7 +57,6 @@ public class Module extends BaseDetailedModule {
         return prereqTree;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public AssignedModule toAssignedModule(SemesterType semester) {
         ModuleSemesterDatum semesterDatum =
                 getSemesterDatum(semester).orElseThrow(() -> new IllegalArgumentException(
@@ -69,7 +64,6 @@ public class Module extends BaseDetailedModule {
         return new AssignedModule(moduleCode, title, moduleCredit, semester, semesterDatum);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public Optional<ModuleSemesterDatum> getSemesterDatum(SemesterType semType) {
         for (ModuleSemesterDatum datum : semesterData) {
             if (datum.getSemester() == semType) {

@@ -1,9 +1,6 @@
 package com.ashuh.nusmoduleplanner.data.model.timetable;
 
-import android.os.Build;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.room.Entity;
 
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.BaseModule;
@@ -25,9 +22,9 @@ public class AssignedModule extends BaseModule {
     private final double moduleCredit;
     private Map<LessonType, String> assignedLessons;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public AssignedModule(@NonNull String moduleCode, @NonNull String title, double moduleCredit,
-                          @NonNull SemesterType semType, @NonNull ModuleSemesterDatum semesterDatum) {
+                          @NonNull SemesterType semType,
+                          @NonNull ModuleSemesterDatum semesterDatum) {
         super(moduleCode, title);
         Objects.requireNonNull(semType);
         Objects.requireNonNull(semesterDatum);

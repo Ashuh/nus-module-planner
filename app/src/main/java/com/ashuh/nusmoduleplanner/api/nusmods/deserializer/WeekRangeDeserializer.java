@@ -1,9 +1,5 @@
 package com.ashuh.nusmoduleplanner.api.nusmods.deserializer;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.weekrange.WeekRange;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
@@ -19,7 +15,6 @@ import java.util.List;
 
 public class WeekRangeDeserializer implements JsonDeserializer<WeekRange> {
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public WeekRange deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {

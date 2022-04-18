@@ -3,10 +3,7 @@ package com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesso
 import static com.ashuh.nusmoduleplanner.data.model.util.DateUtil.DATE_FORMATTER_DISPLAY_SHORT;
 import static java.util.Objects.requireNonNull;
 
-import android.os.Build;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -36,18 +33,11 @@ public class WeekRange {
         this.weeks = weeks;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private static String formatDate(String date) {
-        return LocalDate.parse(date, DateTimeFormatter.ISO_DATE)
-                .format(DATE_FORMATTER_DISPLAY_SHORT);
-    }
-
     @NonNull
     public List<Integer> getWeeks() {
         return weeks;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @NonNull
     @Override
     public String toString() {
@@ -64,13 +54,18 @@ public class WeekRange {
         }
     }
 
+    private static String formatDate(String date) {
+        return LocalDate.parse(date, DateTimeFormatter.ISO_DATE)
+                .format(DATE_FORMATTER_DISPLAY_SHORT);
+    }
+
     private boolean isWeeksContinuous() {
         if (weeks.size() <= 1) {
             return false;
         }
 
         for (int i = 1; i < weeks.size(); i++) {
-            if (weeks.get(i) != weeks.get(i-1) + 1) {
+            if (weeks.get(i) != weeks.get(i - 1) + 1) {
                 return false;
             }
         }

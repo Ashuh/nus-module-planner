@@ -1,10 +1,8 @@
 package com.ashuh.nusmoduleplanner.data.source.disqus;
 
-import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -23,7 +21,6 @@ public class DisqusRepository {
     private static final String FORUM = "nusmods-prod";
     private static final String TAG = "DisqusRepository";
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public static LiveData<PostList> getPosts(String moduleCode) {
         MutableLiveData<PostList> liveData = new MutableLiveData<>();
         DisqusApiInterface api = DisqusApiInterfaceBuilder.getApiInterface();

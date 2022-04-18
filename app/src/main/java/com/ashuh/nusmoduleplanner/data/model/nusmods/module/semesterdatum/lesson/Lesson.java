@@ -1,9 +1,6 @@
 package com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson;
 
-import android.os.Build;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.weekrange.WeekRange;
 
@@ -126,7 +123,6 @@ public class Lesson {
         return weeks;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public String getScheduleDescription() {
         return weeks.toString();
     }

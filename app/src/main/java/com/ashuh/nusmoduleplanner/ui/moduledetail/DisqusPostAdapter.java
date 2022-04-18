@@ -1,14 +1,12 @@
 package com.ashuh.nusmoduleplanner.ui.moduledetail;
 
 import android.annotation.SuppressLint;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashuh.nusmoduleplanner.R;
@@ -21,7 +19,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
 
-@RequiresApi(api = Build.VERSION_CODES.O)
 public class DisqusPostAdapter extends RecyclerView.Adapter<DisqusPostAdapter.ViewHolder> {
 
     private static final List<ChronoUnit> AGE_UNITS = new ArrayList<>(
@@ -30,25 +27,6 @@ public class DisqusPostAdapter extends RecyclerView.Adapter<DisqusPostAdapter.Vi
     private static final String AGE_TEXT = "%s %s ago";
 
     private List<Post> posts = new ArrayList<>();
-
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView userTextView;
-        private final TextView messageTextView;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            userTextView = itemView.findViewById(R.id.disqus_card_title);
-            messageTextView = itemView.findViewById(R.id.disqus_card_message);
-        }
-
-        public TextView getTitleTextView() {
-            return userTextView;
-        }
-
-        public TextView getMessageTextView() {
-            return messageTextView;
-        }
-    }
 
     @NonNull
     @Override
@@ -76,12 +54,6 @@ public class DisqusPostAdapter extends RecyclerView.Adapter<DisqusPostAdapter.Vi
         return posts.size();
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    public void setPosts(List<Post> posts) {
-        this.posts = posts;
-        notifyDataSetChanged();
-    }
-
     private String getAgeText(LocalDateTime postTime) {
         LocalDateTime now = LocalDateTime.now();
 
@@ -97,5 +69,30 @@ public class DisqusPostAdapter extends RecyclerView.Adapter<DisqusPostAdapter.Vi
         }
 
         return String.format(AGE_TEXT, age, ageUnit);
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+        notifyDataSetChanged();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final TextView userTextView;
+        private final TextView messageTextView;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            userTextView = itemView.findViewById(R.id.disqus_card_title);
+            messageTextView = itemView.findViewById(R.id.disqus_card_message);
+        }
+
+        public TextView getTitleTextView() {
+            return userTextView;
+        }
+
+        public TextView getMessageTextView() {
+            return messageTextView;
+        }
     }
 }

@@ -1,12 +1,7 @@
 package com.ashuh.nusmoduleplanner.data.model.util;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
 import java.time.format.DateTimeFormatter;
 
-@RequiresApi(api = Build.VERSION_CODES.O)
 public class DateUtil {
 
     public static final String DATE_FORMAT_API = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";

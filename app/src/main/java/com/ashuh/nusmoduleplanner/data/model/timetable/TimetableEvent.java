@@ -1,11 +1,7 @@
 package com.ashuh.nusmoduleplanner.data.model.timetable;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
-import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.Lesson;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.SemesterType;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.Lesson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +17,6 @@ public class TimetableEvent extends WeekViewEvent {
     private final SortedSet<String> altLessonsCodes;
     private final Lesson lesson;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public TimetableEvent(AssignedModule assignedModule, Lesson lesson, SemesterType semType,
                           me.jlurena.revolvingweekview.DayTime startTime,
                           me.jlurena.revolvingweekview.DayTime endTime) {

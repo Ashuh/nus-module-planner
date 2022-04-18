@@ -2,10 +2,7 @@ package com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum;
 
 import static java.util.Objects.requireNonNull;
 
-import android.os.Build;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 
 import com.ashuh.nusmoduleplanner.data.model.util.DateUtil;
 
@@ -15,7 +12,6 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 
-@RequiresApi(api = Build.VERSION_CODES.O)
 public class ModuleInformationSemesterDatum {
 
     @NonNull
@@ -31,7 +27,6 @@ public class ModuleInformationSemesterDatum {
         this.semester = semester;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public Optional<LocalDateTime> getExamDate() {
         if (!hasExam()) {
             return Optional.empty();

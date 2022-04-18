@@ -2,14 +2,12 @@ package com.ashuh.nusmoduleplanner.ui.timetable;
 
 import android.annotation.SuppressLint;
 import android.content.res.Resources;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashuh.nusmoduleplanner.R;
@@ -20,7 +18,6 @@ import com.ashuh.nusmoduleplanner.data.source.timetable.TimetableDataSource;
 import java.util.ArrayList;
 import java.util.List;
 
-@RequiresApi(api = Build.VERSION_CODES.O)
 public class TimetableEntryAdapter extends RecyclerView.Adapter<TimetableEntryAdapter.ViewHolder> {
 
     private final List<AssignedModule> assignedModules = new ArrayList<>();
@@ -33,7 +30,6 @@ public class TimetableEntryAdapter extends RecyclerView.Adapter<TimetableEntryAd
         return new TimetableEntryAdapter.ViewHolder(view);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         Resources res = viewHolder.titleTextView.getContext().getResources();

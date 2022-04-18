@@ -7,7 +7,6 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -124,7 +123,6 @@ public class TimetableView extends WeekView {
     }
 
     private class TimetableLoader implements WeekViewLoader {
-        @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         public List<? extends WeekViewEvent> onWeekViewLoad() {
             List<WeekViewEvent> events = new ArrayList<>();
