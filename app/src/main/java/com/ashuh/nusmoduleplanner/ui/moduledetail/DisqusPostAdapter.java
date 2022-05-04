@@ -1,6 +1,9 @@
 package com.ashuh.nusmoduleplanner.ui.moduledetail;
 
 import android.annotation.SuppressLint;
+import android.text.Html;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +49,9 @@ public class DisqusPostAdapter extends RecyclerView.Adapter<DisqusPostAdapter.Vi
         titleJoiner.add(author).add(ageText);
 
         viewHolder.getTitleTextView().setText(titleJoiner.toString());
-        viewHolder.getMessageTextView().setText(post.getRawMessage());
+        Spanned spanned = Html.fromHtml(post.getMessage(), Html.FROM_HTML_MODE_LEGACY);
+        viewHolder.getMessageTextView().setText(spanned);
+        viewHolder.getMessageTextView().setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     @Override

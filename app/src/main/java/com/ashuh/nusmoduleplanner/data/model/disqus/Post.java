@@ -6,14 +6,11 @@ import java.time.LocalDateTime;
 
 public class Post {
 
-    @SerializedName("author")
     private Author author;
 
-    @SerializedName("createdAt")
     private LocalDateTime createdAt;
 
-    @SerializedName("raw_message")
-    private String rawMessage;
+    private String message;
 
     public Author getAuthor() {
         return author;
@@ -23,8 +20,8 @@ public class Post {
         return createdAt;
     }
 
-    public String getRawMessage() {
-        return rawMessage;
+    public String getMessage() {
+        return message;
     }
 
 
