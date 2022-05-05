@@ -1,4 +1,4 @@
-package com.ashuh.nusmoduleplanner.api.nusmods.deserializer;
+package com.ashuh.nusmoduleplanner.data.model.typeadapter.deserializer;
 
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.weeks.WeekRange;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.weeks.Weeks;

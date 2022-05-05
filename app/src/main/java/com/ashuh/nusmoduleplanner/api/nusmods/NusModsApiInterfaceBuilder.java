@@ -1,9 +1,9 @@
 package com.ashuh.nusmoduleplanner.api.nusmods;
 
-import com.ashuh.nusmoduleplanner.api.nusmods.deserializer.PrereqTreeDeserializer;
-import com.ashuh.nusmoduleplanner.api.nusmods.deserializer.SemesterTypeDeserializer;
-import com.ashuh.nusmoduleplanner.api.nusmods.deserializer.WeeksDeserializer;
-import com.ashuh.nusmoduleplanner.api.nusmods.deserializer.WorkloadDeserializer;
+import com.ashuh.nusmoduleplanner.data.model.typeadapter.deserializer.PrereqTreeDeserializer;
+import com.ashuh.nusmoduleplanner.data.model.typeadapter.deserializer.SemesterTypeDeserializer;
+import com.ashuh.nusmoduleplanner.data.model.typeadapter.deserializer.WeeksDeserializer;
+import com.ashuh.nusmoduleplanner.data.model.typeadapter.deserializer.WorkloadDeserializer;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.prereqtree.PrereqTree;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.SemesterType;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.weeks.Weeks;

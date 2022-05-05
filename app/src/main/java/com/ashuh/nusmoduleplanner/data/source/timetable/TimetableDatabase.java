@@ -8,8 +8,8 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 
-import com.ashuh.nusmoduleplanner.api.nusmods.deserializer.WeeksDeserializer;
-import com.ashuh.nusmoduleplanner.api.nusmods.deserializer.WeeksSerializer;
+import com.ashuh.nusmoduleplanner.data.model.typeadapter.deserializer.WeeksDeserializer;
+import com.ashuh.nusmoduleplanner.data.model.typeadapter.serializer.WeeksSerializer;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.Lesson;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.LessonType;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.weeks.Weeks;
