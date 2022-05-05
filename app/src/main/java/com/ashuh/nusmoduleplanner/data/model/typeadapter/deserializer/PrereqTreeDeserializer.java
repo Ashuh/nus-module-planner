@@ -1,4 +1,4 @@
-package com.ashuh.nusmoduleplanner.api.nusmods.deserializer;
+package com.ashuh.nusmoduleplanner.data.model.typeadapter.deserializer;
 
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.prereqtree.And;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.prereqtree.LogicalPrerequisite;
