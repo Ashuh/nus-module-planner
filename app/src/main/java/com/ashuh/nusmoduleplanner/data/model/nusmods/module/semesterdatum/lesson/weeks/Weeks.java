@@ -28,7 +28,8 @@ public class Weeks {
             return "Weeks " + weeks.get(0) + "-" + weeks.get(weeks.size() - 1);
         } else {
             return "Weeks " + weeks.toString().replaceAll("[\\[\\]]", "");
-        }    }
+        }
+    }
 
     protected boolean isWeeksContinuous() {
         if (weeks.size() <= 1) {
