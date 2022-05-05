@@ -11,10 +11,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashuh.nusmoduleplanner.R;
-import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.ModuleSemesterDatum;
 import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
+import com.ashuh.nusmoduleplanner.data.model.util.DateUtil;
 import com.ashuh.nusmoduleplanner.data.source.timetable.TimetableDataSource;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,13 +37,13 @@ public class TimetableEntryAdapter extends RecyclerView.Adapter<TimetableEntryAd
         Resources res = viewHolder.titleTextView.getContext().getResources();
 
         AssignedModule assignedModule = assignedModules.get(position);
-        ModuleSemesterDatum semData = assignedModule.getSemesterDatum();
 
         String title = String.format(res.getString(R.string.module_card_title),
                 assignedModule.getModuleCode(),
                 assignedModule.getTitle());
 
-        String examString = semData.getExamInfo();
+        String examString = generateExamInfoText(assignedModule.getExamDate(),
+                assignedModule.getExamDuration());
         String description =
                 String.format(res.getString(R.string.module_card_description), examString,
                         assignedModule.getModuleCredit());
@@ -53,6 +55,18 @@ public class TimetableEntryAdapter extends RecyclerView.Adapter<TimetableEntryAd
     @Override
     public int getItemCount() {
         return assignedModules.size();
+    }
+
+    private String generateExamInfoText(String examDate, int examDuration) {
+        if (examDate == null) {
+            return "No Exam";
+        }
+
+        String examDateString = ZonedDateTime.parse(examDate)
+                .withZoneSameInstant(ZoneId.of("Asia/Singapore"))
+                .format(DateUtil.DATE_FORMATTER_DISPLAY);
+        String examDurationString = examDuration / 60.0 + " hrs";
+        return examDateString + " " + examDurationString;
     }
 
     @SuppressLint("NotifyDataSetChanged")

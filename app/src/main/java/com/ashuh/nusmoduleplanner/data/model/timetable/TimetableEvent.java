@@ -30,7 +30,7 @@ public class TimetableEvent extends WeekViewEvent {
         this.semType = semType;
         altLessonsCodes = new TreeSet<>();
 
-        for (Lesson l : assignedModule.getSemesterDatum().getTimetable(lesson.getType())) {
+        for (Lesson l : assignedModule.getTimetable(lesson.getType())) {
             if (!lesson.getClassNo().equals(l.getClassNo())) {
                 altLessonsCodes.add(l.getClassNo());
             }

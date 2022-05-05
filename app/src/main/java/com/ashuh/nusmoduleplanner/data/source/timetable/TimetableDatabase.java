@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 
-import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.ModuleSemesterDatum;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.Lesson;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.LessonType;
 import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
 import com.google.gson.Gson;
@@ -16,6 +16,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Database(entities = {AssignedModule.class}, version = 1)
@@ -44,21 +45,23 @@ public abstract class TimetableDatabase extends RoomDatabase {
         private static final Gson gson = new Gson();
 
         @TypeConverter
-        public static ModuleSemesterDatum toModuleSemesterDatum(String string) {
+        public static List<Lesson> toLessonList(String string) {
             if (string == null) {
                 return null;
             }
 
-            return gson.fromJson(string, ModuleSemesterDatum.class);
+            Type listType = new TypeToken<List<Lesson>>() {
+            }.getType();
+            return gson.fromJson(string, listType);
         }
 
         @TypeConverter
-        public static String fromModuleSemesterDatum(ModuleSemesterDatum semesterData) {
-            if (semesterData == null) {
+        public static String fromLessonList(List<Lesson> lessons) {
+            if (lessons == null) {
                 return null;
             }
 
-            return gson.toJson(semesterData);
+            return gson.toJson(lessons);
         }
 
         @TypeConverter

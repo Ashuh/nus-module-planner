@@ -132,13 +132,11 @@ public class TimetableView extends WeekView {
             }
 
             for (AssignedModule assignedModule : assignedModules) {
-                ModuleSemesterDatum semData = assignedModule.getSemesterDatum();
-
                 for (LessonType lessonType : assignedModule.getAssignedLessons().keySet()) {
                     String assignedLessonCode = assignedModule.getAssignedLessons()
                             .get(lessonType);
 
-                    List<Lesson> lessons = semData.getTimetable(lessonType, assignedLessonCode);
+                    List<Lesson> lessons = assignedModule.getTimetable(lessonType, assignedLessonCode);
                     int color = getRandomColor();
 
                     for (Lesson lesson : lessons) {

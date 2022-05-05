@@ -11,6 +11,7 @@ import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.Module
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.SemesterType;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.Lesson;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.LessonType;
+import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
 import com.ashuh.nusmoduleplanner.data.model.timetable.TimetableEvent;
 import com.ashuh.nusmoduleplanner.data.source.timetable.TimetableDataSource;
 
@@ -50,12 +51,11 @@ public class LessonSelectDialogFragment extends DialogFragment {
 
     private CharSequence[] getDialogItems() {
         List<String> dialogItems = new ArrayList<>();
-        ModuleSemesterDatum semData =
-                TimetableDataSource.getInstance().getAssignedModule(moduleCode, semType)
-                        .getSemesterDatum();
+        AssignedModule assignedModule =
+                TimetableDataSource.getInstance().getAssignedModule(moduleCode, semType);
 
         for (String code : altLessonCodes) {
-            List<Lesson> lessons = semData.getTimetable(lessonType, code);
+            List<Lesson> lessons = assignedModule.getTimetable(lessonType, code);
             dialogItems.add(getDialogString(lessons));
         }
 
