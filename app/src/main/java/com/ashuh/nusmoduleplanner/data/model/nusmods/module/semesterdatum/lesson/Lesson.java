@@ -2,7 +2,7 @@ package com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesso
 
 import androidx.annotation.NonNull;
 
-import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.weekrange.WeekRange;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.weeks.Weeks;
 
 import org.threeten.bp.DayOfWeek;
 
@@ -17,7 +17,7 @@ public class Lesson {
     @NonNull
     private final String endTime;
     @NonNull
-    private final WeekRange weeks;
+    private final Weeks weeks;
     @NonNull
     private final String venue;
     @NonNull
@@ -27,7 +27,7 @@ public class Lesson {
     private final int size;
 
     public Lesson(@NonNull String classNo, @NonNull String startTime, @NonNull String endTime,
-                  @NonNull WeekRange weeks, @NonNull String venue, @NonNull String day,
+                  @NonNull Weeks weeks, @NonNull String venue, @NonNull String day,
                   @NonNull String lessonType, int size) {
         this.classNo = classNo;
         this.startTime = startTime;
@@ -119,7 +119,7 @@ public class Lesson {
     }
 
     @NonNull
-    public WeekRange getWeeks() {
+    public Weeks getWeeks() {
         return weeks;
     }
 

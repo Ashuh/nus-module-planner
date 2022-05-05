@@ -1,6 +1,7 @@
 package com.ashuh.nusmoduleplanner.api.nusmods.deserializer;
 
-import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.weekrange.WeekRange;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.weeks.WeekRange;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.weeks.Weeks;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -13,15 +14,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class WeekRangeDeserializer implements JsonDeserializer<WeekRange> {
+public class WeeksDeserializer implements JsonDeserializer<Weeks> {
 
     @Override
-    public WeekRange deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+    public Weeks deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
 
         if (json.isJsonArray()) {
             List<Integer> weeks = deserializeWeeks(json.getAsJsonArray());
-            return new WeekRange(weeks);
+            return new Weeks(weeks);
         } else {
             JsonObject jsonObject = json.getAsJsonObject();
 
