@@ -10,13 +10,18 @@ import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.LessonType;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity(tableName = "assigned_modules", primaryKeys = {"semType", "moduleCode"})
 public class AssignedModule extends BaseModule {
+
     @NonNull
-    private final ModuleSemesterDatum semesterDatum;
+    private final List<Lesson> timetable;
+    private final String examDate;
+    private final int examDuration;
     @NonNull
     private final SemesterType semType;
     private final double moduleCredit;
@@ -29,21 +34,58 @@ public class AssignedModule extends BaseModule {
         Objects.requireNonNull(semType);
         Objects.requireNonNull(semesterDatum);
         this.semType = semType;
-        this.semesterDatum = semesterDatum;
+        this.timetable = semesterDatum.getTimetable();
+        this.examDate = semesterDatum.getExamDate();
+        this.examDuration = semesterDatum.getExamDuration();
         this.moduleCredit = moduleCredit;
         assignedLessons = new HashMap<>();
 
         for (Lesson lesson : semesterDatum.getTimetable()) {
             LessonType lessonType = lesson.getType();
-            assignedLessons.put(lessonType, semesterDatum.getTimetable(lessonType).get(0)
+            assignedLessons.put(lessonType, getTimetable(lessonType).get(0)
                     .getClassNo());
         }
+    }
+
+    public AssignedModule(@NonNull String moduleCode, @NonNull String title,
+                          @NonNull List<Lesson> timetable, String examDate, int examDuration,
+                          @NonNull SemesterType semType, double moduleCredit) {
+        super(moduleCode, title);
+        this.timetable = timetable;
+        this.examDate = examDate;
+        this.examDuration = examDuration;
+        this.semType = semType;
+        this.moduleCredit = moduleCredit;
+    }
+
+    @NonNull
+    public List<Lesson> getTimetable() {
+        return timetable;
+    }
+
+    public List<Lesson> getTimetable(LessonType lessonType) {
+        return timetable.stream().filter((lesson) -> lesson.getType() == lessonType).collect(
+                Collectors.toList());
+    }
+
+    public List<Lesson> getTimetable(LessonType lessonType, String classNo) {
+        return timetable.stream()
+                .filter((lesson) -> lesson.getType() == lessonType && lesson.getClassNo()
+                        .equals(classNo)).collect(Collectors.toList());
+    }
+
+    public String getExamDate() {
+        return examDate;
+    }
+
+    public int getExamDuration() {
+        return examDuration;
     }
 
     public void setAssignedLesson(LessonType lessonType, String lessonCode) {
         boolean isValid = false;
 
-        for (Lesson l : semesterDatum.getTimetable(lessonType)) {
+        for (Lesson l : timetable) {
             if (l.getClassNo().equals(lessonCode)) {
                 isValid = true;
                 break;
@@ -68,11 +110,6 @@ public class AssignedModule extends BaseModule {
 
     public void setAssignedLessons(Map<LessonType, String> assignedLessons) {
         this.assignedLessons = assignedLessons;
-    }
-
-    @NonNull
-    public ModuleSemesterDatum getSemesterDatum() {
-        return semesterDatum;
     }
 
     public double getModuleCredit() {

@@ -4,20 +4,12 @@ import static java.util.Objects.requireNonNull;
 
 import androidx.annotation.NonNull;
 
-import com.ashuh.nusmoduleplanner.data.model.util.DateUtil;
-
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.Optional;
-
 public class ModuleInformationSemesterDatum {
 
     @NonNull
-    private final SemesterType semester;
-    private final String examDate;
-    private final int examDuration;
+    protected final SemesterType semester;
+    protected final String examDate;
+    protected final int examDuration;
 
     public ModuleInformationSemesterDatum(String examDate, int examDuration,
                                           @NonNull SemesterType semester) {
@@ -27,16 +19,8 @@ public class ModuleInformationSemesterDatum {
         this.semester = semester;
     }
 
-    public Optional<LocalDateTime> getExamDate() {
-        if (!hasExam()) {
-            return Optional.empty();
-        }
-
-        return Optional.of(LocalDateTime.parse(examDate, DateUtil.DATE_FORMATTER_API));
-    }
-
-    public boolean hasExam() {
-        return examDate != null && !examDate.isEmpty();
+    public String getExamDate() {
+        return examDate;
     }
 
     @NonNull
@@ -44,20 +28,12 @@ public class ModuleInformationSemesterDatum {
         return semester;
     }
 
-    public String getExamInfo() {
-        if (hasExam()) {
-            String examDateString = ZonedDateTime.parse(examDate)
-                    .withZoneSameInstant(ZoneId.of("Asia/Singapore"))
-                    .format(DateUtil.DATE_FORMATTER_DISPLAY);
-            String examDurationString = examDuration / 60.0 + " hrs";
-            return examDateString + " " + examDurationString;
-        } else {
-            return "No Exam";
-        }
+    public boolean hasExam() {
+        return examDate != null && !examDate.isEmpty();
     }
 
-    public Duration getExamDuration() {
-        return Duration.ofMinutes(examDuration);
+    public int getExamDuration() {
+        return examDuration;
     }
 
     @NonNull

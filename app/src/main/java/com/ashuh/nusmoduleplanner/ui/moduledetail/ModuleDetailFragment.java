@@ -27,10 +27,13 @@ import com.ashuh.nusmoduleplanner.data.model.nusmods.AcademicYear;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.ModuleInformationSemesterDatum;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.ModuleSemesterDatum;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.SemesterType;
+import com.ashuh.nusmoduleplanner.data.model.util.DateUtil;
 import com.ashuh.nusmoduleplanner.data.source.disqus.DisqusRepository;
 import com.ashuh.nusmoduleplanner.data.source.nusmods.ModulesRepository;
 import com.ashuh.nusmoduleplanner.data.source.timetable.TimetableDataSource;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -141,7 +144,8 @@ public class ModuleDetailFragment extends Fragment {
 
             for (int i = 0; i < semData.size(); i++) {
                 ModuleSemesterDatum datum = semData.get(i);
-                String examString = datum.getExamInfo();
+                String examString = generateExamInfoText(datum.getExamDate(),
+                        datum.getExamDuration());
                 examViews[datum.getSemester().getId() - 1].setText(examString);
             }
 
@@ -215,6 +219,18 @@ public class ModuleDetailFragment extends Fragment {
         }
 
         return ss;
+    }
+
+    private String generateExamInfoText(String examDate, int examDuration) {
+        if (examDate == null) {
+            return "No Exam";
+        }
+
+        String examDateString = ZonedDateTime.parse(examDate)
+                .withZoneSameInstant(ZoneId.of("Asia/Singapore"))
+                .format(DateUtil.DATE_FORMATTER_DISPLAY);
+        String examDurationString = examDuration / 60.0 + " hrs";
+        return examDateString + " " + examDurationString;
     }
 
     private static class ClickableModuleCode extends ClickableSpan {
