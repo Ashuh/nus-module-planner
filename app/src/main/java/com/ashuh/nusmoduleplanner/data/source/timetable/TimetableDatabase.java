@@ -8,10 +8,14 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 
+import com.ashuh.nusmoduleplanner.api.nusmods.deserializer.WeeksDeserializer;
+import com.ashuh.nusmoduleplanner.api.nusmods.deserializer.WeeksSerializer;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.Lesson;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.LessonType;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.weeks.Weeks;
 import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
@@ -42,7 +46,10 @@ public abstract class TimetableDatabase extends RoomDatabase {
     public abstract TimetableDAO dao();
 
     public static class Converter {
-        private static final Gson gson = new Gson();
+        private static final Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Weeks.class, new WeeksDeserializer())
+                .registerTypeAdapter(Weeks.class, new WeeksSerializer())
+                .create();
 
         @TypeConverter
         public static List<Lesson> toLessonList(String string) {
