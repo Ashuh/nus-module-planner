@@ -74,7 +74,6 @@ public class ModulesRepository {
 
                     @Override
                     public void onResponse(Module response) {
-                        System.out.println(response);
                         data.setValue(response);
                         moduleDetailRequests.put(moduleCode, data);
                     }
