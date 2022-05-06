@@ -39,10 +39,10 @@ public class ModuleInformationSemesterDatum {
     @NonNull
     @Override
     public String toString() {
-        return "ModuleInformationSemesterDatum{" +
-                "examDate='" + examDate + '\'' +
-                ", examDuration=" + examDuration +
-                ", semester=" + semester +
-                '}';
+        return "ModuleInformationSemesterDatum{"
+                + "examDate='" + examDate + '\''
+                + ", examDuration=" + examDuration
+                + ", semester=" + semester
+                + '}';
     }
 }

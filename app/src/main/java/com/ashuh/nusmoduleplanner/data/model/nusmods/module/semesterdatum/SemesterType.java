@@ -2,11 +2,23 @@ package com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum;
 
 import androidx.annotation.NonNull;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum SemesterType {
     SEMESTER_1(1, "Semester 1"),
     SEMESTER_2(2, "Semester 2"),
     SPECIAL_TERM_1(3, "Special Term I"),
     SPECIAL_TERM_2(4, "Special Term II");
+
+    private static final Map<Integer, SemesterType> INTEGER_SEMESTER_MAP;
+
+    static {
+        INTEGER_SEMESTER_MAP = new HashMap<>();
+        for (SemesterType semesterType : values()) {
+            INTEGER_SEMESTER_MAP.put(semesterType.getId(), semesterType);
+        }
+    }
 
     private final int id;
     private final String name;
@@ -17,18 +29,10 @@ public enum SemesterType {
     }
 
     public static SemesterType fromId(int id) {
-        switch (id) {
-            case 1:
-                return SEMESTER_1;
-            case 2:
-                return SEMESTER_2;
-            case 3:
-                return SPECIAL_TERM_1;
-            case 4:
-                return SPECIAL_TERM_2;
-            default:
-                throw new IllegalArgumentException("Invalid semester");
+        if (!INTEGER_SEMESTER_MAP.containsKey(id)) {
+            throw new IllegalArgumentException("No semester type with id " + id);
         }
+        return INTEGER_SEMESTER_MAP.get(id);
     }
 
     @NonNull

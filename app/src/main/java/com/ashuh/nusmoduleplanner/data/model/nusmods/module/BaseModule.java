@@ -31,9 +31,9 @@ public abstract class BaseModule {
     @NonNull
     @Override
     public String toString() {
-        return "BaseModule{" +
-                "moduleCode='" + moduleCode + '\'' +
-                ", title='" + title + '\'' +
-                '}';
+        return "BaseModule{"
+                + "moduleCode='" + moduleCode + '\''
+                + ", title='" + title + '\''
+                + '}';
     }
 }

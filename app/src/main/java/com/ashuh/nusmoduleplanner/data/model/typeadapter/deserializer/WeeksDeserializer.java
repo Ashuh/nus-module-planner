@@ -28,11 +28,12 @@ public class WeeksDeserializer implements JsonDeserializer<Weeks> {
 
             String start = jsonObject.get("start").getAsString();
             String end = jsonObject.get("end").getAsString();
-            int weekInterval = jsonObject.has("weekInterval") ?
-                    jsonObject.get("weekInterval").getAsInt() : 0;
-            List<Integer> weeks = jsonObject.has("weeks") ?
-                    deserializeWeeks(jsonObject.get("weeks").getAsJsonArray()) :
-                    Collections.emptyList();
+            int weekInterval = jsonObject.has("weekInterval")
+                    ? jsonObject.get("weekInterval").getAsInt()
+                    : 0;
+            List<Integer> weeks = jsonObject.has("weeks")
+                    ? deserializeWeeks(jsonObject.get("weeks").getAsJsonArray())
+                    : Collections.emptyList();
 
             return new WeekRange(start, end, weekInterval, weeks);
         }

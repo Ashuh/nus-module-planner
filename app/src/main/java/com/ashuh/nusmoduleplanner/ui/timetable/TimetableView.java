@@ -3,7 +3,6 @@ package com.ashuh.nusmoduleplanner.ui.timetable;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.RectF;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 
@@ -11,9 +10,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.ashuh.nusmoduleplanner.MainActivity;
-import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.Lesson;
-import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.ModuleSemesterDatum;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.SemesterType;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.Lesson;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.LessonType;
 import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
 import com.ashuh.nusmoduleplanner.data.model.timetable.TimetableEvent;
@@ -31,12 +29,42 @@ import me.jlurena.revolvingweekview.WeekView;
 import me.jlurena.revolvingweekview.WeekViewEvent;
 
 public class TimetableView extends WeekView {
+
+    private static final int HOUR_TIMETABLE_START = 8;
+    private static final int HOUR_TIMETABLE_END = 22;
+    private static final int HOUR_NOON = 12;
+
+    private static final int TEXT_SIZE = 12;
+    private static final int TEXT_SIZE_EVENT = 10;
+
+    private static final int MAX_COLOR_VALUE = 255;
+
     private SemesterType semType = null;
     private List<AssignedModule> assignedModules;
 
     public TimetableView(Context context) {
         super(context);
         init(context);
+    }
+
+    private void init(Context context) {
+        setHorizontalFlingEnabled(false);
+        goToDate(DayOfWeek.MONDAY);
+        setMinTime(HOUR_TIMETABLE_START);
+        setMaxTime(HOUR_TIMETABLE_END);
+
+        setOverlappingEventGap(
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2,
+                        getResources().getDisplayMetrics()));
+        setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, TEXT_SIZE,
+                getResources().getDisplayMetrics()));
+        setEventTextSize(
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, TEXT_SIZE_EVENT,
+                        getResources().getDisplayMetrics()));
+
+        setOnEventClickListener(new TimetableClickListener(context));
+        setDateTimeInterpreter(new TimetableDateTimeInterpreter());
+        setWeekViewLoader(new TimetableLoader());
     }
 
     public TimetableView(Context context, AttributeSet attrs) {
@@ -58,28 +86,10 @@ public class TimetableView extends WeekView {
         notifyDatasetChanged();
     }
 
-    private void init(Context context) {
-        setHorizontalFlingEnabled(false);
-        goToDate(DayOfWeek.MONDAY);
-        setMinTime(8);
-        setMaxTime(22);
-
-        setOverlappingEventGap(
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2,
-                        getResources().getDisplayMetrics()));
-        setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12,
-                getResources().getDisplayMetrics()));
-        setEventTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 10,
-                getResources().getDisplayMetrics()));
-
-        setOnEventClickListener(new TimetableClickListener(context));
-        setDateTimeInterpreter(new TimetableDateTimeInterpreter());
-        setWeekViewLoader(new TimetableLoader());
-    }
-
     private int getRandomColor() {
         Random random = new Random();
-        return Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256));
+        return Color.argb(MAX_COLOR_VALUE, random.nextInt(MAX_COLOR_VALUE + 1),
+                random.nextInt(MAX_COLOR_VALUE + 1), random.nextInt(MAX_COLOR_VALUE + 1));
     }
 
     private static class TimetableDateTimeInterpreter implements DateTimeInterpreter {
@@ -93,8 +103,8 @@ public class TimetableView extends WeekView {
         public String interpretTime(int hour, int minutes) {
             String strMinutes = String.format(Locale.getDefault(), "%02d", minutes);
 
-            if (hour > 11) {
-                return ((hour == 12) ? "12" : (hour - 12)) + ":" + strMinutes + " PM";
+            if (hour >= HOUR_NOON) {
+                return ((hour == HOUR_NOON) ? "12" : (hour - HOUR_NOON)) + ":" + strMinutes + " PM";
             } else {
                 return ((hour == 0) ? "12:" : String.valueOf(hour)) + ":" + strMinutes + " AM";
             }
@@ -104,7 +114,7 @@ public class TimetableView extends WeekView {
     private static class TimetableClickListener implements WeekView.EventClickListener {
         private final Context context;
 
-        public TimetableClickListener(Context context) {
+        TimetableClickListener(Context context) {
             this.context = context;
         }
 
@@ -136,7 +146,8 @@ public class TimetableView extends WeekView {
                     String assignedLessonCode = assignedModule.getAssignedLessons()
                             .get(lessonType);
 
-                    List<Lesson> lessons = assignedModule.getTimetable(lessonType, assignedLessonCode);
+                    List<Lesson> lessons =
+                            assignedModule.getTimetable(lessonType, assignedLessonCode);
                     int color = getRandomColor();
 
                     for (Lesson lesson : lessons) {

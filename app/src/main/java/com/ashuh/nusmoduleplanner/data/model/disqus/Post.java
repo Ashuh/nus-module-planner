@@ -1,7 +1,5 @@
 package com.ashuh.nusmoduleplanner.data.model.disqus;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.time.LocalDateTime;
 
 public class Post {

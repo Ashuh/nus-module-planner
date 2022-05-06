@@ -10,6 +10,11 @@ import me.jlurena.revolvingweekview.DayTime;
 
 public class Lesson {
 
+    private static final int HOUR_START_INDEX = 0;
+    private static final int HOUR_END_INDEX = 1;
+    private static final int MINUTE_START_INDEX = 2;
+    private static final int MINUTE_END_INDEX = 3;
+
     @NonNull
     private final String classNo;
     @NonNull
@@ -74,11 +79,11 @@ public class Lesson {
     }
 
     public int getStartHour() {
-        return Integer.parseInt(getStartTime().substring(0, 2));
+        return Integer.parseInt(getStartTime().substring(HOUR_START_INDEX, HOUR_END_INDEX + 1));
     }
 
     public int getStartMinute() {
-        return Integer.parseInt(getStartTime().substring(2, 4));
+        return Integer.parseInt(getStartTime().substring(MINUTE_START_INDEX, MINUTE_END_INDEX + 1));
     }
 
     @NonNull
@@ -91,11 +96,11 @@ public class Lesson {
     }
 
     public int getEndHour() {
-        return Integer.parseInt(getEndTime().substring(0, 2));
+        return Integer.parseInt(getEndTime().substring(HOUR_START_INDEX, HOUR_END_INDEX + 1));
     }
 
     public int getEndMinute() {
-        return Integer.parseInt(getEndTime().substring(2, 4));
+        return Integer.parseInt(getEndTime().substring(MINUTE_START_INDEX, MINUTE_END_INDEX + 1));
     }
 
     @NonNull

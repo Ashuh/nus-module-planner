@@ -7,8 +7,8 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.SemesterType;
+import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
 
 import java.util.List;
 
@@ -30,8 +30,7 @@ public interface TimetableDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(AssignedModule entry);
 
-    @Query("DELETE FROM assigned_modules WHERE (semType = :semType) AND (moduleCode = " +
-            ":moduleCode)")
+    @Query("DELETE FROM assigned_modules WHERE (semType = :semType) AND (moduleCode = :moduleCode)")
     void delete(SemesterType semType, String moduleCode);
 
     @Query("DELETE FROM assigned_modules WHERE (moduleCode = :moduleCode)")

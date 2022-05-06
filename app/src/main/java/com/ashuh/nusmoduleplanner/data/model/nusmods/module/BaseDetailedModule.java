@@ -94,18 +94,18 @@ public abstract class BaseDetailedModule extends BaseModule {
     @NonNull
     @Override
     public String toString() {
-        return "BaseDetailedModule{" +
-                "acadYear='" + acadYear + '\'' +
-                ", description='" + description + '\'' +
-                ", faculty='" + faculty + '\'' +
-                ", department='" + department + '\'' +
-                ", moduleCredit=" + moduleCredit +
-                ", preclusion='" + preclusion + '\'' +
-                ", prerequisite='" + prerequisite + '\'' +
-                ", corequisite='" + corequisite + '\'' +
-                ", workload=" + workload +
-                ", moduleCode='" + moduleCode + '\'' +
-                ", title='" + title + '\'' +
-                '}';
+        return "BaseDetailedModule{"
+                + "acadYear='" + acadYear + '\''
+                + ", description='" + description + '\''
+                + ", faculty='" + faculty + '\''
+                + ", department='" + department
+                + '\'' + ", moduleCredit=" + moduleCredit
+                + ", preclusion='" + preclusion + '\''
+                + ", prerequisite='" + prerequisite + '\''
+                + ", corequisite='" + corequisite + '\''
+                + ", workload=" + workload
+                + ", moduleCode='" + moduleCode
+                + '\'' + ", title='" + title + '\''
+                + '}';
     }
 }

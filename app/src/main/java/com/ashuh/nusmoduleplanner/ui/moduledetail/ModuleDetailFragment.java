@@ -42,6 +42,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ModuleDetailFragment extends Fragment {
+
+    private static final int MINUTES_PER_HOUR = 60;
+
     private ModuleDetailViewModel viewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -229,7 +232,7 @@ public class ModuleDetailFragment extends Fragment {
         String examDateString = ZonedDateTime.parse(examDate)
                 .withZoneSameInstant(ZoneId.of("Asia/Singapore"))
                 .format(DateUtil.DATE_FORMATTER_DISPLAY);
-        String examDurationString = examDuration / 60.0 + " hrs";
+        String examDurationString = (double) examDuration / MINUTES_PER_HOUR + " hrs";
         return examDateString + " " + examDurationString;
     }
 

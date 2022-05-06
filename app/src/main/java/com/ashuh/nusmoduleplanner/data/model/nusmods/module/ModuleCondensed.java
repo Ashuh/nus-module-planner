@@ -20,10 +20,10 @@ public class ModuleCondensed extends BaseModule {
     @NonNull
     @Override
     public String toString() {
-        return "ModuleCondensed{" +
-                "moduleCode='" + moduleCode + '\'' +
-                ", title='" + title + '\'' +
-                ", semesters=" + semesters +
-                '}';
+        return "ModuleCondensed{"
+                + "moduleCode='" + moduleCode + '\''
+                + ", title='" + title + '\''
+                + ", semesters=" + semesters
+                + '}';
     }
 }
