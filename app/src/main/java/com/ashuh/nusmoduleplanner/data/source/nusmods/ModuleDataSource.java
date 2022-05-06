@@ -43,7 +43,7 @@ public class ModuleDataSource {
     private static class NusModsCallback<T> implements Callback<T> {
         final ResponseListener<T> listener;
 
-        public NusModsCallback(ResponseListener<T> listener) {
+        NusModsCallback(ResponseListener<T> listener) {
             this.listener = listener;
         }
 

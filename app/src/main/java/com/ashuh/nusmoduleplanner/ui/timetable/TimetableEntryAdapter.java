@@ -22,6 +22,8 @@ import java.util.List;
 
 public class TimetableEntryAdapter extends RecyclerView.Adapter<TimetableEntryAdapter.ViewHolder> {
 
+    private static final int MINUTES_PER_HOUR = 60;
+
     private final List<AssignedModule> assignedModules = new ArrayList<>();
 
     @NonNull
@@ -65,7 +67,7 @@ public class TimetableEntryAdapter extends RecyclerView.Adapter<TimetableEntryAd
         String examDateString = ZonedDateTime.parse(examDate)
                 .withZoneSameInstant(ZoneId.of("Asia/Singapore"))
                 .format(DateUtil.DATE_FORMATTER_DISPLAY);
-        String examDurationString = examDuration / 60.0 + " hrs";
+        String examDurationString = (double) examDuration / MINUTES_PER_HOUR + " hrs";
         return examDateString + " " + examDurationString;
     }
 

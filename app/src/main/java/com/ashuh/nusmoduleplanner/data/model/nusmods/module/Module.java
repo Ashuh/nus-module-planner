@@ -77,20 +77,19 @@ public class Module extends BaseDetailedModule {
     @NonNull
     @Override
     public String toString() {
-        return "Module{" +
-                "acadYear='" + acadYear + '\'' +
-                ", description='" + description + '\'' +
-                ", faculty='" + faculty + '\'' +
-                ", department='" + department + '\'' +
-                ", moduleCredit=" + moduleCredit +
-                ", preclusion='" + preclusion + '\'' +
-                ", prerequisite='" + prerequisite + '\'' +
-                ", corequisite='" + corequisite + '\'' +
-                ", workload=" + workload +
-                ", moduleCode='" + moduleCode + '\'' +
-                ", title='" + title + '\'' +
-                ", semesterData=" + semesterData +
-                ", prereqTree=" + prereqTree +
-                '}';
+        return "Module{" + "acadYear='" + acadYear + '\''
+                + ", description='" + description + '\''
+                + ", faculty='" + faculty + '\''
+                + ", department='" + department + '\''
+                + ", moduleCredit=" + moduleCredit
+                + ", preclusion='" + preclusion + '\''
+                + ", prerequisite='" + prerequisite + '\''
+                + ", corequisite='" + corequisite + '\''
+                + ", workload=" + workload
+                + ", moduleCode='" + moduleCode + '\''
+                + ", title='" + title + '\''
+                + ", semesterData=" + semesterData
+                + ", prereqTree=" + prereqTree
+                + '}';
     }
 }

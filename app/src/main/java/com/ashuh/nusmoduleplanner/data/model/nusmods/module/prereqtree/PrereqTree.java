@@ -18,8 +18,9 @@ public class PrereqTree {
     @NonNull
     @Override
     public String toString() {
-        return "PrereqTree{" + (hasMultiplePrerequisites() ? logicalPrerequisite :
-                singlePrerequisite);
+        return "PrereqTree{"
+                + (hasMultiplePrerequisites() ? logicalPrerequisite : singlePrerequisite)
+                + "}";
     }
 
     public boolean hasMultiplePrerequisites() {

@@ -17,7 +17,8 @@ import java.util.Map;
 
 public class ModulesRepository {
     private static ModulesRepository instance;
-    private final MutableLiveData<List<ModuleInformation>> moduleInfoRequests = new MutableLiveData<>();
+    private final MutableLiveData<List<ModuleInformation>> moduleInfoRequests =
+            new MutableLiveData<>();
     private final Map<String, MutableLiveData<Module>> moduleDetailRequests = new HashMap<>();
     private final ModuleDataSource source;
 
@@ -30,33 +31,6 @@ public class ModulesRepository {
             instance = new ModulesRepository();
         }
         return instance;
-    }
-
-    public LiveData<List<ModuleInformation>> getModules(AcademicYear acadYear) {
-        if (moduleInfoRequests.getValue() == null) {
-
-            source.getModules(acadYear,
-                    new ModuleDataSource.ResponseListener<List<ModuleInformation>>() {
-                        @Override
-                        public void onError(String message) {
-                            Log.e("getModules", message);
-                        }
-
-                        @Override
-                        public void onResponse(List<ModuleInformation> response) {
-                            List<ModuleInformation> filtered = new ArrayList<>();
-
-                            for (int i = 0; i < response.size(); i++) {
-                                if (!response.get(i).getSemesterData().isEmpty()) {
-                                    filtered.add(response.get(i));
-                                }
-                            }
-                            moduleInfoRequests.setValue(filtered);
-                        }
-                    });
-        }
-
-        return moduleInfoRequests;
     }
 
     public LiveData<Module> getModule(AcademicYear acadYear, String moduleCode) {
@@ -90,5 +64,32 @@ public class ModulesRepository {
         }
 
         return false;
+    }
+
+    public LiveData<List<ModuleInformation>> getModules(AcademicYear acadYear) {
+        if (moduleInfoRequests.getValue() == null) {
+
+            source.getModules(acadYear,
+                    new ModuleDataSource.ResponseListener<List<ModuleInformation>>() {
+                        @Override
+                        public void onError(String message) {
+                            Log.e("getModules", message);
+                        }
+
+                        @Override
+                        public void onResponse(List<ModuleInformation> response) {
+                            List<ModuleInformation> filtered = new ArrayList<>();
+
+                            for (int i = 0; i < response.size(); i++) {
+                                if (!response.get(i).getSemesterData().isEmpty()) {
+                                    filtered.add(response.get(i));
+                                }
+                            }
+                            moduleInfoRequests.setValue(filtered);
+                        }
+                    });
+        }
+
+        return moduleInfoRequests;
     }
 }

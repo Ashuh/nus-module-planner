@@ -30,9 +30,9 @@ public class Workload {
     @NonNull
     @Override
     public String toString() {
-        return "Workload{" +
-                "workloadList=" + workloadList +
-                ", workloadString='" + workloadString + '\'' +
-                '}';
+        return "Workload{"
+                + "workloadList=" + workloadList
+                + ", workloadString='" + workloadString + '\''
+                + '}';
     }
 }

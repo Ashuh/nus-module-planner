@@ -8,11 +8,10 @@ import java.util.List;
 
 public class PostList {
 
-    @SerializedName("code")
-    private int code;
-
     @SerializedName("response")
     List<Post> posts;
+    @SerializedName("code")
+    private int code;
 
     public List<Post> getPosts() {
         return posts;
@@ -21,9 +20,9 @@ public class PostList {
     @NonNull
     @Override
     public String toString() {
-        return "PostList{" +
-                "code=" + code +
-                ", posts=" + posts +
-                '}';
+        return "PostList{"
+                + "code=" + code
+                + ", posts=" + posts
+                + '}';
     }
 }

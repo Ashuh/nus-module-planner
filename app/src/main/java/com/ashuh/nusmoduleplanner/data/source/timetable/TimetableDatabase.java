@@ -46,7 +46,7 @@ public abstract class TimetableDatabase extends RoomDatabase {
     public abstract TimetableDAO dao();
 
     public static class Converter {
-        private static final Gson gson = new GsonBuilder()
+        private static final Gson GSON = new GsonBuilder()
                 .registerTypeAdapter(Weeks.class, new WeeksDeserializer())
                 .registerTypeAdapter(Weeks.class, new WeeksSerializer())
                 .create();
@@ -59,7 +59,7 @@ public abstract class TimetableDatabase extends RoomDatabase {
 
             Type listType = new TypeToken<List<Lesson>>() {
             }.getType();
-            return gson.fromJson(string, listType);
+            return GSON.fromJson(string, listType);
         }
 
         @TypeConverter
@@ -68,7 +68,7 @@ public abstract class TimetableDatabase extends RoomDatabase {
                 return null;
             }
 
-            return gson.toJson(lessons);
+            return GSON.toJson(lessons);
         }
 
         @TypeConverter
@@ -80,7 +80,7 @@ public abstract class TimetableDatabase extends RoomDatabase {
             Map<LessonType, String> map = new HashMap<>();
             Type mapType = new TypeToken<Map<String, String>>() {
             }.getType();
-            Map<String, String> temp = gson.fromJson(string, mapType);
+            Map<String, String> temp = GSON.fromJson(string, mapType);
 
             for (String key : temp.keySet()) {
                 map.put(LessonType.fromString(key), temp.get(key));
@@ -95,7 +95,7 @@ public abstract class TimetableDatabase extends RoomDatabase {
                 return null;
             }
 
-            return gson.toJson(map);
+            return GSON.toJson(map);
         }
     }
 }

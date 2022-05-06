@@ -18,7 +18,8 @@ import com.ashuh.nusmoduleplanner.data.model.nusmods.module.ModuleInformation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.ViewHolder> implements Filterable {
+public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.ViewHolder>
+        implements Filterable {
     private final List<ModuleInformation> modules = new ArrayList<>();
     private List<ModuleInformation> filteredModules = new ArrayList<>();
 

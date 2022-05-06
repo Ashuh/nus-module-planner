@@ -15,13 +15,13 @@ public enum LessonType {
     RECITATION("Recitation", "REC"),
     SECTIONAL("Sectional Teaching", "SEC");
 
-    private static final Map<String, LessonType> nameMap;
+    private static final Map<String, LessonType> STRING_LESSON_TYPE_MAP;
 
     static {
-        nameMap = new HashMap<>();
+        STRING_LESSON_TYPE_MAP = new HashMap<>();
 
         for (LessonType type : LessonType.values()) {
-            nameMap.put(type.toString(), type);
+            STRING_LESSON_TYPE_MAP.put(type.toString(), type);
         }
     }
 
@@ -34,7 +34,7 @@ public enum LessonType {
     }
 
     public static LessonType fromString(String s) {
-        LessonType type = nameMap.get(s);
+        LessonType type = STRING_LESSON_TYPE_MAP.get(s);
 
         if (type == null) {
             throw new IllegalArgumentException("Invalid lesson type: " + s);

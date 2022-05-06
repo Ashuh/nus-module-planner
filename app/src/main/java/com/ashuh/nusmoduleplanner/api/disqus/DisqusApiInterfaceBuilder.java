@@ -22,9 +22,10 @@ public class DisqusApiInterfaceBuilder {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
                     .withZone(ZoneId.of("UTC"));
 
-            Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class,
-                    (JsonDeserializer<LocalDateTime>) (json, type, jsonDeserializationContext) -> LocalDateTime
-                            .parse(json.getAsString(), formatter)).create();
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>)
+                            (json, type, jsonDeserializationContext) -> LocalDateTime
+                                    .parse(json.getAsString(), formatter)).create();
 
             instance = new Retrofit.Builder()
                     .baseUrl(BASE_URL)

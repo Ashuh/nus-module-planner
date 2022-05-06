@@ -7,6 +7,9 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 public class TimetableCollectionAdapter extends FragmentStateAdapter {
+
+    private static final int NUM_TABS = 4;
+
     public TimetableCollectionAdapter(Fragment fragment) {
         super(fragment);
     }
@@ -23,6 +26,6 @@ public class TimetableCollectionAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 4;
+        return NUM_TABS;
     }
 }
