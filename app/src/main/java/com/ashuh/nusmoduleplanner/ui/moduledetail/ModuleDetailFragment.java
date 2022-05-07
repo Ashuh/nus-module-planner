@@ -130,7 +130,7 @@ public class ModuleDetailFragment extends Fragment {
     private void setSemestersTextView(Module module) {
         StringJoiner joiner = new StringJoiner(" • ");
 
-        for (SemesterType semester : module.getSemesters().orElse(Collections.emptySet())) {
+        for (SemesterType semester : module.getSemesters().orElse(Collections.emptyList())) {
             joiner.add(semester.toString());
         }
 
