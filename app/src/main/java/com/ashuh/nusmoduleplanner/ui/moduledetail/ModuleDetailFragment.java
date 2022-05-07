@@ -1,10 +1,17 @@
 package com.ashuh.nusmoduleplanner.ui.moduledetail;
 
+import static java.util.Objects.requireNonNull;
+
+import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -14,6 +21,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,11 +32,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ashuh.nusmoduleplanner.MainActivity;
 import com.ashuh.nusmoduleplanner.R;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.AcademicYear;
+import com.ashuh.nusmoduleplanner.data.model.nusmods.module.Module;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.ModuleInformationSemesterDatum;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.ModuleSemesterDatum;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.SemesterType;
 import com.ashuh.nusmoduleplanner.data.model.util.DateUtil;
-import com.ashuh.nusmoduleplanner.data.source.disqus.DisqusRepository;
 import com.ashuh.nusmoduleplanner.data.source.nusmods.ModulesRepository;
 import com.ashuh.nusmoduleplanner.data.source.timetable.TimetableDataSource;
 
@@ -36,27 +44,50 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.StringJoiner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ModuleDetailFragment extends Fragment {
 
+    private static final String ACTION_BAR_TITLE = "Module Details";
     private static final int MINUTES_PER_HOUR = 60;
 
+    private TextView titleTextView;
+    private TextView codeTextView;
+    private TextView adminInfoTextView;
+    private TextView semestersTextView;
+    private TextView descriptionTextView;
+    private TextView moduleRequirementsTextView;
+    private TextView examInfoTextView;
+    private Button button;
+    private RecyclerView recyclerView;
     private ModuleDetailViewModel viewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Module Details");
+        ActionBar actionBar = ((MainActivity) requireActivity()).getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setTitle(ACTION_BAR_TITLE);
+
         View root = inflater.inflate(R.layout.fragment_module_detail, container, false);
+        titleTextView = root.findViewById(R.id.module_title);
+        codeTextView = root.findViewById(R.id.module_code);
+        adminInfoTextView = root.findViewById(R.id.module_admin_info);
+        semestersTextView = root.findViewById(R.id.module_semesters);
+        descriptionTextView = root.findViewById(R.id.module_description);
+        moduleRequirementsTextView = root.findViewById(R.id.module_requirements);
+        examInfoTextView = root.findViewById(R.id.exam_info);
+        button = root.findViewById(R.id.add_to_timetable_button);
+        recyclerView = root.findViewById(R.id.disqus_posts);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         String moduleCode = ModuleDetailFragmentArgs.fromBundle(getArguments()).getModuleCode();
         viewModel = new ViewModelProvider(this,
                 new ModuleDetailViewModelFactory(AcademicYear.getCurrent(), moduleCode))
                 .get(ModuleDetailViewModel.class);
-        observeViewModel(root);
+
+        observeViewModel();
         return root;
     }
 
@@ -65,146 +96,119 @@ public class ModuleDetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    private void observeViewModel(View root) {
-        final TextView titleTextView = root.findViewById(R.id.module_title);
-        final TextView codeTextView = root.findViewById(R.id.module_code);
-        final TextView infoTextView = root.findViewById(R.id.module_info);
-        final TextView semestersTextView = root.findViewById(R.id.module_semesters);
-        final TextView descriptionTextView = root.findViewById(R.id.module_description);
-        final TextView prerequisiteTextView = root.findViewById(R.id.module_prerequisite);
-        final TextView corequisiteTextView = root.findViewById(R.id.module_corequisite);
-        final TextView preclusionTextView = root.findViewById(R.id.module_preclusion);
-        final TextView prerequisiteHeaderTextView = root
-                .findViewById(R.id.module_prerequisite_header);
-        final TextView corequisiteHeaderTextView = root
-                .findViewById(R.id.module_corequisite_header);
-        final TextView preclusionHeaderTextView = root.findViewById(R.id.module_preclusion_header);
-
-        final TextView sem1ExamTextView = root.findViewById(R.id.module_exam_1);
-        final TextView sem2ExamTextView = root.findViewById(R.id.module_exam_2);
-        final TextView sem3ExamTextView = root.findViewById(R.id.module_exam_3);
-        final TextView sem4ExamTextView = root.findViewById(R.id.module_exam_4);
-
-        final TextView sem1ExamHeadingTextView = root.findViewById(R.id.module_exam_1_heading);
-        final TextView sem2ExamHeadingTextView = root.findViewById(R.id.module_exam_2_heading);
-        final TextView sem3ExamHeadingTextView = root.findViewById(R.id.module_exam_3_heading2);
-        final TextView sem4ExamHeadingTextView = root.findViewById(R.id.module_exam_4_heading);
-
-        final Button button = root.findViewById(R.id.button);
-        final RecyclerView recyclerView = root.findViewById(R.id.disqus_posts);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+    private void observeViewModel() {
         DisqusPostAdapter adapter = new DisqusPostAdapter();
         recyclerView.setAdapter(adapter);
+        viewModel.getDisqusPostsObservable().observe(getViewLifecycleOwner(),
+                postList -> adapter.setPosts(postList.getPosts()));
 
-        viewModel.getModuleObservable().observe(getViewLifecycleOwner(), m -> {
-            if (m == null) {
+        viewModel.getModuleObservable().observe(getViewLifecycleOwner(), module -> {
+            if (module == null) {
                 return;
             }
 
-            DisqusRepository.getPosts(m.getModuleCode()).observe(getViewLifecycleOwner(),
-                    postList -> adapter.setPosts(postList.getPosts()));
-
-            codeTextView.setText(m.getModuleCode());
-            titleTextView.setText(m.getTitle());
-            infoTextView.setText(generateInfoText(m.getDepartment(), m.getFaculty(),
-                    m.getModuleCredit()));
-            semestersTextView.setText(generateSemestersText(m.getSemesters().orElse(
-                    Collections.emptySet())));
-            setTextView(descriptionTextView, m.getDescription());
-
-            if (m.hasPrerequisite()) {
-                prerequisiteTextView.setText(generateClickableString(m.getPrerequisite()));
-                prerequisiteTextView.setMovementMethod(LinkMovementMethod.getInstance());
-            } else {
-                prerequisiteHeaderTextView.setVisibility(View.GONE);
-                prerequisiteTextView.setVisibility(View.GONE);
-            }
-
-            if (m.hasCorequisite()) {
-                corequisiteTextView
-                        .setText(generateClickableString(m.getCorequisite()));
-                corequisiteTextView.setMovementMethod(LinkMovementMethod.getInstance());
-            } else {
-                corequisiteHeaderTextView.setVisibility(View.GONE);
-                corequisiteTextView.setVisibility(View.GONE);
-            }
-
-            if (m.hasPreclusion()) {
-                preclusionTextView.setText(generateClickableString(m.getPreclusion()));
-                preclusionTextView.setMovementMethod(LinkMovementMethod.getInstance());
-            } else {
-                preclusionHeaderTextView.setVisibility(View.GONE);
-                preclusionTextView.setVisibility(View.GONE);
-            }
-
-            TextView[] examViews = new TextView[]{sem1ExamTextView, sem2ExamTextView,
-                    sem3ExamTextView, sem4ExamTextView};
-            TextView[] examHeadingViews = new TextView[]{sem1ExamHeadingTextView,
-                    sem2ExamHeadingTextView, sem3ExamHeadingTextView,
-                    sem4ExamHeadingTextView};
-
-            List<ModuleSemesterDatum> semData = m.getSemesterData();
-
-            for (int i = 0; i < semData.size(); i++) {
-                ModuleSemesterDatum datum = semData.get(i);
-                String examString = generateExamInfoText(datum.getExamDate(),
-                        datum.getExamDuration());
-                examViews[datum.getSemester().getId() - 1].setText(examString);
-            }
-
-            for (int i = 0; i < examHeadingViews.length; i++) {
-                if (examViews[i].getText().length() == 0) {
-                    examViews[i].setVisibility(View.GONE);
-                    examHeadingViews[i].setVisibility(View.GONE);
-                }
-            }
-
-            button.setOnClickListener(view -> {
-                PopupMenu popupMenu = new PopupMenu(getActivity(), button);
-
-                for (ModuleInformationSemesterDatum datum : semData) {
-                    SemesterType sem = datum.getSemester();
-                    popupMenu.getMenu()
-                            .add(Menu.NONE, sem.getId(), Menu.NONE, sem.toString());
-                }
-
-                popupMenu.setOnMenuItemClickListener(
-                        menuItem -> {
-                            SemesterType semester = SemesterType.fromId(menuItem.getItemId());
-                            TimetableDataSource.getInstance().insert(m.toAssignedModule(semester));
-                            return true;
-                        });
-
-                popupMenu.show();
-            });
+            codeTextView.setText(module.getModuleCode());
+            titleTextView.setText(module.getTitle());
+            setAdminInfoTextView(module);
+            setSemestersTextView(module);
+            setDescriptionTextView(module);
+            setRequirementsTextView(module);
+            setExamInfoTextView(module);
+            setAddToTimetableButtonListener(module);
         });
     }
 
-    private String generateInfoText(String department, String faculty, Double credits) {
-        return new StringJoiner(" • ").add(department).add(faculty).add(credits + " MCs")
+    private void setAdminInfoTextView(Module module) {
+        String adminInfo = new StringJoiner(" • ")
+                .add(module.getDepartment())
+                .add(module.getFaculty())
+                .add(module.getModuleCredit() + " MCs")
                 .toString();
+        adminInfoTextView.setText(adminInfo);
     }
 
-    private String generateSemestersText(Set<SemesterType> semesters) {
+    private void setSemestersTextView(Module module) {
         StringJoiner joiner = new StringJoiner(" • ");
 
-        for (SemesterType semester : semesters) {
+        for (SemesterType semester : module.getSemesters().orElse(Collections.emptySet())) {
             joiner.add(semester.toString());
         }
 
-        return joiner.toString();
+        semestersTextView.setText(joiner.toString());
     }
 
-    private void setTextView(TextView view, String text) {
-        if (text == null || text.isEmpty()) {
-            view.setVisibility(View.GONE);
-
+    private void setDescriptionTextView(Module module) {
+        String description = module.getDescription();
+        if (description.isEmpty()) {
+            descriptionTextView.setVisibility(View.GONE);
         } else {
-            view.setText(text);
+            descriptionTextView.setText(description);
         }
     }
 
-    private SpannableString generateClickableString(String string) {
+    private void setRequirementsTextView(Module module) {
+        SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
+
+        if (module.hasPrerequisite()) {
+            SpannableStringBuilder prerequisiteText
+                    = generateTextWithBoldHeading("Prerequisite",
+                    makeModuleCodesClickable(module.getPrerequisite()));
+            stringBuilder.append(prerequisiteText).append("\n\n");
+        }
+
+        if (module.hasCorequisite()) {
+            SpannableStringBuilder corequisiteText
+                    = generateTextWithBoldHeading("Corequisite",
+                    makeModuleCodesClickable(module.getCorequisite()));
+            stringBuilder.append(corequisiteText).append("\n\n");
+        }
+
+        if (module.hasPreclusion()) {
+            SpannableStringBuilder preclusionText = generateTextWithBoldHeading("Preclusion",
+                    makeModuleCodesClickable(module.getPreclusion()));
+            stringBuilder.append(preclusionText).append("\n\n");
+        }
+
+        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
+        moduleRequirementsTextView.setText(stringBuilder);
+        moduleRequirementsTextView.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    private void setExamInfoTextView(Module module) {
+        List<ModuleSemesterDatum> semData = module.getSemesterData();
+        SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
+
+        for (int i = 0; i < semData.size(); i++) {
+            ModuleSemesterDatum datum = semData.get(i);
+
+            String examInfoHeading = datum.getSemester() + " Exam";
+            String examInfo = generateExamInfoText(datum.getExamDate(), datum.getExamDuration());
+
+            SpannableStringBuilder curSemExamInfo
+                    = generateTextWithBoldHeading(examInfoHeading, examInfo);
+            stringBuilder.append(curSemExamInfo).append("\n\n");
+        }
+
+        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
+        examInfoTextView.setText(stringBuilder);
+    }
+
+    private void setAddToTimetableButtonListener(Module module) {
+        button.setOnClickListener(view -> new ModuleSemesterMenu(requireContext(), button, module)
+                .show());
+    }
+
+    private SpannableStringBuilder generateTextWithBoldHeading(CharSequence heading,
+                                                               CharSequence text) {
+        SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
+        stringBuilder.append(heading).append("\n").append(text);
+        StyleSpan boldStyleSpan = new StyleSpan(Typeface.BOLD);
+        stringBuilder.setSpan(boldStyleSpan, 0, heading.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return stringBuilder;
+    }
+
+    private SpannableString makeModuleCodesClickable(String string) {
         if (string == null) {
             return new SpannableString("");
         }
@@ -234,6 +238,39 @@ public class ModuleDetailFragment extends Fragment {
                 .format(DateUtil.DATE_FORMATTER_DISPLAY);
         String examDurationString = (double) examDuration / MINUTES_PER_HOUR + " hrs";
         return examDateString + " " + examDurationString;
+    }
+
+    private static class ModuleSemesterMenu extends PopupMenu {
+
+        @NonNull
+        private final Module module;
+
+        public ModuleSemesterMenu(@NonNull Context context, @NonNull View anchor,
+                                  @NonNull Module module) {
+            super(context, anchor);
+            requireNonNull(module);
+            this.module = module;
+
+            initMenuItems();
+            setOnMenuItemClickListener(menuItem -> {
+                SemesterType semester = SemesterType.fromId(menuItem.getItemId());
+                addModuleToSemesterTimetable(semester);
+                return true;
+            });
+
+        }
+
+        private void initMenuItems() {
+            for (ModuleInformationSemesterDatum datum : module.getSemesterData()) {
+                SemesterType sem = datum.getSemester();
+                getMenu().add(Menu.NONE, sem.getId(), Menu.NONE, sem.toString());
+            }
+        }
+
+        private void addModuleToSemesterTimetable(SemesterType semester) {
+            TimetableDataSource.getInstance().insert(module.toAssignedModule(semester));
+        }
+
     }
 
     private static class ClickableModuleCode extends ClickableSpan {
