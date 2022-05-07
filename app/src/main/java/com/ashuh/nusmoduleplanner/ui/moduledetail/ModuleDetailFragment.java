@@ -274,7 +274,6 @@ public class ModuleDetailFragment extends Fragment {
         private void addModuleToSemesterTimetable(SemesterType semester) {
             TimetableDataSource.getInstance().insert(module.toAssignedModule(semester));
         }
-
     }
 
     private static class ClickableModuleCode extends ClickableSpan {
