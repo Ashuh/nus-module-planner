@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ashuh.nusmoduleplanner.R;
 import com.ashuh.nusmoduleplanner.data.model.disqus.Post;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,8 +59,8 @@ public class DisqusPostAdapter extends RecyclerView.Adapter<DisqusPostAdapter.Vi
         return posts.size();
     }
 
-    private String getAgeText(LocalDateTime postTime) {
-        LocalDateTime now = LocalDateTime.now();
+    private String getAgeText(ZonedDateTime postTime) {
+        ZonedDateTime now = ZonedDateTime.now();
 
         long age = 0;
         ChronoUnit ageUnit = AGE_UNITS.get(AGE_UNITS.size() - 1);

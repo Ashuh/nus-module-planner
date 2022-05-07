@@ -6,14 +6,15 @@ import androidx.annotation.NonNull;
 
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.Lesson;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public class ModuleSemesterDatum extends ModuleInformationSemesterDatum {
 
     @NonNull
-    private List<Lesson> timetable;
+    private final List<Lesson> timetable;
 
-    public ModuleSemesterDatum(String examDate, int examDuration,
+    public ModuleSemesterDatum(ZonedDateTime examDate, int examDuration,
                                @NonNull SemesterType semester,
                                @NonNull List<Lesson> timetable) {
         super(examDate, examDuration, semester);

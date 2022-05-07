@@ -9,6 +9,7 @@ import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.Semest
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.Lesson;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.LessonType;
 
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,7 @@ public class AssignedModule extends BaseModule {
 
     @NonNull
     private final List<Lesson> timetable;
-    private final String examDate;
+    private final ZonedDateTime examDate;
     private final int examDuration;
     @NonNull
     private final SemesterType semType;
@@ -47,8 +48,13 @@ public class AssignedModule extends BaseModule {
         }
     }
 
+    public List<Lesson> getTimetable(LessonType lessonType) {
+        return timetable.stream().filter((lesson) -> lesson.getType() == lessonType).collect(
+                Collectors.toList());
+    }
+
     public AssignedModule(@NonNull String moduleCode, @NonNull String title,
-                          @NonNull List<Lesson> timetable, String examDate, int examDuration,
+                          @NonNull List<Lesson> timetable, ZonedDateTime examDate, int examDuration,
                           @NonNull SemesterType semType, double moduleCredit) {
         super(moduleCode, title);
         this.timetable = timetable;
@@ -63,18 +69,13 @@ public class AssignedModule extends BaseModule {
         return timetable;
     }
 
-    public List<Lesson> getTimetable(LessonType lessonType) {
-        return timetable.stream().filter((lesson) -> lesson.getType() == lessonType).collect(
-                Collectors.toList());
-    }
-
     public List<Lesson> getTimetable(LessonType lessonType, String classNo) {
         return timetable.stream()
                 .filter((lesson) -> lesson.getType() == lessonType && lesson.getClassNo()
                         .equals(classNo)).collect(Collectors.toList());
     }
 
-    public String getExamDate() {
+    public ZonedDateTime getExamDate() {
         return examDate;
     }
 
