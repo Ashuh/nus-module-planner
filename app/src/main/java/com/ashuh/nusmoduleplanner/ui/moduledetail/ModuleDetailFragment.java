@@ -278,9 +278,12 @@ public class ModuleDetailFragment extends Fragment {
     }
 
     private static class ClickableModuleCode extends ClickableSpan {
+
+        @NonNull
         private final String moduleCode;
 
-        ClickableModuleCode(String moduleCode) {
+        ClickableModuleCode(@NonNull String moduleCode) {
+            requireNonNull(moduleCode);
             this.moduleCode = moduleCode;
         }
 
