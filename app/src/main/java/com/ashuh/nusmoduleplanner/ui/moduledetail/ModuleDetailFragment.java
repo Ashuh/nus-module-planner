@@ -169,9 +169,13 @@ public class ModuleDetailFragment extends Fragment {
             stringBuilder.append(preclusionText).append("\n\n");
         }
 
-        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
-        moduleRequirementsTextView.setText(stringBuilder);
-        moduleRequirementsTextView.setMovementMethod(LinkMovementMethod.getInstance());
+        if (stringBuilder.length() == 0) {
+            moduleRequirementsTextView.setVisibility(View.GONE);
+        } else {
+            stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
+            moduleRequirementsTextView.setText(stringBuilder);
+            moduleRequirementsTextView.setMovementMethod(LinkMovementMethod.getInstance());
+        }
     }
 
     private void setExamInfoTextView(Module module) {
