@@ -4,14 +4,16 @@ import static java.util.Objects.requireNonNull;
 
 import androidx.annotation.NonNull;
 
+import java.time.ZonedDateTime;
+
 public class ModuleInformationSemesterDatum {
 
     @NonNull
     protected final SemesterType semester;
-    protected final String examDate;
+    protected final ZonedDateTime examDate;
     protected final int examDuration;
 
-    public ModuleInformationSemesterDatum(String examDate, int examDuration,
+    public ModuleInformationSemesterDatum(ZonedDateTime examDate, int examDuration,
                                           @NonNull SemesterType semester) {
         requireNonNull(semester);
         this.examDate = examDate;
@@ -19,7 +21,7 @@ public class ModuleInformationSemesterDatum {
         this.semester = semester;
     }
 
-    public String getExamDate() {
+    public ZonedDateTime getExamDate() {
         return examDate;
     }
 
@@ -29,7 +31,7 @@ public class ModuleInformationSemesterDatum {
     }
 
     public boolean hasExam() {
-        return examDate != null && !examDate.isEmpty();
+        return examDate != null;
     }
 
     public int getExamDuration() {

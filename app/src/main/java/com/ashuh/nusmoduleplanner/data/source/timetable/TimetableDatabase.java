@@ -8,17 +8,18 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 
-import com.ashuh.nusmoduleplanner.data.model.typeadapter.deserializer.WeeksDeserializer;
-import com.ashuh.nusmoduleplanner.data.model.typeadapter.serializer.WeeksSerializer;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.Lesson;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.LessonType;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.weeks.Weeks;
 import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
+import com.ashuh.nusmoduleplanner.data.model.typeadapter.deserializer.WeeksDeserializer;
+import com.ashuh.nusmoduleplanner.data.model.typeadapter.serializer.WeeksSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +51,24 @@ public abstract class TimetableDatabase extends RoomDatabase {
                 .registerTypeAdapter(Weeks.class, new WeeksDeserializer())
                 .registerTypeAdapter(Weeks.class, new WeeksSerializer())
                 .create();
+
+        @TypeConverter
+        public static ZonedDateTime toZonedDateTime(String string) {
+            if (string == null) {
+                return null;
+            }
+
+            return ZonedDateTime.parse(string);
+        }
+
+        @TypeConverter
+        public static String fromZonedDateTime(ZonedDateTime zonedDateTime) {
+            if (zonedDateTime == null) {
+                return null;
+            }
+
+            return zonedDateTime.toString();
+        }
 
         @TypeConverter
         public static List<Lesson> toLessonList(String string) {

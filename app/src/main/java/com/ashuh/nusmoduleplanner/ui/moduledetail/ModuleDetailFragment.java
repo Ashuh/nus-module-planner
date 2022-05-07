@@ -224,13 +224,13 @@ public class ModuleDetailFragment extends Fragment {
         return ss;
     }
 
-    private String generateExamInfoText(String examDate, int examDuration) {
+    private String generateExamInfoText(ZonedDateTime examDate, int examDuration) {
         if (examDate == null) {
             return "No Exam";
         }
 
-        String examDateString = ZonedDateTime.parse(examDate)
-                .withZoneSameInstant(ZoneId.of("Asia/Singapore"))
+        String examDateString = examDate
+                .withZoneSameInstant(ZoneId.systemDefault())
                 .format(DateUtil.DATE_FORMATTER_DISPLAY);
         String examDurationString = (double) examDuration / MINUTES_PER_HOUR + " hrs";
         return examDateString + " " + examDurationString;
