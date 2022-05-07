@@ -42,7 +42,7 @@ public class Module extends BaseDetailedModule {
     }
 
     public boolean hasSemesters() {
-        return semesterData == null || semesterData.isEmpty();
+        return semesterData != null && !semesterData.isEmpty();
     }
 
     public List<ModuleSemesterDatum> getSemesterData() {
