@@ -1,12 +1,12 @@
 package com.ashuh.nusmoduleplanner.data.model.disqus;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public class Post {
 
     private Author author;
 
-    private LocalDateTime createdAt;
+    private ZonedDateTime createdAt;
 
     private String message;
 
@@ -14,7 +14,7 @@ public class Post {
         return author;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public ZonedDateTime getCreatedAt() {
         return createdAt;
     }
 
