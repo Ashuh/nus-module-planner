@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,6 +23,14 @@ public class ModuleListFragment extends Fragment {
     private ModuleListAdapter adapter;
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = new ViewModelProvider(this).get(ModuleListViewModel.class);
+        adapter = new ModuleListAdapter();
+        viewModel.getModuleListObservable().observe(this, adapter);
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_modules, container, false);
@@ -29,24 +38,10 @@ public class ModuleListFragment extends Fragment {
         recyclerView = rootView.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-
-        adapter = new ModuleListAdapter();
         recyclerView.setAdapter(adapter);
 
-        viewModel = new ViewModelProvider(this).get(ModuleListViewModel.class);
-        observeViewModel();
         setSearchListener();
-
         return rootView;
-    }
-
-    private void observeViewModel() {
-        viewModel.getModuleListObservable().observe(getViewLifecycleOwner(), modules -> {
-            if (modules == null) {
-                return;
-            }
-            adapter.setModules(modules);
-        });
     }
 
     private void setSearchListener() {

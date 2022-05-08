@@ -11,6 +11,7 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.ViewHolder>
-        implements Filterable {
+        implements Observer<List<ModuleInformation>>, Filterable {
 
     @NonNull
     private final List<ModuleInformation> modules = new ArrayList<>();
@@ -48,17 +49,6 @@ public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.Vi
         return filteredModules.size();
     }
 
-    public void setModules(List<ModuleInformation> modules) {
-        if (modules == null) {
-            return;
-        }
-        this.modules.clear();
-        this.modules.addAll(modules);
-        filteredModules.clear();
-        filteredModules.addAll(modules);
-        notifyDataSetChanged();
-    }
-
     @Override
     public Filter getFilter() {
         return new Filter() {
@@ -75,7 +65,6 @@ public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.Vi
                         }
                     }
                 }
-
                 FilterResults filterResults = new FilterResults();
                 filterResults.values = filteredList;
                 return filterResults;
@@ -87,6 +76,19 @@ public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.Vi
                 notifyDataSetChanged();
             }
         };
+    }
+
+    @Override
+    public void onChanged(List<ModuleInformation> modules) {
+        if (modules == null) {
+            return;
+        }
+
+        this.modules.clear();
+        this.modules.addAll(modules);
+        filteredModules.clear();
+        filteredModules.addAll(modules);
+        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
