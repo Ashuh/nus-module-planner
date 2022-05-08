@@ -250,8 +250,7 @@ public class ModuleDetailFragment extends Fragment {
         @NonNull
         private final Module module;
 
-        public ModuleSemesterMenu(@NonNull Context context, @NonNull View anchor,
-                                  @NonNull Module module) {
+        ModuleSemesterMenu(@NonNull Context context, @NonNull View anchor, @NonNull Module module) {
             super(context, anchor);
             requireNonNull(module);
             this.module = module;
