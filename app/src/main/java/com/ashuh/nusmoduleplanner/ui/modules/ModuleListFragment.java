@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashuh.nusmoduleplanner.R;
 
-public class ModuleListFragment extends Fragment {
+public class ModuleListFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     private RecyclerView recyclerView;
     private SearchView searchView;
@@ -34,29 +34,27 @@ public class ModuleListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_modules, container, false);
+
         searchView = rootView.findViewById(R.id.search_view);
+        searchView.setOnQueryTextListener(this);
+
         recyclerView = rootView.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
-        setSearchListener();
         return rootView;
     }
 
-    private void setSearchListener() {
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                adapter.getFilter().filter(s);
-                return true;
-            }
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        adapter.getFilter().filter(s);
+        return true;
+    }
 
-            @Override
-            public boolean onQueryTextChange(String s) {
-                adapter.getFilter().filter(s);
-                return true;
-            }
-        });
+    @Override
+    public boolean onQueryTextChange(String s) {
+        adapter.getFilter().filter(s);
+        return true;
     }
 }
