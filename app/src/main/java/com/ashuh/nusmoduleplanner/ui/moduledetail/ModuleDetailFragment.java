@@ -64,6 +64,7 @@ public class ModuleDetailFragment extends Fragment {
     private RecyclerView recyclerView;
     private ModuleDetailViewModel viewModel;
 
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         ActionBar actionBar = ((MainActivity) requireActivity()).getSupportActionBar();
