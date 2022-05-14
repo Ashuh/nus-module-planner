@@ -16,8 +16,6 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 public class TimetableFragment extends Fragment {
-    TimetableCollectionAdapter timetableCollectionAdapter;
-    ViewPager2 viewPager;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -27,9 +25,9 @@ public class TimetableFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        timetableCollectionAdapter = new TimetableCollectionAdapter(this);
-        viewPager = view.findViewById(R.id.pager);
-        viewPager.setAdapter(timetableCollectionAdapter);
+        TimetableCollectionAdapter adapter = new TimetableCollectionAdapter(this);
+        ViewPager2 viewPager = view.findViewById(R.id.pager);
+        viewPager.setAdapter(adapter);
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
 
         new TabLayoutMediator(tabLayout, viewPager,
