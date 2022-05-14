@@ -15,7 +15,7 @@ import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.Semest
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-public class TimetableFragment extends Fragment {
+public class TimetablePagerFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -25,7 +25,7 @@ public class TimetableFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        TimetableCollectionAdapter adapter = new TimetableCollectionAdapter(this);
+        TimetablePagerAdapter adapter = new TimetablePagerAdapter(this);
         ViewPager2 viewPager = view.findViewById(R.id.pager);
         viewPager.setAdapter(adapter);
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);

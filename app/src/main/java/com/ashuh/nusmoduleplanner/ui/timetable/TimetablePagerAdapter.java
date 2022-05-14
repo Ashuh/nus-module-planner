@@ -6,20 +6,20 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-public class TimetableCollectionAdapter extends FragmentStateAdapter {
+public class TimetablePagerAdapter extends FragmentStateAdapter {
 
     private static final int NUM_TABS = 4;
 
-    public TimetableCollectionAdapter(Fragment fragment) {
+    public TimetablePagerAdapter(Fragment fragment) {
         super(fragment);
     }
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        Fragment fragment = new TimetableTabFragment();
+        Fragment fragment = new TimetablePageFragment();
         Bundle args = new Bundle();
-        args.putInt(TimetableTabFragment.ARG_SEMESTER, position + 1);
+        args.putInt(TimetablePageFragment.ARG_SEMESTER, position + 1);
         fragment.setArguments(args);
         return fragment;
     }
