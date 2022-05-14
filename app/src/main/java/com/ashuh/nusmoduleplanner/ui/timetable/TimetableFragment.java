@@ -19,6 +19,7 @@ public class TimetableFragment extends Fragment {
     TimetableCollectionAdapter timetableCollectionAdapter;
     ViewPager2 viewPager;
 
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_timetable, container, false);
