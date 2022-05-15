@@ -1,7 +1,6 @@
 package com.ashuh.nusmoduleplanner.ui.timetable;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -15,13 +14,13 @@ import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.LessonType;
 import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
 import com.ashuh.nusmoduleplanner.data.model.timetable.TimetableEvent;
+import com.ashuh.nusmoduleplanner.util.ColorScheme;
 
 import org.threeten.bp.DayOfWeek;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 import me.jlurena.revolvingweekview.DateTimeInterpreter;
 import me.jlurena.revolvingweekview.DayTime;
@@ -36,8 +35,6 @@ public class TimetableView extends WeekView {
 
     private static final int TEXT_SIZE = 12;
     private static final int TEXT_SIZE_EVENT = 10;
-
-    private static final int MAX_COLOR_VALUE = 255;
 
     private SemesterType semType = null;
     private List<AssignedModule> assignedModules;
@@ -84,12 +81,6 @@ public class TimetableView extends WeekView {
     public void setAssignedModules(List<AssignedModule> assignedModules) {
         this.assignedModules = assignedModules;
         notifyDatasetChanged();
-    }
-
-    private int getRandomColor() {
-        Random random = new Random();
-        return Color.argb(MAX_COLOR_VALUE, random.nextInt(MAX_COLOR_VALUE + 1),
-                random.nextInt(MAX_COLOR_VALUE + 1), random.nextInt(MAX_COLOR_VALUE + 1));
     }
 
     private static class TimetableDateTimeInterpreter implements DateTimeInterpreter {
@@ -148,7 +139,7 @@ public class TimetableView extends WeekView {
 
                     List<Lesson> lessons =
                             assignedModule.getTimetable(lessonType, assignedLessonCode);
-                    int color = getRandomColor();
+                    int color = ColorScheme.GOOGLE.getRandomColor().toArgb();
 
                     for (Lesson lesson : lessons) {
                         DayTime startTime = lesson.getStartDayTime();
