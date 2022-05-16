@@ -36,10 +36,10 @@ public class TimetableView extends WeekView {
 
     public TimetableView(Context context) {
         super(context);
-        init(context);
+        init();
     }
 
-    private void init(Context context) {
+    private void init() {
         setHorizontalFlingEnabled(false);
         goToDate(DayOfWeek.MONDAY);
         setMinTime(HOUR_TIMETABLE_START);
@@ -60,12 +60,12 @@ public class TimetableView extends WeekView {
 
     public TimetableView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        init();
     }
 
     public TimetableView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
+        init();
     }
 
     public void setSemType(SemesterType semType) {
