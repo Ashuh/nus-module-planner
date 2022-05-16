@@ -1,6 +1,5 @@
 package com.ashuh.nusmoduleplanner.ui.timetable;
 
-import android.content.Context;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -28,7 +27,7 @@ import com.ashuh.nusmoduleplanner.data.source.timetable.TimetableDatabase;
 import me.jlurena.revolvingweekview.WeekView;
 import me.jlurena.revolvingweekview.WeekViewEvent;
 
-public class TimetableTabFragment extends Fragment {
+public class TimetableTabFragment extends Fragment implements WeekView.EventClickListener {
     public static final String ARG_SEMESTER = "semester";
     private SemesterType semType;
     private TimetableViewModel viewModel;
@@ -73,32 +72,21 @@ public class TimetableTabFragment extends Fragment {
             }
             adapter.setAssignedModules(entries);
             timetableView.setAssignedModules(entries);
-            timetableView.setOnEventClickListener(
-                    new TimetableClickListener(getContext(), viewModel));
+            timetableView.setOnEventClickListener(this);
         });
     }
 
-    public static class TimetableClickListener implements WeekView.EventClickListener {
+    @Override
+    public void onEventClick(WeekViewEvent event, RectF eventRect) {
+        TimetableEvent ttEvent = (TimetableEvent) event;
 
-        private final Context context;
-        private final TimetableViewModel viewModel;
-
-        TimetableClickListener(Context context, TimetableViewModel viewModel) {
-            this.context = context;
-            this.viewModel = viewModel;
+        if (ttEvent.getAlternateLessonCodes().isEmpty()) {
+            return;
         }
 
-        @Override
-        public void onEventClick(WeekViewEvent event, RectF eventRect) {
-            TimetableEvent ttEvent = (TimetableEvent) event;
-
-            if (ttEvent.getAlternateLessonCodes().isEmpty()) {
-                return;
-            }
-
-            DialogFragment fragment = new LessonSelectDialogFragment(ttEvent, viewModel);
-            FragmentManager fragmentManager = ((MainActivity) context).getSupportFragmentManager();
-            fragment.show(fragmentManager, "lessons");
-        }
+        DialogFragment fragment = new LessonSelectDialogFragment(ttEvent, viewModel);
+        FragmentManager fragmentManager
+                = ((MainActivity) requireContext()).getSupportFragmentManager();
+        fragment.show(fragmentManager, "lessons");
     }
 }
