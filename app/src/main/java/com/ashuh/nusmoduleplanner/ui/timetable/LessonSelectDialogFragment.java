@@ -12,7 +12,6 @@ import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.LessonType;
 import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
 import com.ashuh.nusmoduleplanner.data.model.timetable.TimetableEvent;
-import com.ashuh.nusmoduleplanner.data.source.timetable.TimetableDataSource;
 
 import org.threeten.bp.format.TextStyle;
 
@@ -21,16 +20,19 @@ import java.util.List;
 import java.util.Locale;
 
 public class LessonSelectDialogFragment extends DialogFragment {
+
     private final SemesterType semType;
     private final String moduleCode;
     private final LessonType lessonType;
     private final List<String> altLessonCodes;
+    private final TimetableViewModel viewModel;
 
-    public LessonSelectDialogFragment(TimetableEvent event) {
+    public LessonSelectDialogFragment(TimetableEvent event, TimetableViewModel viewModel) {
         semType = event.getSemType();
         moduleCode = event.getAssignedModule().getModuleCode();
         lessonType = event.getLesson().getType();
         altLessonCodes = event.getAlternateLessonCodes();
+        this.viewModel = viewModel;
     }
 
     @NonNull
@@ -41,7 +43,7 @@ public class LessonSelectDialogFragment extends DialogFragment {
 
         builder.setItems(getDialogItems(), (dialogInterface, i) -> {
             String selectedLessonCode = altLessonCodes.get(i);
-            TimetableDataSource.getInstance().updateAssignedLesson(moduleCode, semType,
+            viewModel.updateAssignedLesson(moduleCode, semType,
                     lessonType, selectedLessonCode);
         });
 
@@ -50,8 +52,7 @@ public class LessonSelectDialogFragment extends DialogFragment {
 
     private CharSequence[] getDialogItems() {
         List<String> dialogItems = new ArrayList<>();
-        AssignedModule assignedModule =
-                TimetableDataSource.getInstance().getAssignedModule(moduleCode, semType);
+        AssignedModule assignedModule = viewModel.getAssignedModule(moduleCode, semType);
 
         for (String code : altLessonCodes) {
             List<Lesson> lessons = assignedModule.getTimetable(lessonType, code);

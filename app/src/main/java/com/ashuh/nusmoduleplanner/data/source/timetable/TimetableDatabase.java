@@ -32,16 +32,13 @@ public abstract class TimetableDatabase extends RoomDatabase {
 
     private static TimetableDatabase instance;
 
-    public static void init(Context context) {
-        instance = Room.databaseBuilder(context, TimetableDatabase.class, DATABASE_NAME)
-                .allowMainThreadQueries()
-                .fallbackToDestructiveMigration()
-                .build();
-    }
-
-    public static TimetableDatabase getInstance() {
+    public static TimetableDatabase getInstance(Context context) {
         if (instance == null) {
-            throw new RuntimeException("Database has not been initialized");
+            instance = Room.databaseBuilder(context.getApplicationContext(),
+                            TimetableDatabase.class, DATABASE_NAME)
+                    .allowMainThreadQueries()
+                    .fallbackToDestructiveMigration()
+                    .build();
         }
         return instance;
     }

@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ashuh.nusmoduleplanner.R;
 import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
 import com.ashuh.nusmoduleplanner.data.model.util.DateUtil;
-import com.ashuh.nusmoduleplanner.data.source.timetable.TimetableDataSource;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -25,6 +24,11 @@ public class TimetableEntryAdapter extends RecyclerView.Adapter<TimetableEntryAd
     private static final int MINUTES_PER_HOUR = 60;
 
     private final List<AssignedModule> assignedModules = new ArrayList<>();
+    private final TimetableViewModel viewModel;
+
+    public TimetableEntryAdapter(TimetableViewModel viewModel) {
+        this.viewModel = viewModel;
+    }
 
     @NonNull
     @Override
@@ -81,8 +85,7 @@ public class TimetableEntryAdapter extends RecyclerView.Adapter<TimetableEntryAd
     public void deleteModule(int id) {
         AssignedModule deleted = assignedModules.get(id);
         assignedModules.remove(id);
-        TimetableDataSource.getInstance()
-                .delete(deleted.getSemType(), deleted.getModuleCode());
+        viewModel.delete(deleted.getSemType(), deleted.getModuleCode());
         notifyItemChanged(id);
     }
 

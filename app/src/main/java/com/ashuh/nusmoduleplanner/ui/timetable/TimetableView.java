@@ -1,14 +1,9 @@
 package com.ashuh.nusmoduleplanner.ui.timetable;
 
 import android.content.Context;
-import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;
-
-import com.ashuh.nusmoduleplanner.MainActivity;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.SemesterType;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.Lesson;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.LessonType;
@@ -59,7 +54,6 @@ public class TimetableView extends WeekView {
                 (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, TEXT_SIZE_EVENT,
                         getResources().getDisplayMetrics()));
 
-        setOnEventClickListener(new TimetableClickListener(context));
         setDateTimeInterpreter(new TimetableDateTimeInterpreter());
         setWeekViewLoader(new TimetableLoader());
     }
@@ -99,27 +93,6 @@ public class TimetableView extends WeekView {
             } else {
                 return ((hour == 0) ? "12:" : String.valueOf(hour)) + ":" + strMinutes + " AM";
             }
-        }
-    }
-
-    private static class TimetableClickListener implements WeekView.EventClickListener {
-        private final Context context;
-
-        TimetableClickListener(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        public void onEventClick(WeekViewEvent event, RectF eventRect) {
-            TimetableEvent ttEvent = (TimetableEvent) event;
-
-            if (ttEvent.getAlternateLessonCodes().isEmpty()) {
-                return;
-            }
-
-            DialogFragment fragment = new LessonSelectDialogFragment(ttEvent);
-            FragmentManager fragmentManager = ((MainActivity) context).getSupportFragmentManager();
-            fragment.show(fragmentManager, "lessons");
         }
     }
 

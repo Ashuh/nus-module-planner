@@ -30,7 +30,9 @@ import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.Semest
 import com.ashuh.nusmoduleplanner.data.model.util.DateUtil;
 import com.ashuh.nusmoduleplanner.data.source.disqus.DisqusRepository;
 import com.ashuh.nusmoduleplanner.data.source.nusmods.ModulesRepository;
+import com.ashuh.nusmoduleplanner.data.source.timetable.TimetableDAO;
 import com.ashuh.nusmoduleplanner.data.source.timetable.TimetableDataSource;
+import com.ashuh.nusmoduleplanner.data.source.timetable.TimetableDatabase;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -53,8 +55,13 @@ public class ModuleDetailFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_module_detail, container, false);
 
         String moduleCode = ModuleDetailFragmentArgs.fromBundle(getArguments()).getModuleCode();
+
+        TimetableDAO dao = TimetableDatabase.getInstance(getContext()).dao();
+        TimetableDataSource timetableDataSource = new TimetableDataSource(dao);
+
         viewModel = new ViewModelProvider(this,
-                new ModuleDetailViewModelFactory(AcademicYear.getCurrent(), moduleCode))
+                new ModuleDetailViewModelFactory(timetableDataSource, AcademicYear.getCurrent(),
+                        moduleCode))
                 .get(ModuleDetailViewModel.class);
         observeViewModel(root);
         return root;
@@ -171,7 +178,7 @@ public class ModuleDetailFragment extends Fragment {
                 popupMenu.setOnMenuItemClickListener(
                         menuItem -> {
                             SemesterType semester = SemesterType.fromId(menuItem.getItemId());
-                            TimetableDataSource.getInstance().insert(m.toAssignedModule(semester));
+                            viewModel.addAssignedModule(m.toAssignedModule(semester));
                             return true;
                         });
 
