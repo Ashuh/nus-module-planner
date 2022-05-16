@@ -39,7 +39,7 @@ public abstract class TimetableDatabase extends RoomDatabase {
                 .build();
     }
 
-    public static TimetableDatabase getDatabase() {
+    public static TimetableDatabase getInstance() {
         if (instance == null) {
             throw new RuntimeException("Database has not been initialized");
         }

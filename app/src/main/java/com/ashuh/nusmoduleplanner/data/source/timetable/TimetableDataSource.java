@@ -13,7 +13,7 @@ public class TimetableDataSource {
     private final TimetableDAO dao;
 
     TimetableDataSource() {
-        dao = TimetableDatabase.getDatabase().dao();
+        dao = TimetableDatabase.getInstance().dao();
     }
 
     public static TimetableDataSource getInstance() {
