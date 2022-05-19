@@ -252,7 +252,7 @@ public class ModuleDetailFragment extends Fragment {
         return examDateString + " " + examDurationString;
     }
 
-    private static class ModuleSemesterMenu extends PopupMenu {
+    private class ModuleSemesterMenu extends PopupMenu {
 
         @NonNull
         private final Module module;

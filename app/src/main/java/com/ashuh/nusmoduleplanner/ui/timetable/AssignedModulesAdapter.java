@@ -27,7 +27,7 @@ public class AssignedModulesAdapter
     private final List<AssignedModule> assignedModules = new ArrayList<>();
     private final TimetableViewModel viewModel;
 
-    public TimetableEntryAdapter(TimetableViewModel viewModel) {
+    public AssignedModulesAdapter(TimetableViewModel viewModel) {
         this.viewModel = viewModel;
     }
 
