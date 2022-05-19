@@ -1,6 +1,8 @@
 package com.ashuh.nusmoduleplanner.ui.modules;
 
-import android.content.res.Resources;
+import static com.ashuh.nusmoduleplanner.ui.modules.ModuleListFragmentDirections.actionNavModulesToNavModuleDetail;
+import static java.util.Objects.requireNonNull;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,7 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,8 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.ViewHolder>
-        implements Filterable {
+        implements Observer<List<ModuleInformation>>, Filterable {
+
+    @NonNull
     private final List<ModuleInformation> modules = new ArrayList<>();
+    @NonNull
     private List<ModuleInformation> filteredModules = new ArrayList<>();
 
     @NonNull
@@ -34,39 +40,13 @@ public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ModuleListAdapter.ViewHolder viewHolder, int position) {
-        Resources res = viewHolder.titleTextView.getContext().getResources();
         ModuleInformation module = filteredModules.get(position);
-
-        String title =
-                String.format(res.getString(R.string.module_card_title), module.getModuleCode(),
-                        module.getTitle());
-
-        String desc = String.format(res.getString(R.string.module_card_description),
-                module.getDepartment(),
-                module.getModuleCredit());
-
-        viewHolder.getTitleTextView().setText(title);
-        viewHolder.getDescriptionTextView().setText(desc);
-
-        viewHolder.itemView.setOnClickListener(view -> {
-            ModuleListFragmentDirections.ActionNavModulesToNavModuleDetail action =
-                    ModuleListFragmentDirections
-                            .actionNavModulesToNavModuleDetail(module.getModuleCode());
-            Navigation.findNavController(view).navigate(action);
-        });
+        viewHolder.setModule(module);
     }
 
     @Override
     public int getItemCount() {
-        return filteredModules == null ? 0 : filteredModules.size();
-    }
-
-    public void setModules(List<ModuleInformation> m) {
-        this.modules.clear();
-        this.modules.addAll(m);
-        filteredModules.clear();
-        filteredModules.addAll(m);
-        notifyDataSetChanged();
+        return filteredModules.size();
     }
 
     @Override
@@ -85,7 +65,6 @@ public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.Vi
                         }
                     }
                 }
-
                 FilterResults filterResults = new FilterResults();
                 filterResults.values = filteredList;
                 return filterResults;
@@ -99,7 +78,24 @@ public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.Vi
         };
     }
 
+    @Override
+    public void onChanged(List<ModuleInformation> modules) {
+        if (modules == null) {
+            return;
+        }
+
+        this.modules.clear();
+        this.modules.addAll(modules);
+        filteredModules.clear();
+        filteredModules.addAll(modules);
+        notifyDataSetChanged();
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        private static final String TEXT_TITLE = "%s %s";
+        private static final String TEXT_ADMIN_INFO = "%s • %s MCs";
+
         private final TextView titleTextView;
         private final TextView descriptionTextView;
 
@@ -109,12 +105,20 @@ public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.Vi
             descriptionTextView = view.findViewById(R.id.module_card_desc);
         }
 
-        public TextView getTitleTextView() {
-            return titleTextView;
-        }
+        public void setModule(@NonNull ModuleInformation module) {
+            requireNonNull(module);
+            String title = String.format(TEXT_TITLE, module.getModuleCode(), module.getTitle());
+            String desc = String
+                    .format(TEXT_ADMIN_INFO, module.getDepartment(), module.getModuleCredit());
 
-        public TextView getDescriptionTextView() {
-            return descriptionTextView;
+            titleTextView.setText(title);
+            descriptionTextView.setText(desc);
+
+            itemView.setOnClickListener(view -> {
+                ModuleListFragmentDirections.ActionNavModulesToNavModuleDetail action
+                        = actionNavModulesToNavModuleDetail(module.getModuleCode());
+                Navigation.findNavController(view).navigate(action);
+            });
         }
     }
 }

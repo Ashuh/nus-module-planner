@@ -9,9 +9,9 @@ import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.Semest
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.workload.Workload;
 import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Module extends BaseDetailedModule {
@@ -32,17 +32,17 @@ public class Module extends BaseDetailedModule {
         this.fulfillRequirements = fulfillRequirements;
     }
 
-    public Optional<Set<SemesterType>> getSemesters() {
+    public Optional<List<SemesterType>> getSemesters() {
         if (!hasSemesters()) {
             return Optional.empty();
         }
 
         return Optional.of(semesterData.stream().map(ModuleInformationSemesterDatum::getSemester)
-                .collect(Collectors.toSet()));
+                .collect(Collectors.toCollection(ArrayList::new)));
     }
 
     public boolean hasSemesters() {
-        return semesterData == null || semesterData.isEmpty();
+        return semesterData != null && !semesterData.isEmpty();
     }
 
     public List<ModuleSemesterDatum> getSemesterData() {

@@ -20,7 +20,8 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TimetableEntryAdapter extends RecyclerView.Adapter<TimetableEntryAdapter.ViewHolder> {
+public class AssignedModulesAdapter
+        extends RecyclerView.Adapter<AssignedModulesAdapter.ViewHolder> {
 
     private static final int MINUTES_PER_HOUR = 60;
 
@@ -31,7 +32,7 @@ public class TimetableEntryAdapter extends RecyclerView.Adapter<TimetableEntryAd
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.timetable_card_layout, parent, false);
-        return new TimetableEntryAdapter.ViewHolder(view);
+        return new AssignedModulesAdapter.ViewHolder(view);
     }
 
     @Override

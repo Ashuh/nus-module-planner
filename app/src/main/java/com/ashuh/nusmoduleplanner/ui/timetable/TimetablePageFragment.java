@@ -16,11 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ashuh.nusmoduleplanner.R;
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.SemesterType;
 
-public class TimetableTabFragment extends Fragment {
+public class TimetablePageFragment extends Fragment {
     public static final String ARG_SEMESTER = "semester";
     private SemesterType semType;
     private TimetableViewModel viewModel;
-    private TimetableEntryAdapter adapter;
+    private AssignedModulesAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class TimetableTabFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_timetable_tab, container, false);
-        adapter = new TimetableEntryAdapter();
+        adapter = new AssignedModulesAdapter();
         RecyclerView recyclerView = rootView.findViewById(R.id.timetable_recycler_view);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -58,5 +58,27 @@ public class TimetableTabFragment extends Fragment {
             adapter.setAssignedModules(entries);
             timetableView.setAssignedModules(entries);
         });
+    }
+
+    public static class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
+        private final AssignedModulesAdapter adapter;
+
+        public SwipeToDeleteCallback(AssignedModulesAdapter adapter) {
+            super(ItemTouchHelper.RIGHT, ItemTouchHelper.RIGHT);
+            this.adapter = adapter;
+        }
+
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView,
+                              @NonNull RecyclerView.ViewHolder viewHolder,
+                              @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+            int position = viewHolder.getAdapterPosition();
+            adapter.deleteModule(position);
+        }
     }
 }

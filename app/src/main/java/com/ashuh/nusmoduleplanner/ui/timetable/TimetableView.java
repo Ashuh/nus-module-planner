@@ -94,6 +94,8 @@ public class TimetableView extends WeekView {
 
     private static class TimetableDateTimeInterpreter implements DateTimeInterpreter {
 
+        private static final String TEXT_TIME_FORMAT = "%d:%02d %s";
+
         @Override
         public String interpretDate(DayOfWeek day) {
             return day.getDisplayName(org.threeten.bp.format.TextStyle.SHORT, Locale.getDefault());
@@ -101,13 +103,9 @@ public class TimetableView extends WeekView {
 
         @Override
         public String interpretTime(int hour, int minutes) {
-            String strMinutes = String.format(Locale.getDefault(), "%02d", minutes);
-
-            if (hour >= HOUR_NOON) {
-                return ((hour == HOUR_NOON) ? "12" : (hour - HOUR_NOON)) + ":" + strMinutes + " PM";
-            } else {
-                return ((hour == 0) ? "12:" : String.valueOf(hour)) + ":" + strMinutes + " AM";
-            }
+            int hourConverted = (hour % HOUR_NOON == 0) ? HOUR_NOON : hour % HOUR_NOON;
+            return String.format(Locale.ENGLISH, TEXT_TIME_FORMAT, hourConverted, minutes,
+                    hour < HOUR_NOON ? "AM" : "PM");
         }
     }
 
