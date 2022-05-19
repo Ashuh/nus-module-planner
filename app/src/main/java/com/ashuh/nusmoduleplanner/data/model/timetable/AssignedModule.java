@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-@Entity(tableName = "assigned_modules", primaryKeys = {"semType", "moduleCode"})
+@Entity(primaryKeys = {"semType", "moduleCode"})
 public class AssignedModule extends BaseModule {
 
     @NonNull

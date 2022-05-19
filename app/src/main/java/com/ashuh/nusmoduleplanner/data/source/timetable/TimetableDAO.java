@@ -15,13 +15,13 @@ import java.util.List;
 @Dao
 public interface TimetableDAO {
 
-    @Query("SELECT * FROM assigned_modules")
+    @Query("SELECT * FROM assignedmodule")
     LiveData<List<AssignedModule>> getAll();
 
-    @Query("SELECT * FROM assigned_modules WHERE semType = :semType")
+    @Query("SELECT * FROM assignedmodule WHERE semType = :semType")
     LiveData<List<AssignedModule>> getAssignedModules(SemesterType semType);
 
-    @Query("SELECT * FROM assigned_modules WHERE moduleCode = :moduleCode AND semType = :semType")
+    @Query("SELECT * FROM assignedmodule WHERE moduleCode = :moduleCode AND semType = :semType")
     AssignedModule getAssignedModule(String moduleCode, SemesterType semType);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -30,13 +30,13 @@ public interface TimetableDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(AssignedModule entry);
 
-    @Query("DELETE FROM assigned_modules WHERE (semType = :semType) AND (moduleCode = :moduleCode)")
+    @Query("DELETE FROM assignedmodule WHERE (semType = :semType) AND (moduleCode = :moduleCode)")
     void delete(SemesterType semType, String moduleCode);
 
-    @Query("DELETE FROM assigned_modules WHERE (moduleCode = :moduleCode)")
+    @Query("DELETE FROM assignedmodule WHERE (moduleCode = :moduleCode)")
     void delete(String moduleCode);
 
-    @Query("DELETE FROM assigned_modules")
+    @Query("DELETE FROM assignedmodule")
     void deleteAll();
 
     @Update

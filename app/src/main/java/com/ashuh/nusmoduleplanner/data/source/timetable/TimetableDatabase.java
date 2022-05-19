@@ -27,19 +27,18 @@ import java.util.Map;
 @Database(entities = {AssignedModule.class}, version = 1)
 @TypeConverters({TimetableDatabase.Converter.class})
 public abstract class TimetableDatabase extends RoomDatabase {
+
+    private static final String DATABASE_NAME = "timetable_db";
+
     private static TimetableDatabase instance;
 
-    public static void init(Context context) {
-        instance = Room.databaseBuilder(context,
-                TimetableDatabase.class, "assigned_modules")
-                .allowMainThreadQueries()
-                .fallbackToDestructiveMigration()
-                .build();
-    }
-
-    public static TimetableDatabase getDatabase() {
+    public static TimetableDatabase getInstance(Context context) {
         if (instance == null) {
-            throw new RuntimeException("Database has not been initialized");
+            instance = Room.databaseBuilder(context.getApplicationContext(),
+                            TimetableDatabase.class, DATABASE_NAME)
+                    .allowMainThreadQueries()
+                    .fallbackToDestructiveMigration()
+                    .build();
         }
         return instance;
     }

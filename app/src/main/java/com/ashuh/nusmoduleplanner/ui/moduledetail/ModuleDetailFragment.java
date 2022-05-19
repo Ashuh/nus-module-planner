@@ -38,7 +38,9 @@ import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.Module
 import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.SemesterType;
 import com.ashuh.nusmoduleplanner.data.model.util.DateUtil;
 import com.ashuh.nusmoduleplanner.data.source.nusmods.ModulesRepository;
+import com.ashuh.nusmoduleplanner.data.source.timetable.TimetableDAO;
 import com.ashuh.nusmoduleplanner.data.source.timetable.TimetableDataSource;
+import com.ashuh.nusmoduleplanner.data.source.timetable.TimetableDatabase;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -84,8 +86,13 @@ public class ModuleDetailFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         String moduleCode = ModuleDetailFragmentArgs.fromBundle(getArguments()).getModuleCode();
+
+        TimetableDAO dao = TimetableDatabase.getInstance(getContext()).dao();
+        TimetableDataSource timetableDataSource = new TimetableDataSource(dao);
+
         viewModel = new ViewModelProvider(this,
-                new ModuleDetailViewModelFactory(AcademicYear.getCurrent(), moduleCode))
+                new ModuleDetailViewModelFactory(timetableDataSource, AcademicYear.getCurrent(),
+                        moduleCode))
                 .get(ModuleDetailViewModel.class);
 
         observeViewModel();
@@ -245,7 +252,7 @@ public class ModuleDetailFragment extends Fragment {
         return examDateString + " " + examDurationString;
     }
 
-    private static class ModuleSemesterMenu extends PopupMenu {
+    private class ModuleSemesterMenu extends PopupMenu {
 
         @NonNull
         private final Module module;
@@ -258,7 +265,7 @@ public class ModuleDetailFragment extends Fragment {
             initMenuItems();
             setOnMenuItemClickListener(menuItem -> {
                 SemesterType semester = SemesterType.fromId(menuItem.getItemId());
-                addModuleToSemesterTimetable(semester);
+                viewModel.addAssignedModule(module.toAssignedModule(semester));
                 return true;
             });
 
@@ -269,10 +276,6 @@ public class ModuleDetailFragment extends Fragment {
                 SemesterType sem = datum.getSemester();
                 getMenu().add(Menu.NONE, sem.getId(), Menu.NONE, sem.toString());
             }
-        }
-
-        private void addModuleToSemesterTimetable(SemesterType semester) {
-            TimetableDataSource.getInstance().insert(module.toAssignedModule(semester));
         }
     }
 
