@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,47 +15,46 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashuh.nusmoduleplanner.R;
 
-public class ModuleListFragment extends Fragment {
-    protected RecyclerView mRecyclerView;
-    protected ModuleListAdapter mAdapter;
-    protected RecyclerView.LayoutManager mLayoutManager;
+public class ModuleListFragment extends Fragment implements SearchView.OnQueryTextListener {
+
+    private RecyclerView recyclerView;
+    private SearchView searchView;
+    private ModuleListViewModel viewModel;
+    private ModuleListAdapter adapter;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAdapter = new ModuleListAdapter();
-        ModuleListViewModel viewModel = new ViewModelProvider(this).get(ModuleListViewModel.class);
-        viewModel.getModuleListObservable().observe(this, modules -> {
-            if (modules != null) {
-                mAdapter.setModules(modules);
-            }
-        });
-
+        viewModel = new ViewModelProvider(this).get(ModuleListViewModel.class);
+        adapter = new ModuleListAdapter();
+        viewModel.getModuleListObservable().observe(this, adapter);
     }
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_modules, container, false);
-        mRecyclerView = rootView.findViewById(R.id.recycler_view);
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
 
-        final SearchView searchView = rootView.findViewById(R.id.search_view);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                mAdapter.getFilter().filter(s);
-                return true;
-            }
+        searchView = rootView.findViewById(R.id.search_view);
+        searchView.setOnQueryTextListener(this);
 
-            @Override
-            public boolean onQueryTextChange(String s) {
-                mAdapter.getFilter().filter(s);
-                return true;
-            }
-        });
+        recyclerView = rootView.findViewById(R.id.recycler_view);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
 
         return rootView;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        adapter.getFilter().filter(s);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+        adapter.getFilter().filter(s);
+        return true;
     }
 }

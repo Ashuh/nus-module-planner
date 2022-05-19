@@ -128,7 +128,7 @@ public class Lesson {
         return weeks;
     }
 
-    public String getScheduleDescription() {
+    public String getWeeksDescription() {
         return weeks.toString();
     }
 }

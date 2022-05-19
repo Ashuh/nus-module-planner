@@ -1,6 +1,7 @@
 package com.ashuh.nusmoduleplanner.ui.timetable;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,7 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class LessonSelectDialogFragment extends DialogFragment {
+public class LessonSelectDialogFragment extends DialogFragment implements
+        DialogInterface.OnClickListener {
+
+    private static final String TEXT_DIALOG_TITLE = "Select Lesson";
+    private static final String TEXT_CLASS_INFO_FORMAT = "[%s] %s\n";
+    private static final String TEXT_LESSON_INFO_FORMAT = "%s %s - %s %s\n";
 
     private final SemesterType semType;
     private final String moduleCode;
@@ -39,14 +45,8 @@ public class LessonSelectDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
-        builder.setTitle("Select Lesson");
-
-        builder.setItems(getDialogItems(), (dialogInterface, i) -> {
-            String selectedLessonCode = altLessonCodes.get(i);
-            viewModel.updateAssignedLesson(moduleCode, semType,
-                    lessonType, selectedLessonCode);
-        });
-
+        builder.setTitle(TEXT_DIALOG_TITLE)
+                .setItems(getDialogItems(), this);
         return builder.create();
     }
 
@@ -63,19 +63,28 @@ public class LessonSelectDialogFragment extends DialogFragment {
     }
 
     private String getDialogString(List<Lesson> lessons) {
-        StringBuilder sb =
-                new StringBuilder().append('[').append(lessonType.getShortName()).append("] ")
-                        .append(lessons.get(0).getClassNo()).append('\n');
+        String classInfoText = String.format(TEXT_CLASS_INFO_FORMAT,
+                lessonType.getShortName(),
+                lessons.get(0).getClassNo());
+        StringBuilder builder = new StringBuilder(classInfoText);
 
         for (Lesson lesson : lessons) {
-            String dayTime =
-                    lesson.getDay().getDisplayName(TextStyle.SHORT, Locale.getDefault()) + " "
-                            + lesson.getStartTime() + "-" + lesson.getEndTime();
-            sb.append(dayTime).append(' ');
-            sb.append(lesson.getScheduleDescription());
-            sb.append('\n');
+            String lessonInfoText = String.format(TEXT_LESSON_INFO_FORMAT,
+                    lesson.getDay().getDisplayName(TextStyle.SHORT, Locale.getDefault()),
+                    lesson.getStartTime(),
+                    lesson.getEndTime(),
+                    lesson.getWeeksDescription());
+
+            builder.append(lessonInfoText);
         }
 
-        return sb.toString();
+        return builder.toString();
+    }
+
+    @Override
+    public void onClick(DialogInterface dialogInterface, int i) {
+        String selectedLessonCode = altLessonCodes.get(i);
+        TimetableDataSource.getInstance()
+                .updateAssignedLesson(moduleCode, semType, lessonType, selectedLessonCode);
     }
 }

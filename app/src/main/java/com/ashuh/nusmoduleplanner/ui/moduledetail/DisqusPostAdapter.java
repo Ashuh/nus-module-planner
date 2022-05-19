@@ -1,9 +1,14 @@
 package com.ashuh.nusmoduleplanner.ui.moduledetail;
 
 import android.annotation.SuppressLint;
+import android.graphics.Typeface;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +25,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.StringJoiner;
 
 public class DisqusPostAdapter extends RecyclerView.Adapter<DisqusPostAdapter.ViewHolder> {
 
@@ -43,12 +47,24 @@ public class DisqusPostAdapter extends RecyclerView.Adapter<DisqusPostAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         Post post = posts.get(position);
         String author = post.getAuthor().getName();
-        String ageText = getAgeText(post.getCreatedAt());
+        String age = getAgeText(post.getCreatedAt());
 
-        StringJoiner titleJoiner = new StringJoiner(" • ");
-        titleJoiner.add(author).add(ageText);
+        String headingText = String.format("%s • %s", author, age);
+        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(headingText);
 
-        viewHolder.getTitleTextView().setText(titleJoiner.toString());
+        int color = viewHolder.getMessageTextView()
+                .getContext()
+                .getResources()
+                .getColor(R.color.primary, viewHolder.getMessageTextView().getContext().getTheme());
+        ForegroundColorSpan colorSpan = new ForegroundColorSpan(color);
+        stringBuilder.setSpan(colorSpan, 0, author.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        StyleSpan boldStyleSpan = new StyleSpan(Typeface.BOLD);
+        stringBuilder.setSpan(boldStyleSpan, 0, author.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        viewHolder.getTitleTextView().setText(stringBuilder);
         Spanned spanned = Html.fromHtml(post.getMessage(), Html.FROM_HTML_MODE_LEGACY);
         viewHolder.getMessageTextView().setText(spanned);
         viewHolder.getMessageTextView().setMovementMethod(LinkMovementMethod.getInstance());
