@@ -10,7 +10,7 @@ import androidx.room.RoomDatabase;
 import com.ashuh.nusmoduleplanner.common.data.local.dao.ModuleDao;
 import com.ashuh.nusmoduleplanner.common.data.local.model.module.ExamEntity;
 import com.ashuh.nusmoduleplanner.common.data.local.model.module.ModuleEntity;
-import com.ashuh.nusmoduleplanner.common.data.local.model.module.ModuleRequirementCrossRefEntity;
+import com.ashuh.nusmoduleplanner.common.data.local.model.module.ModuleFulfillsCrossRefEntity;
 import com.ashuh.nusmoduleplanner.common.data.local.model.module.WorkloadEntity;
 import com.ashuh.nusmoduleplanner.common.data.local.model.module.lesson.LessonEntity;
 import com.ashuh.nusmoduleplanner.common.data.local.model.module.lessonoccurrence.LessonOccurrenceEntity;
@@ -26,7 +26,7 @@ import com.ashuh.nusmoduleplanner.common.data.local.model.module.weeks.WeeksWeek
 @Database(
         entities = {
                 ModuleEntity.class,
-                ModuleRequirementCrossRefEntity.class,
+                ModuleFulfillsCrossRefEntity.class,
                 WorkloadEntity.class,
                 PrerequisiteTreeEntity.class,
                 PrerequisiteTreeNodeEntity.class,

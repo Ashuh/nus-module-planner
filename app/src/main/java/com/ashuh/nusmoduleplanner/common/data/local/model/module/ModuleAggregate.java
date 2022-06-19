@@ -53,7 +53,7 @@ public class ModuleAggregate {
             entityColumn = "moduleCode",
             entity = ModuleEntity.class,
             associateBy = @Junction(
-                    value = ModuleRequirementCrossRefEntity.class,
+                    value = ModuleFulfillsCrossRefEntity.class,
                     parentColumn = "fulfillsModuleCode",
                     entityColumn = "fulfilledModuleCode"
             )

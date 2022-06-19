@@ -21,14 +21,14 @@ import java.util.Objects;
                 value = "fulfillsModuleCode"
         )
 )
-public class ModuleRequirementCrossRefEntity {
+public class ModuleFulfillsCrossRefEntity {
     @NonNull
     private final String fulfilledModuleCode;
     @NonNull
     private final String fulfillsModuleCode;
 
-    public ModuleRequirementCrossRefEntity(@NonNull String fulfilledModuleCode,
-                                           @NonNull String fulfillsModuleCode) {
+    public ModuleFulfillsCrossRefEntity(@NonNull String fulfilledModuleCode,
+                                        @NonNull String fulfillsModuleCode) {
         requireNonNull(fulfilledModuleCode);
         requireNonNull(fulfillsModuleCode);
         this.fulfilledModuleCode = fulfilledModuleCode;
@@ -58,7 +58,7 @@ public class ModuleRequirementCrossRefEntity {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        ModuleRequirementCrossRefEntity that = (ModuleRequirementCrossRefEntity) o;
+        ModuleFulfillsCrossRefEntity that = (ModuleFulfillsCrossRefEntity) o;
         return fulfilledModuleCode.equals(that.fulfilledModuleCode)
                 && fulfillsModuleCode.equals(that.fulfillsModuleCode);
     }
