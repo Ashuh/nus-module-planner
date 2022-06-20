@@ -1,24 +1,20 @@
-package com.ashuh.nusmoduleplanner.ui.timetable;
+package com.ashuh.nusmoduleplanner.timetable;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 
-import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.SemesterType;
-import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.Lesson;
-import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.lesson.LessonType;
-import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
-import com.ashuh.nusmoduleplanner.data.model.timetable.TimetableEvent;
-import com.ashuh.nusmoduleplanner.util.ColorScheme;
+import com.ashuh.nusmoduleplanner.common.domain.model.module.ModuleReading;
+import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 
 import org.threeten.bp.DayOfWeek;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import me.jlurena.revolvingweekview.DateTimeInterpreter;
-import me.jlurena.revolvingweekview.DayTime;
 import me.jlurena.revolvingweekview.WeekView;
 import me.jlurena.revolvingweekview.WeekViewEvent;
 
@@ -31,8 +27,8 @@ public class TimetableView extends WeekView {
     private static final int TEXT_SIZE = 12;
     private static final int TEXT_SIZE_EVENT = 10;
 
-    private SemesterType semType = null;
-    private List<AssignedModule> assignedModules;
+//    private Semester semester = null;
+    private List<ModuleReading> entries;
 
     public TimetableView(Context context) {
         super(context);
@@ -68,12 +64,12 @@ public class TimetableView extends WeekView {
         init();
     }
 
-    public void setSemType(SemesterType semType) {
-        this.semType = semType;
-    }
+//    public void setSemester(Semester semester) {
+//        this.semester = semester;
+//    }
 
-    public void setAssignedModules(List<AssignedModule> assignedModules) {
-        this.assignedModules = assignedModules;
+    public void setAssignedModules(List<ModuleReading> entries) {
+        this.entries = entries;
         notifyDatasetChanged();
     }
 
@@ -97,36 +93,13 @@ public class TimetableView extends WeekView {
     private class TimetableLoader implements WeekViewLoader {
         @Override
         public List<? extends WeekViewEvent> onWeekViewLoad() {
-            List<WeekViewEvent> events = new ArrayList<>();
-
-            if (assignedModules == null) {
-                return events;
+            if (entries == null) {
+                return Collections.emptyList();
             }
-
-            for (AssignedModule assignedModule : assignedModules) {
-                for (LessonType lessonType : assignedModule.getAssignedLessons().keySet()) {
-                    String assignedLessonCode = assignedModule.getAssignedLessons()
-                            .get(lessonType);
-
-                    List<Lesson> lessons =
-                            assignedModule.getTimetable(lessonType, assignedLessonCode);
-                    int color = ColorScheme.GOOGLE.getRandomColor().toArgb();
-
-                    for (Lesson lesson : lessons) {
-                        DayTime startTime = lesson.getStartDayTime();
-                        DayTime endTime = lesson.getEndDayTime();
-
-                        TimetableEvent event = new TimetableEvent(assignedModule,
-                                lesson, semType, startTime, endTime);
-
-                        event.setLocation(lesson.getVenue());
-                        event.setColor(color);
-                        events.add(event);
-                    }
-                }
-            }
-
-            return events;
+            return entries.stream()
+                    .map(TimetableEvent::fromTimetableEntry)
+                    .flatMap(List::stream)
+                    .collect(Collectors.toList());
         }
     }
 }

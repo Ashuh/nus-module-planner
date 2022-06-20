@@ -1,4 +1,4 @@
-package com.ashuh.nusmoduleplanner.ui.moduledetail;
+package com.ashuh.nusmoduleplanner.moduledetail;
 
 import android.annotation.SuppressLint;
 import android.graphics.Typeface;
@@ -18,7 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashuh.nusmoduleplanner.R;
-import com.ashuh.nusmoduleplanner.data.model.disqus.Post;
+import com.ashuh.nusmoduleplanner.common.domain.model.post.Post;
 
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;

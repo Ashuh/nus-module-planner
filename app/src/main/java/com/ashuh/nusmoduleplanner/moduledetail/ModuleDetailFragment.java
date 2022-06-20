@@ -1,14 +1,14 @@
-package com.ashuh.nusmoduleplanner.ui.moduledetail;
+package com.ashuh.nusmoduleplanner.moduledetail;
 
 import static java.util.Objects.requireNonNull;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.StyleSpan;
@@ -29,23 +29,22 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ashuh.nusmoduleplanner.MainActivity;
+import com.ashuh.nusmoduleplanner.common.MainActivity;
+import com.ashuh.nusmoduleplanner.common.NusModulePlannerApplication;
 import com.ashuh.nusmoduleplanner.R;
-import com.ashuh.nusmoduleplanner.data.model.nusmods.AcademicYear;
-import com.ashuh.nusmoduleplanner.data.model.nusmods.module.Module;
-import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.ModuleInformationSemesterDatum;
-import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.ModuleSemesterDatum;
-import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.SemesterType;
-import com.ashuh.nusmoduleplanner.data.model.util.DateUtil;
-import com.ashuh.nusmoduleplanner.data.source.nusmods.ModulesRepository;
-import com.ashuh.nusmoduleplanner.data.source.timetable.TimetableDAO;
-import com.ashuh.nusmoduleplanner.data.source.timetable.TimetableDataSource;
-import com.ashuh.nusmoduleplanner.data.source.timetable.TimetableDatabase;
+import com.ashuh.nusmoduleplanner.common.domain.model.module.Exam;
+import com.ashuh.nusmoduleplanner.common.domain.model.module.Module;
+import com.ashuh.nusmoduleplanner.common.domain.model.module.ModuleReading;
+import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
+import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
+import com.ashuh.nusmoduleplanner.common.domain.model.module.AcademicYear;
+import com.ashuh.nusmoduleplanner.common.util.DateUtil;
+import com.ashuh.nusmoduleplanner.common.util.ColorScheme;
 
+import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Collections;
-import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -53,7 +52,6 @@ import java.util.regex.Pattern;
 public class ModuleDetailFragment extends Fragment {
 
     private static final String ACTION_BAR_TITLE = "Module Details";
-    private static final int MINUTES_PER_HOUR = 60;
 
     private TextView titleTextView;
     private TextView codeTextView;
@@ -86,13 +84,13 @@ public class ModuleDetailFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         String moduleCode = ModuleDetailFragmentArgs.fromBundle(getArguments()).getModuleCode();
-
-        TimetableDAO dao = TimetableDatabase.getInstance(getContext()).dao();
-        TimetableDataSource timetableDataSource = new TimetableDataSource(dao);
+        ModuleRepository moduleRepository
+                = ((NusModulePlannerApplication) requireActivity().getApplication())
+                .appContainer.moduleRepository;
 
         viewModel = new ViewModelProvider(this,
-                new ModuleDetailViewModelFactory(timetableDataSource, AcademicYear.getCurrent(),
-                        moduleCode))
+                new ModuleDetailViewModelFactory(moduleRepository,
+                        AcademicYear.getCurrent(), moduleCode))
                 .get(ModuleDetailViewModel.class);
 
         observeViewModel();
@@ -138,7 +136,7 @@ public class ModuleDetailFragment extends Fragment {
     private void setSemestersTextView(Module module) {
         StringJoiner joiner = new StringJoiner(" • ");
 
-        for (SemesterType semester : module.getSemesters().orElse(Collections.emptyList())) {
+        for (Semester semester : module.getSemesters()) {
             joiner.add(semester.toString());
         }
 
@@ -157,21 +155,21 @@ public class ModuleDetailFragment extends Fragment {
     private void setRequirementsTextView(Module module) {
         SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
 
-        if (module.hasPrerequisite()) {
+        if (!module.getPrerequisite().isEmpty()) {
             SpannableStringBuilder prerequisiteText
                     = generateTextWithBoldHeading("Prerequisite",
                     makeModuleCodesClickable(module.getPrerequisite()));
             stringBuilder.append(prerequisiteText).append("\n\n");
         }
 
-        if (module.hasCorequisite()) {
+        if (!module.getCoRequisite().isEmpty()) {
             SpannableStringBuilder corequisiteText
                     = generateTextWithBoldHeading("Corequisite",
-                    makeModuleCodesClickable(module.getCorequisite()));
+                    makeModuleCodesClickable(module.getCoRequisite()));
             stringBuilder.append(corequisiteText).append("\n\n");
         }
 
-        if (module.hasPreclusion()) {
+        if (!module.getPreclusion().isEmpty()) {
             SpannableStringBuilder preclusionText = generateTextWithBoldHeading("Preclusion",
                     makeModuleCodesClickable(module.getPreclusion()));
             stringBuilder.append(preclusionText).append("\n\n");
@@ -187,21 +185,25 @@ public class ModuleDetailFragment extends Fragment {
     }
 
     private void setExamInfoTextView(Module module) {
-        List<ModuleSemesterDatum> semData = module.getSemesterData();
+        Map<Semester, Exam> semesterToExam = module.getExams();
+        System.out.println(semesterToExam);
+
         SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
 
-        for (int i = 0; i < semData.size(); i++) {
-            ModuleSemesterDatum datum = semData.get(i);
-
-            String examInfoHeading = datum.getSemester() + " Exam";
-            String examInfo = generateExamInfoText(datum.getExamDate(), datum.getExamDuration());
-
+        for (Semester semester : semesterToExam.keySet()) {
+            String examInfoHeading = semester + " Exam";
+            Exam exam = semesterToExam.get(semester);
+            assert exam != null;
+            String examInfo = generateExamInfoText(exam.getDate(), exam.getDuration());
             SpannableStringBuilder curSemExamInfo
                     = generateTextWithBoldHeading(examInfoHeading, examInfo);
             stringBuilder.append(curSemExamInfo).append("\n\n");
         }
 
-        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
+        if (stringBuilder.length() > 0) {
+            stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
+        }
+
         examInfoTextView.setText(stringBuilder);
     }
 
@@ -229,54 +231,28 @@ public class ModuleDetailFragment extends Fragment {
         Matcher matcher = pattern.matcher(string);
         SpannableString ss = new SpannableString(string);
 
-        while (matcher.find()) {
-            if (ModulesRepository.getInstance()
-                    .hasModule(AcademicYear.getCurrent(), matcher.group())) {
-                ss.setSpan(new ClickableModuleCode(matcher.group()), matcher.start(), matcher.end(),
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
-        }
+//        while (matcher.find()) {
+//            if (ModulesRepository.getInstance()
+//                    .hasModule(AcademicYear.getCurrent(), matcher.group())) {
+//                ss.setSpan(new ClickableModuleCode(matcher.group()), matcher.start(), matcher
+//                .end(),
+//                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            }
+//        }
 
         return ss;
     }
 
-    private String generateExamInfoText(ZonedDateTime examDate, int examDuration) {
-        if (examDate == null) {
+    private String generateExamInfoText(ZonedDateTime date, Duration examDuration) {
+        if (date == null) {
             return "No Exam";
         }
 
-        String examDateString = examDate
+        String examDateString = date
                 .withZoneSameInstant(ZoneId.systemDefault())
                 .format(DateUtil.DATE_FORMATTER_DISPLAY);
-        String examDurationString = (double) examDuration / MINUTES_PER_HOUR + " hrs";
+        String examDurationString = (double) examDuration.toHours() + " hrs";
         return examDateString + " " + examDurationString;
-    }
-
-    private class ModuleSemesterMenu extends PopupMenu {
-
-        @NonNull
-        private final Module module;
-
-        ModuleSemesterMenu(@NonNull Context context, @NonNull View anchor, @NonNull Module module) {
-            super(context, anchor);
-            requireNonNull(module);
-            this.module = module;
-
-            initMenuItems();
-            setOnMenuItemClickListener(menuItem -> {
-                SemesterType semester = SemesterType.fromId(menuItem.getItemId());
-                viewModel.addAssignedModule(module.toAssignedModule(semester));
-                return true;
-            });
-
-        }
-
-        private void initMenuItems() {
-            for (ModuleInformationSemesterDatum datum : module.getSemesterData()) {
-                SemesterType sem = datum.getSemester();
-                getMenu().add(Menu.NONE, sem.getId(), Menu.NONE, sem.toString());
-            }
-        }
     }
 
     private static class ClickableModuleCode extends ClickableSpan {
@@ -294,6 +270,75 @@ public class ModuleDetailFragment extends Fragment {
             ModuleDetailFragmentDirections.ActionNavModuleDetailSelf action =
                     ModuleDetailFragmentDirections.actionNavModuleDetailSelf(moduleCode);
             Navigation.findNavController(view).navigate(action);
+        }
+    }
+
+    private class ModuleSemesterMenu extends PopupMenu {
+        private static final int ID_SEMESTER_1 = 1;
+        private static final int ID_SEMESTER_2 = 2;
+        private static final int ID_SPECIAL_TERM_1 = 3;
+        private static final int ID_SPECIAL_TERM_2 = 4;
+
+        @NonNull
+        private final Module module;
+
+        ModuleSemesterMenu(@NonNull Context context, @NonNull View anchor, @NonNull Module module) {
+            super(context, anchor);
+            requireNonNull(module);
+            this.module = module;
+
+            initMenuItems();
+            setOnMenuItemClickListener(menuItem -> {
+                Semester semester;
+                switch (menuItem.getItemId()) {
+                    case ID_SEMESTER_1:
+                        semester = Semester.SEMESTER_1;
+                        break;
+                    case ID_SEMESTER_2:
+                        semester = Semester.SEMESTER_2;
+                        break;
+                    case ID_SPECIAL_TERM_1:
+                        semester = Semester.SPECIAL_TERM_1;
+                        break;
+                    case ID_SPECIAL_TERM_2:
+                        semester = Semester.SPECIAL_TERM_2;
+                        break;
+                    default:
+                        throw new IllegalStateException(
+                                "Unknown menu item id: " + menuItem.getItemId());
+                }
+
+
+                Color color = ColorScheme.GOOGLE.getRandomColor();
+                ModuleReading moduleReading = ModuleReading.withDefaultLessonMapping(module,
+                        semester, color);
+                viewModel.addTimetableEntry(moduleReading);
+                return true;
+            });
+
+        }
+
+        private void initMenuItems() {
+            for (Semester semester : module.getSemesters()) {
+                int id;
+                switch (semester) {
+                    case SEMESTER_1:
+                        id = ID_SEMESTER_1;
+                        break;
+                    case SEMESTER_2:
+                        id = ID_SEMESTER_2;
+                        break;
+                    case SPECIAL_TERM_1:
+                        id = ID_SPECIAL_TERM_1;
+                        break;
+                    case SPECIAL_TERM_2:
+                        id = ID_SPECIAL_TERM_2;
+                        break;
+                    default:
+                        throw new IllegalStateException("Unknown semester type: " + semester);
+                }
+                getMenu().add(Menu.NONE, id, Menu.NONE, semester.toString());
+            }
         }
     }
 }

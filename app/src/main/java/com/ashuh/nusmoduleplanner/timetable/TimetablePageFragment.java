@@ -1,4 +1,4 @@
-package com.ashuh.nusmoduleplanner.ui.timetable;
+package com.ashuh.nusmoduleplanner.timetable;
 
 import android.graphics.RectF;
 import android.os.Bundle;
@@ -17,27 +17,27 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ashuh.nusmoduleplanner.MainActivity;
 import com.ashuh.nusmoduleplanner.R;
-import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.SemesterType;
-import com.ashuh.nusmoduleplanner.data.model.timetable.AssignedModule;
-import com.ashuh.nusmoduleplanner.data.model.timetable.TimetableEvent;
-import com.ashuh.nusmoduleplanner.data.source.timetable.TimetableDAO;
-import com.ashuh.nusmoduleplanner.data.source.timetable.TimetableDataSource;
-import com.ashuh.nusmoduleplanner.data.source.timetable.TimetableDatabase;
+import com.ashuh.nusmoduleplanner.common.MainActivity;
+import com.ashuh.nusmoduleplanner.common.NusModulePlannerApplication;
+import com.ashuh.nusmoduleplanner.common.domain.model.module.ModuleReading;
+import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
+import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.Lesson;
+import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonType;
+import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import me.jlurena.revolvingweekview.WeekView;
 import me.jlurena.revolvingweekview.WeekViewEvent;
 
 public class TimetablePageFragment extends Fragment implements WeekView.EventClickListener,
-        Observer<List<AssignedModule>> {
-
+        Observer<List<ModuleReading>> {
     public static final String ARG_SEMESTER = "semester";
 
     private TimetableView timetableView;
-    private SemesterType semType;
+    private Semester semester;
     private TimetableViewModel viewModel;
     private AssignedModulesAdapter adapter;
 
@@ -46,12 +46,16 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         assert args != null;
-        semType = SemesterType.fromId(args.getInt(ARG_SEMESTER));
 
-        TimetableDAO dao = TimetableDatabase.getInstance(getContext()).dao();
-        TimetableDataSource dataSource = new TimetableDataSource(dao);
+        int semInt = args.getInt(ARG_SEMESTER);
+        semester = Semester.fromInt(semInt);
 
-        viewModel = new ViewModelProvider(this, new TimetableViewModelFactory(dataSource, semType))
+        ModuleRepository moduleRepository
+                = ((NusModulePlannerApplication) requireActivity().getApplication())
+                .appContainer.moduleRepository;
+
+        viewModel = new ViewModelProvider(this,
+                new TimetableViewModelFactory(moduleRepository, semester))
                 .get(TimetableViewModel.class);
     }
 
@@ -72,7 +76,6 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         timetableView = view.findViewById(R.id.revolving_weekview);
-        timetableView.setSemType(semType);
         timetableView.setOnEventClickListener(this);
         viewModel.getTimetableEntriesObservable().observe(getViewLifecycleOwner(), this);
     }
@@ -80,25 +83,33 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
         TimetableEvent ttEvent = (TimetableEvent) event;
-
-        if (ttEvent.getAlternateLessonCodes().isEmpty()) {
-            return;
-        }
-
-        DialogFragment fragment = new LessonSelectDialogFragment(ttEvent, viewModel);
-        FragmentManager fragmentManager
-                = ((MainActivity) requireContext()).getSupportFragmentManager();
-        fragment.show(fragmentManager, "lessons");
+        String moduleCode = ttEvent.getModuleCode();
+        LessonType lessonType = ttEvent.getLessonType();
+        viewModel.getLessons(moduleCode, semester, lessonType)
+                .observe(getViewLifecycleOwner(), lessons -> {
+                    if (lessons == null || lessons.size() <= 1) {
+                        return;
+                    }
+                    List<Lesson> altLessons = lessons.stream()
+                            .filter(lesson -> !lesson.getLessonNo().equals(ttEvent.getLessonNo()))
+                            .collect(Collectors.toList());
+                    DialogFragment dialog = new LessonSelectDialogFragment(moduleCode, semester,
+                            lessonType, altLessons, viewModel);
+                    FragmentManager fragmentManager
+                            = ((MainActivity) requireContext()).getSupportFragmentManager();
+                    dialog.show(fragmentManager, "lessons");
+//                    viewModel.getLessons(moduleCode, semester, lessonType)
+//                            .removeObservers(this);
+                });
     }
 
     @Override
-    public void onChanged(List<AssignedModule> assignedModules) {
-        if (assignedModules == null) {
+    public void onChanged(List<ModuleReading> entries) {
+        if (entries == null) {
             return;
         }
-
-        adapter.setAssignedModules(assignedModules);
-        timetableView.setAssignedModules(assignedModules);
+        adapter.setAssignedModules(entries);
+        timetableView.setAssignedModules(entries);
     }
 
     public static class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {

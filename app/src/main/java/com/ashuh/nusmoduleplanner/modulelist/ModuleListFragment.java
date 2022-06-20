@@ -1,4 +1,4 @@
-package com.ashuh.nusmoduleplanner.ui.modules;
+package com.ashuh.nusmoduleplanner.modulelist;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +13,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ashuh.nusmoduleplanner.common.NusModulePlannerApplication;
 import com.ashuh.nusmoduleplanner.R;
+import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
 
 public class ModuleListFragment extends Fragment implements SearchView.OnQueryTextListener {
 
@@ -25,8 +27,15 @@ public class ModuleListFragment extends Fragment implements SearchView.OnQueryTe
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = new ViewModelProvider(this).get(ModuleListViewModel.class);
         adapter = new ModuleListAdapter();
+
+        ModuleRepository moduleRepository
+                = ((NusModulePlannerApplication) requireActivity().getApplication())
+                .appContainer.moduleRepository;
+
+        viewModel = new ViewModelProvider(this,
+                new ModuleListViewModelFactory(moduleRepository))
+                .get(ModuleListViewModel.class);
         viewModel.getModuleListObservable().observe(this, adapter);
     }
 

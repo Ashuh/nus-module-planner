@@ -1,4 +1,4 @@
-package com.ashuh.nusmoduleplanner.ui.timetable;
+package com.ashuh.nusmoduleplanner.timetable;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.ashuh.nusmoduleplanner.R;
-import com.ashuh.nusmoduleplanner.data.model.nusmods.module.semesterdatum.SemesterType;
+import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -31,7 +31,7 @@ public class TimetablePagerFragment extends Fragment {
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
 
         new TabLayoutMediator(tabLayout, viewPager,
-                (tab, position) -> tab.setText(SemesterType.fromId(position + 1).toString()))
+                (tab, position) -> tab.setText(Semester.fromInt(position + 1).toString()))
                 .attach();
     }
 }
