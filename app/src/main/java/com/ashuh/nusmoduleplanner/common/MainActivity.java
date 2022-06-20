@@ -1,4 +1,4 @@
-package com.ashuh.nusmoduleplanner;
+package com.ashuh.nusmoduleplanner.common;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,6 +11,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.ashuh.nusmoduleplanner.R;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
