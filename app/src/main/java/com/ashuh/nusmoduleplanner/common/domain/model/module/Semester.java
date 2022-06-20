@@ -20,13 +20,23 @@ public enum Semester {
         this.name = name;
     }
 
+    public static Semester fromInt(int value) {
+        for (Semester semester : values()) {
+            if (semester.value == value) {
+                return semester;
+            }
+        }
+        throw new IllegalArgumentException("Invalid semester value: " + value);
+    }
+
+    public int asInt() {
+        return value;
+    }
+
     @NonNull
     @Override
     public String toString() {
         return name;
     }
 
-    public int asInt() {
-        return value;
-    }
 }
