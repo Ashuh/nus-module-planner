@@ -1,4 +1,4 @@
-package com.ashuh.nusmoduleplanner.data.model.util;
+package com.ashuh.nusmoduleplanner.common.util;
 
 import java.time.format.DateTimeFormatter;
 

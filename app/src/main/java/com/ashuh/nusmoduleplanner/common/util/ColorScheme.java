@@ -1,4 +1,4 @@
-package com.ashuh.nusmoduleplanner.util;
+package com.ashuh.nusmoduleplanner.common.util;
 
 
 import android.graphics.Color;
