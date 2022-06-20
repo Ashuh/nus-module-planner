@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.ashuh.nusmoduleplanner.ui.timetable.TimetableView
+    <com.ashuh.nusmoduleplanner.timetable.TimetableView
         android:id="@+id/revolving_weekview"
         android:layout_width="match_parent"
         android:layout_height="0dp"

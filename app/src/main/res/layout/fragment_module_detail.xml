@@ -9,7 +9,7 @@
         android:id="@+id/module_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".ui.moduledetail.ModuleDetailFragment">
+        tools:context=".moduledetail.ModuleDetailFragment">
 
         <TextView
             android:id="@+id/module_code"
