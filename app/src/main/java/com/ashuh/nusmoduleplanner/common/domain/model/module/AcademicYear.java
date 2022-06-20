@@ -1,4 +1,4 @@
-package com.ashuh.nusmoduleplanner.data.model.nusmods;
+package com.ashuh.nusmoduleplanner.common.domain.model.module;
 
 import android.icu.util.Calendar;
 
