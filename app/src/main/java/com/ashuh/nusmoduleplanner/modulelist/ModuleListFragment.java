@@ -56,14 +56,14 @@ public class ModuleListFragment extends Fragment implements SearchView.OnQueryTe
     }
 
     @Override
-    public boolean onQueryTextSubmit(String s) {
-        adapter.getFilter().filter(s);
-        return true;
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+
     }
 
     @Override
-    public boolean onQueryTextChange(String s) {
-        adapter.getFilter().filter(s);
+    public boolean onQueryTextChange(String query) {
+        viewModel.filter(query);
         return true;
     }
 }

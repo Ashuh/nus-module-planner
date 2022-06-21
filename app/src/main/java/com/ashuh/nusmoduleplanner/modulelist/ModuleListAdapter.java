@@ -6,8 +6,6 @@ import static java.util.Objects.requireNonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,12 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.ViewHolder>
-        implements Observer<List<ModuleInfo>>, Filterable {
-
+        implements Observer<List<ModuleInfo>> {
     @NonNull
     private final List<ModuleInfo> modules = new ArrayList<>();
-    @NonNull
-    private List<ModuleInfo> filteredModules = new ArrayList<>();
 
     @NonNull
     @Override
@@ -40,42 +35,13 @@ public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ModuleListAdapter.ViewHolder viewHolder, int position) {
-        ModuleInfo module = filteredModules.get(position);
+        ModuleInfo module = modules.get(position);
         viewHolder.setModule(module);
     }
 
     @Override
     public int getItemCount() {
-        return filteredModules.size();
-    }
-
-    @Override
-    public Filter getFilter() {
-        return new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence charSequence) {
-                String charString = charSequence.toString();
-                List<ModuleInfo> filteredList = new ArrayList<>();
-                if (charString.isEmpty()) {
-                    filteredList = modules;
-                } else {
-                    for (ModuleInfo m : modules) {
-                        if (m.getModuleCode().contains(charString.toUpperCase())) {
-                            filteredList.add(m);
-                        }
-                    }
-                }
-                FilterResults filterResults = new FilterResults();
-                filterResults.values = filteredList;
-                return filterResults;
-            }
-
-            @Override
-            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                filteredModules = (ArrayList<ModuleInfo>) filterResults.values;
-                notifyDataSetChanged();
-            }
-        };
+        return modules.size();
     }
 
     @Override
@@ -83,16 +49,12 @@ public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.Vi
         if (modules == null) {
             return;
         }
-
         this.modules.clear();
         this.modules.addAll(modules);
-        filteredModules.clear();
-        filteredModules.addAll(modules);
         notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-
         private static final String TEXT_TITLE = "%s %s";
         private static final String TEXT_ADMIN_INFO = "%s • %s MCs";
 
