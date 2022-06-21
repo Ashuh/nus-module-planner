@@ -1,4 +1,4 @@
-package com.ashuh.nusmoduleplanner.modulelist;
+package com.ashuh.nusmoduleplanner.modulelist.presentation;
 
 import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNullElse;
@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.ashuh.nusmoduleplanner.common.domain.model.module.AcademicYear;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.ModuleInfo;
-import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
+import com.ashuh.nusmoduleplanner.modulelist.domain.usecase.GetModuleInfoUseCase;
 
 import java.util.Collections;
 import java.util.List;
@@ -20,17 +20,18 @@ import java.util.stream.Collectors;
 
 public class ModuleListViewModel extends ViewModel {
     private static final Predicate<ModuleInfo> PREDICATE_SHOW_ALL = module -> true;
+
     @NonNull
-    private final ModuleRepository moduleRepository;
+    private final GetModuleInfoUseCase getModuleInfoUseCase;
     private final LiveData<List<ModuleInfo>> allModules;
     private final MediatorLiveData<List<ModuleInfo>> filteredModules;
     private final MutableLiveData<Predicate<ModuleInfo>> filterPredicate
             = new MutableLiveData<>(PREDICATE_SHOW_ALL);
 
-    public ModuleListViewModel(@NonNull ModuleRepository moduleRepository) {
-        requireNonNull(moduleRepository);
-        this.moduleRepository = moduleRepository;
-        allModules = moduleRepository.getAllModuleInfo(AcademicYear.getCurrent().toString());
+    public ModuleListViewModel(@NonNull GetModuleInfoUseCase getModuleInfoUseCase) {
+        requireNonNull(getModuleInfoUseCase);
+        this.getModuleInfoUseCase = getModuleInfoUseCase;
+        allModules = getModuleInfoUseCase.execute(AcademicYear.getCurrent());
 
         filteredModules = new MediatorLiveData<>();
         filteredModules.addSource(allModules, unfiltered -> {

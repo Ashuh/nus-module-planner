@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/nav_modules"
-        android:name="com.ashuh.nusmoduleplanner.modulelist.ModuleListFragment"
+        android:name="com.ashuh.nusmoduleplanner.modulelist.presentation.ModuleListFragment"
         android:label="@string/menu_modules"
         tools:layout="@layout/fragment_modules">
         <action

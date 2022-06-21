@@ -1,6 +1,5 @@
-package com.ashuh.nusmoduleplanner.modulelist;
+package com.ashuh.nusmoduleplanner.modulelist.presentation;
 
-import static com.ashuh.nusmoduleplanner.modulelist.ModuleListFragmentDirections.actionNavModulesToNavModuleDetail;
 import static java.util.Objects.requireNonNull;
 
 import android.view.LayoutInflater;
@@ -78,7 +77,8 @@ public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.Vi
 
             itemView.setOnClickListener(view -> {
                 ModuleListFragmentDirections.ActionNavModulesToNavModuleDetail action
-                        = actionNavModulesToNavModuleDetail(module.getModuleCode());
+                        = ModuleListFragmentDirections.actionNavModulesToNavModuleDetail(
+                        module.getModuleCode());
                 Navigation.findNavController(view).navigate(action);
             });
         }
