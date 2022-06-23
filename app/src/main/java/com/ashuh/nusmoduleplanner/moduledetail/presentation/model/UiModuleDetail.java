@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Exam;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Module;
-import com.ashuh.nusmoduleplanner.common.domain.model.module.ModuleCredit;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.model.post.Post;
 
@@ -19,7 +18,7 @@ public class UiModuleDetail {
     @NonNull
     private final String title;
     @NonNull
-    private final ModuleCredit moduleCredit;
+    private final String moduleCredit;
     @NonNull
     private final String department;
     @NonNull
@@ -40,7 +39,7 @@ public class UiModuleDetail {
     private final List<Post> posts;
 
     public UiModuleDetail(@NonNull String moduleCode, @NonNull String title,
-                          @NonNull ModuleCredit moduleCredit, @NonNull String department,
+                          @NonNull String moduleCredit, @NonNull String department,
                           @NonNull String faculty, @NonNull String description,
                           @NonNull String prerequisite, @NonNull String coRequisite,
                           @NonNull String preclusion, @NonNull Map<Semester, Exam> semesterToExam,
@@ -62,7 +61,7 @@ public class UiModuleDetail {
     private static UiModuleDetail fromDomain(Module module) {
         String moduleCode = module.getModuleCode();
         String title = module.getTitle();
-        ModuleCredit moduleCredit = module.getModuleCredit();
+        String moduleCredit = module.getModuleCredit().toString();
         String department = module.getDepartment();
         String faculty = module.getFaculty();
         String description = module.getDescription();
@@ -87,7 +86,7 @@ public class UiModuleDetail {
     }
 
     @NonNull
-    public ModuleCredit getModuleCredit() {
+    public String getModuleCredit() {
         return moduleCredit;
     }
 
@@ -139,7 +138,7 @@ public class UiModuleDetail {
     public static class Builder {
         private String moduleCode = "";
         private String title = "";
-        private ModuleCredit moduleCredit = new ModuleCredit(0);
+        private String moduleCredit = "";
         private String department = "";
         private String faculty = "";
         private String description = "";
@@ -153,7 +152,7 @@ public class UiModuleDetail {
         public void withModule(Module module) {
             this.moduleCode = module.getModuleCode();
             this.title = module.getTitle();
-            this.moduleCredit = module.getModuleCredit();
+            this.moduleCredit = module.getModuleCredit().toString();
             this.department = module.getDepartment();
             this.faculty = module.getFaculty();
             this.description = module.getDescription();

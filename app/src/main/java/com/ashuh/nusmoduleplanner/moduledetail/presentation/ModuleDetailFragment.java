@@ -120,11 +120,11 @@ public class ModuleDetailFragment extends Fragment {
     }
 
     private void setAdminInfoTextView(String department, String faculty,
-                                      ModuleCredit moduleCredit) {
+                                      String moduleCredit) {
         String adminInfo = new StringJoiner(" • ")
                 .add(department)
                 .add(faculty)
-                .add(moduleCredit.toString())
+                .add(moduleCredit)
                 .toString();
         adminInfoTextView.setText(adminInfo);
     }
