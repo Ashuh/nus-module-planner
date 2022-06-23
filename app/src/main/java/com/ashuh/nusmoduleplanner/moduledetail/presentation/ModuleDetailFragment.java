@@ -65,44 +65,46 @@ public class ModuleDetailFragment extends Fragment {
     private ModuleDetailViewModel viewModel;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         ActionBar actionBar = ((MainActivity) requireActivity()).getSupportActionBar();
         assert actionBar != null;
         actionBar.setTitle(ACTION_BAR_TITLE);
 
-        View root = inflater.inflate(R.layout.fragment_module_detail, container, false);
-        titleTextView = root.findViewById(R.id.module_title);
-        codeTextView = root.findViewById(R.id.module_code);
-        adminInfoTextView = root.findViewById(R.id.module_admin_info);
-        semestersTextView = root.findViewById(R.id.module_semesters);
-        descriptionTextView = root.findViewById(R.id.module_description);
-        moduleRequirementsTextView = root.findViewById(R.id.module_requirements);
-        examInfoTextView = root.findViewById(R.id.exam_info);
-        button = root.findViewById(R.id.add_to_timetable_button);
-        recyclerView = root.findViewById(R.id.disqus_posts);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        String moduleCode = ModuleDetailFragmentArgs.fromBundle(getArguments()).getModuleCode();
         ModuleRepository moduleRepository
                 = ((NusModulePlannerApplication) requireActivity().getApplication())
                 .appContainer.moduleRepository;
         PostRepository postRepository
                 = ((NusModulePlannerApplication) requireActivity().getApplication())
                 .appContainer.postRepository;
+        String moduleCode = ModuleDetailFragmentArgs.fromBundle(getArguments()).getModuleCode();
 
         viewModel = new ViewModelProvider(this,
                 new ModuleDetailViewModelFactory(moduleRepository, postRepository,
                         AcademicYear.getCurrent(), moduleCode))
                 .get(ModuleDetailViewModel.class);
+    }
 
-        observeViewModel();
-        return root;
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_module_detail, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        titleTextView = view.findViewById(R.id.module_title);
+        codeTextView = view.findViewById(R.id.module_code);
+        adminInfoTextView = view.findViewById(R.id.module_admin_info);
+        semestersTextView = view.findViewById(R.id.module_semesters);
+        descriptionTextView = view.findViewById(R.id.module_description);
+        moduleRequirementsTextView = view.findViewById(R.id.module_requirements);
+        examInfoTextView = view.findViewById(R.id.exam_info);
+        button = view.findViewById(R.id.add_to_timetable_button);
+        recyclerView = view.findViewById(R.id.disqus_posts);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        observeViewModel();
     }
 
     private void observeViewModel() {
