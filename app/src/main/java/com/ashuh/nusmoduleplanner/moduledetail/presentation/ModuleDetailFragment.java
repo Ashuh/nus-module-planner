@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -29,7 +28,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashuh.nusmoduleplanner.R;
-import com.ashuh.nusmoduleplanner.common.MainActivity;
 import com.ashuh.nusmoduleplanner.common.NusModulePlannerApplication;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.AcademicYear;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Exam;
@@ -50,9 +48,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ModuleDetailFragment extends Fragment {
-
-    private static final String ACTION_BAR_TITLE = "Module Details";
-
     private TextView titleTextView;
     private TextView codeTextView;
     private TextView adminInfoTextView;
@@ -67,9 +62,6 @@ public class ModuleDetailFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActionBar actionBar = ((MainActivity) requireActivity()).getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setTitle(ACTION_BAR_TITLE);
 
         ModuleRepository moduleRepository
                 = ((NusModulePlannerApplication) requireActivity().getApplication())
