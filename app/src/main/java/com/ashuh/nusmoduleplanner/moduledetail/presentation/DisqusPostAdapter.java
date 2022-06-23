@@ -1,4 +1,4 @@
-package com.ashuh.nusmoduleplanner.moduledetail;
+package com.ashuh.nusmoduleplanner.moduledetail.presentation;
 
 import android.annotation.SuppressLint;
 import android.graphics.Typeface;
@@ -27,7 +27,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DisqusPostAdapter extends RecyclerView.Adapter<DisqusPostAdapter.ViewHolder> {
-
     private static final List<ChronoUnit> AGE_UNITS = new ArrayList<>(
             Arrays.asList(ChronoUnit.YEARS, ChronoUnit.MONTHS, ChronoUnit.DAYS,
                     ChronoUnit.HOURS, ChronoUnit.MINUTES));

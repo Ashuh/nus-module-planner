@@ -1,9 +1,8 @@
-package com.ashuh.nusmoduleplanner.moduledetail;
+package com.ashuh.nusmoduleplanner.moduledetail.presentation;
 
 import static java.util.Objects.requireNonNull;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -29,22 +28,23 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ashuh.nusmoduleplanner.R;
 import com.ashuh.nusmoduleplanner.common.MainActivity;
 import com.ashuh.nusmoduleplanner.common.NusModulePlannerApplication;
-import com.ashuh.nusmoduleplanner.R;
+import com.ashuh.nusmoduleplanner.common.domain.model.module.AcademicYear;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Exam;
-import com.ashuh.nusmoduleplanner.common.domain.model.module.Module;
-import com.ashuh.nusmoduleplanner.common.domain.model.module.ModuleReading;
+import com.ashuh.nusmoduleplanner.common.domain.model.module.ModuleCredit;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
-import com.ashuh.nusmoduleplanner.common.domain.model.module.AcademicYear;
+import com.ashuh.nusmoduleplanner.common.domain.repository.PostRepository;
 import com.ashuh.nusmoduleplanner.common.util.DateUtil;
-import com.ashuh.nusmoduleplanner.common.util.ColorScheme;
 
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringJoiner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -87,9 +87,12 @@ public class ModuleDetailFragment extends Fragment {
         ModuleRepository moduleRepository
                 = ((NusModulePlannerApplication) requireActivity().getApplication())
                 .appContainer.moduleRepository;
+        PostRepository postRepository
+                = ((NusModulePlannerApplication) requireActivity().getApplication())
+                .appContainer.postRepository;
 
         viewModel = new ViewModelProvider(this,
-                new ModuleDetailViewModelFactory(moduleRepository,
+                new ModuleDetailViewModelFactory(moduleRepository, postRepository,
                         AcademicYear.getCurrent(), moduleCode))
                 .get(ModuleDetailViewModel.class);
 
@@ -105,46 +108,43 @@ public class ModuleDetailFragment extends Fragment {
     private void observeViewModel() {
         DisqusPostAdapter adapter = new DisqusPostAdapter();
         recyclerView.setAdapter(adapter);
-        viewModel.getDisqusPostsObservable().observe(getViewLifecycleOwner(),
-                postList -> adapter.setPosts(postList.getPosts()));
 
-        viewModel.getModuleObservable().observe(getViewLifecycleOwner(), module -> {
-            if (module == null) {
-                return;
-            }
-
-            codeTextView.setText(module.getModuleCode());
-            titleTextView.setText(module.getTitle());
-            setAdminInfoTextView(module);
-            setSemestersTextView(module);
-            setDescriptionTextView(module);
-            setRequirementsTextView(module);
-            setExamInfoTextView(module);
-            setAddToTimetableButtonListener(module);
+        viewModel.getState().observe(getViewLifecycleOwner(), state -> {
+            codeTextView.setText(state.getModuleCode());
+            titleTextView.setText(state.getTitle());
+            setAdminInfoTextView(state.getDepartment(), state.getFaculty(),
+                    state.getModuleCredit());
+            setSemestersTextView(state.getSemestersOffered());
+            setDescriptionTextView(state.getDescription());
+            setRequirementsTextView(state.getPrerequisite(), state.getCoRequisite(),
+                    state.getPreclusion());
+            setExamInfoTextView(state.getExams());
+            setAddToTimetableButtonListener(state.getSemestersOffered());
+            adapter.setPosts(state.getPosts());
         });
     }
 
-    private void setAdminInfoTextView(Module module) {
+    private void setAdminInfoTextView(String department, String faculty,
+                                      ModuleCredit moduleCredit) {
         String adminInfo = new StringJoiner(" • ")
-                .add(module.getDepartment())
-                .add(module.getFaculty())
-                .add(module.getModuleCredit() + " MCs")
+                .add(department)
+                .add(faculty)
+                .add(moduleCredit.toString())
                 .toString();
         adminInfoTextView.setText(adminInfo);
     }
 
-    private void setSemestersTextView(Module module) {
+    private void setSemestersTextView(Collection<Semester> semesters) {
         StringJoiner joiner = new StringJoiner(" • ");
 
-        for (Semester semester : module.getSemesters()) {
+        for (Semester semester : semesters) {
             joiner.add(semester.toString());
         }
 
         semestersTextView.setText(joiner.toString());
     }
 
-    private void setDescriptionTextView(Module module) {
-        String description = module.getDescription();
+    private void setDescriptionTextView(String description) {
         if (description.isEmpty()) {
             descriptionTextView.setVisibility(View.GONE);
         } else {
@@ -152,26 +152,27 @@ public class ModuleDetailFragment extends Fragment {
         }
     }
 
-    private void setRequirementsTextView(Module module) {
+    private void setRequirementsTextView(String prerequisite, String coRequisite,
+                                         String preclusion) {
         SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
 
-        if (!module.getPrerequisite().isEmpty()) {
+        if (!prerequisite.isEmpty()) {
             SpannableStringBuilder prerequisiteText
                     = generateTextWithBoldHeading("Prerequisite",
-                    makeModuleCodesClickable(module.getPrerequisite()));
+                    makeModuleCodesClickable(prerequisite));
             stringBuilder.append(prerequisiteText).append("\n\n");
         }
 
-        if (!module.getCoRequisite().isEmpty()) {
+        if (!coRequisite.isEmpty()) {
             SpannableStringBuilder corequisiteText
                     = generateTextWithBoldHeading("Corequisite",
-                    makeModuleCodesClickable(module.getCoRequisite()));
+                    makeModuleCodesClickable(coRequisite));
             stringBuilder.append(corequisiteText).append("\n\n");
         }
 
-        if (!module.getPreclusion().isEmpty()) {
+        if (!preclusion.isEmpty()) {
             SpannableStringBuilder preclusionText = generateTextWithBoldHeading("Preclusion",
-                    makeModuleCodesClickable(module.getPreclusion()));
+                    makeModuleCodesClickable(preclusion));
             stringBuilder.append(preclusionText).append("\n\n");
         }
 
@@ -184,10 +185,7 @@ public class ModuleDetailFragment extends Fragment {
         }
     }
 
-    private void setExamInfoTextView(Module module) {
-        Map<Semester, Exam> semesterToExam = module.getExams();
-        System.out.println(semesterToExam);
-
+    private void setExamInfoTextView(Map<Semester, Exam> semesterToExam) {
         SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
 
         for (Semester semester : semesterToExam.keySet()) {
@@ -207,9 +205,10 @@ public class ModuleDetailFragment extends Fragment {
         examInfoTextView.setText(stringBuilder);
     }
 
-    private void setAddToTimetableButtonListener(Module module) {
-        button.setOnClickListener(view -> new ModuleSemesterMenu(requireContext(), button, module)
-                .show());
+    private void setAddToTimetableButtonListener(Set<Semester> semesters) {
+        button.setOnClickListener(
+                view -> new ModuleSemesterMenu(requireContext(), button, semesters)
+                        .show());
     }
 
     private SpannableStringBuilder generateTextWithBoldHeading(CharSequence heading,
@@ -279,13 +278,13 @@ public class ModuleDetailFragment extends Fragment {
         private static final int ID_SPECIAL_TERM_1 = 3;
         private static final int ID_SPECIAL_TERM_2 = 4;
 
-        @NonNull
-        private final Module module;
+        private final Set<Semester> semesters;
 
-        ModuleSemesterMenu(@NonNull Context context, @NonNull View anchor, @NonNull Module module) {
+        ModuleSemesterMenu(@NonNull Context context, @NonNull View anchor,
+                           Set<Semester> semesters) {
             super(context, anchor);
-            requireNonNull(module);
-            this.module = module;
+            requireNonNull(semesters);
+            this.semesters = semesters;
 
             initMenuItems();
             setOnMenuItemClickListener(menuItem -> {
@@ -308,18 +307,13 @@ public class ModuleDetailFragment extends Fragment {
                                 "Unknown menu item id: " + menuItem.getItemId());
                 }
 
-
-                Color color = ColorScheme.GOOGLE.getRandomColor();
-                ModuleReading moduleReading = ModuleReading.withDefaultLessonMapping(module,
-                        semester, color);
-                viewModel.addTimetableEntry(moduleReading);
+                viewModel.createModuleReading(semester);
                 return true;
             });
-
         }
 
         private void initMenuItems() {
-            for (Semester semester : module.getSemesters()) {
+            for (Semester semester : semesters) {
                 int id;
                 switch (semester) {
                     case SEMESTER_1:

@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/nav_module_detail"
-        android:name="com.ashuh.nusmoduleplanner.moduledetail.ModuleDetailFragment"
+        android:name="com.ashuh.nusmoduleplanner.moduledetail.presentation.ModuleDetailFragment"
         tools:layout="@layout/fragment_module_detail">
         <argument
             android:name="moduleCode"
