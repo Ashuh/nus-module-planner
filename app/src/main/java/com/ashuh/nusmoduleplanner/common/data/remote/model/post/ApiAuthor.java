@@ -12,7 +12,7 @@ import com.google.gson.annotations.SerializedName;
 public class ApiAuthor {
     @NonNull
     @SerializedName("username")
-    private final String username;
+    private final String userName;
     @NonNull
     @SerializedName("about")
     private final String about;
@@ -49,12 +49,12 @@ public class ApiAuthor {
     @SerializedName("isPrimary")
     private final boolean isPrimary;
 
-    public ApiAuthor(@NonNull String username, @NonNull String about, @NonNull String name,
+    public ApiAuthor(@NonNull String userName, @NonNull String about, @NonNull String name,
                      @NonNull String profileUrl, @NonNull String url, @NonNull String signedUrl,
                      @NonNull String location, @NonNull String joinedAt, @NonNull String id,
                      @NonNull ApiAvatar avatar, boolean isPowerContributor, boolean isAnonymous,
                      boolean isPrivate, boolean isPrimary) {
-        requireNonNull(username);
+        requireNonNull(userName);
         requireNonNull(about);
         requireNonNull(name);
         requireNonNull(profileUrl);
@@ -64,7 +64,7 @@ public class ApiAuthor {
         requireNonNull(joinedAt);
         requireNonNull(id);
         requireNonNull(avatar);
-        this.username = username;
+        this.userName = userName;
         this.about = about;
         this.name = name;
         this.profileUrl = profileUrl;
@@ -81,8 +81,8 @@ public class ApiAuthor {
     }
 
     @NonNull
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
     @NonNull
@@ -149,6 +149,6 @@ public class ApiAuthor {
     @NonNull
     public Author toDomain() {
         Avatar domainAvatar = avatar.toDomain();
-        return new Author(id, name, url, domainAvatar);
+        return new Author(name, userName, id, profileUrl, domainAvatar);
     }
 }

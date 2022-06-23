@@ -8,19 +8,24 @@ public class Author {
     @NonNull
     private final String name;
     @NonNull
-    private final String profileUrl;
+    private final String userName;
     @NonNull
     private final String id;
     @NonNull
+    private final String profileUrl;
+    @NonNull
     private final Avatar avatar;
 
-    public Author(@NonNull String name, @NonNull String profileUrl, @NonNull String id,
+    public Author(@NonNull String name, @NonNull String userName, @NonNull String id,
+                  @NonNull String profileUrl,
                   @NonNull Avatar avatar) {
         requireNonNull(name);
-        requireNonNull(profileUrl);
+        requireNonNull(userName);
         requireNonNull(id);
+        requireNonNull(profileUrl);
         requireNonNull(avatar);
         this.name = name;
+        this.userName = userName;
         this.profileUrl = profileUrl;
         this.id = id;
         this.avatar = avatar;
@@ -32,13 +37,18 @@ public class Author {
     }
 
     @NonNull
-    public String getProfileUrl() {
-        return profileUrl;
+    public String getUserName() {
+        return userName;
     }
 
     @NonNull
     public String getId() {
         return id;
+    }
+
+    @NonNull
+    public String getProfileUrl() {
+        return profileUrl;
     }
 
     @NonNull
