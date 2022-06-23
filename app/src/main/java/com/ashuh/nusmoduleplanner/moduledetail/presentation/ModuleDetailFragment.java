@@ -119,8 +119,10 @@ public class ModuleDetailFragment extends Fragment {
         });
     }
 
-    private void setAdminInfoTextView(String department, String faculty,
-                                      String moduleCredit) {
+    private void setAdminInfoTextView(String department, String faculty, String moduleCredit) {
+        if (department.isEmpty() || faculty.isEmpty() || moduleCredit.isEmpty()) {
+            return;
+        }
         String adminInfo = new StringJoiner(" • ")
                 .add(department)
                 .add(faculty)
