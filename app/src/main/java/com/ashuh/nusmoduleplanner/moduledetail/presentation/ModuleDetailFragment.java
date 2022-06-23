@@ -32,7 +32,6 @@ import com.ashuh.nusmoduleplanner.R;
 import com.ashuh.nusmoduleplanner.common.NusModulePlannerApplication;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.AcademicYear;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Exam;
-import com.ashuh.nusmoduleplanner.common.domain.model.module.ModuleCredit;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
 import com.ashuh.nusmoduleplanner.common.domain.repository.PostRepository;
@@ -47,6 +46,7 @@ import java.util.Set;
 import java.util.StringJoiner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class ModuleDetailFragment extends Fragment {
     private TextView titleTextView;
@@ -130,13 +130,11 @@ public class ModuleDetailFragment extends Fragment {
     }
 
     private void setSemestersTextView(Collection<Semester> semesters) {
-        StringJoiner joiner = new StringJoiner(" • ");
-
-        for (Semester semester : semesters) {
-            joiner.add(semester.toString());
-        }
-
-        semestersTextView.setText(joiner.toString());
+        String semestersText = semesters.stream()
+                .sorted()
+                .map(Semester::toString)
+                .collect(Collectors.joining(" • "));
+        semestersTextView.setText(semestersText);
     }
 
     private void setDescriptionTextView(String description) {
