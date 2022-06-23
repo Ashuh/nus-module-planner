@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.StyleSpan;
@@ -220,18 +221,15 @@ public class ModuleDetailFragment extends Fragment {
             return new SpannableString("");
         }
 
-        final Pattern pattern = Pattern.compile("(([A-Z][A-Z])(?<!AY))[A-Z]?\\d\\d\\d\\d[A-Z]?");
+        final String moduleCodeRegex = "[A-Z]{2,4}[1234568]\\d{3}[A-Z]{0,3}";
+        final Pattern pattern = Pattern.compile(moduleCodeRegex);
         Matcher matcher = pattern.matcher(string);
         SpannableString ss = new SpannableString(string);
 
-//        while (matcher.find()) {
-//            if (ModulesRepository.getInstance()
-//                    .hasModule(AcademicYear.getCurrent(), matcher.group())) {
-//                ss.setSpan(new ClickableModuleCode(matcher.group()), matcher.start(), matcher
-//                .end(),
-//                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            }
-//        }
+        while (matcher.find()) {
+            ss.setSpan(new ClickableModuleCode(matcher.group()), matcher.start(), matcher.end(),
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
 
         return ss;
     }
