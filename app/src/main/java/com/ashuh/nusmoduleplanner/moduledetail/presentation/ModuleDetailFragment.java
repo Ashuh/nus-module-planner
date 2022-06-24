@@ -36,6 +36,7 @@ import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
 import com.ashuh.nusmoduleplanner.common.domain.repository.PostRepository;
 import com.ashuh.nusmoduleplanner.common.util.DateUtil;
+import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiModuleDetail;
 
 import java.time.Duration;
 import java.time.ZoneId;
@@ -57,13 +58,13 @@ public class ModuleDetailFragment extends Fragment {
     private TextView moduleRequirementsTextView;
     private TextView examInfoTextView;
     private Button button;
-    private RecyclerView recyclerView;
+    private DisqusPostAdapter postAdapter;
     private ModuleDetailViewModel viewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        postAdapter = new DisqusPostAdapter();
         ModuleRepository moduleRepository
                 = ((NusModulePlannerApplication) requireActivity().getApplication())
                 .appContainer.moduleRepository;
@@ -74,7 +75,6 @@ public class ModuleDetailFragment extends Fragment {
         int primaryColor = requireContext()
                 .getResources()
                 .getColor(R.color.primary, requireContext().getTheme());
-
         viewModel = new ViewModelProvider(this,
                 new ModuleDetailViewModelFactory(moduleRepository, postRepository, primaryColor,
                         AcademicYear.getCurrent(), moduleCode))
@@ -98,28 +98,28 @@ public class ModuleDetailFragment extends Fragment {
         moduleRequirementsTextView = view.findViewById(R.id.module_requirements);
         examInfoTextView = view.findViewById(R.id.exam_info);
         button = view.findViewById(R.id.add_to_timetable_button);
-        recyclerView = view.findViewById(R.id.disqus_posts);
+        RecyclerView recyclerView = view.findViewById(R.id.disqus_posts);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(postAdapter);
         observeViewModel();
     }
 
     private void observeViewModel() {
-        DisqusPostAdapter adapter = new DisqusPostAdapter();
-        recyclerView.setAdapter(adapter);
+        viewModel.getState().observe(getViewLifecycleOwner(), this::updateUi);
+    }
 
-        viewModel.getState().observe(getViewLifecycleOwner(), state -> {
-            codeTextView.setText(state.getModuleCode());
-            titleTextView.setText(state.getTitle());
-            setAdminInfoTextView(state.getDepartment(), state.getFaculty(),
-                    state.getModuleCredit());
-            setSemestersTextView(state.getSemestersOffered());
-            setDescriptionTextView(state.getDescription());
-            setRequirementsTextView(state.getPrerequisite(), state.getCoRequisite(),
-                    state.getPreclusion());
-            setExamInfoTextView(state.getExams());
-            setAddToTimetableButtonListener(state.getSemestersOffered());
-            adapter.setPosts(state.getPosts());
-        });
+    private void updateUi(UiModuleDetail state) {
+        codeTextView.setText(state.getModuleCode());
+        titleTextView.setText(state.getTitle());
+        setAdminInfoTextView(state.getDepartment(), state.getFaculty(),
+                state.getModuleCredit());
+        setSemestersTextView(state.getSemestersOffered());
+        setDescriptionTextView(state.getDescription());
+        setRequirementsTextView(state.getPrerequisite(), state.getCoRequisite(),
+                state.getPreclusion());
+        setExamInfoTextView(state.getExams());
+        setAddToTimetableButtonListener(state.getSemestersOffered());
+        postAdapter.setPosts(state.getPosts());
     }
 
     private void setAdminInfoTextView(String department, String faculty, String moduleCredit) {
