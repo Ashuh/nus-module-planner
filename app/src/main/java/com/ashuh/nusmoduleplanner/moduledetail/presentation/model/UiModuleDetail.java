@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class UiModuleDetail {
     @NonNull
@@ -36,14 +37,14 @@ public class UiModuleDetail {
     @NonNull
     private final Set<Semester> semestersOffered;
     @NonNull
-    private final List<Post> posts;
+    private final List<UiPost> posts;
 
     public UiModuleDetail(@NonNull String moduleCode, @NonNull String title,
                           @NonNull String moduleCredit, @NonNull String department,
                           @NonNull String faculty, @NonNull String description,
                           @NonNull String prerequisite, @NonNull String coRequisite,
                           @NonNull String preclusion, @NonNull Map<Semester, Exam> semesterToExam,
-                          @NonNull Set<Semester> semestersOffered, @NonNull List<Post> posts) {
+                          @NonNull Set<Semester> semestersOffered, @NonNull List<UiPost> posts) {
         this.moduleCode = moduleCode;
         this.title = title;
         this.moduleCredit = moduleCredit;
@@ -70,7 +71,7 @@ public class UiModuleDetail {
         String preclusion = module.getPreclusion();
         Map<Semester, Exam> semesterToExam = module.getExams();
         Set<Semester> semestersOffered = module.getSemesters();
-        List<Post> posts = Collections.emptyList();
+        List<UiPost> posts = Collections.emptyList();
         return new UiModuleDetail(moduleCode, title, moduleCredit, department, faculty, description,
                 prerequisite, coRequisite, preclusion, semesterToExam, semestersOffered, posts);
     }
@@ -131,7 +132,7 @@ public class UiModuleDetail {
     }
 
     @NonNull
-    public List<Post> getPosts() {
+    public List<UiPost> getPosts() {
         return posts;
     }
 
@@ -147,7 +148,7 @@ public class UiModuleDetail {
         private String preclusion = "";
         private Map<Semester, Exam> semesterToExam = Collections.emptyMap();
         private Set<Semester> semestersOffered = Collections.emptySet();
-        private List<Post> posts = Collections.emptyList();
+        private List<UiPost> posts = Collections.emptyList();
 
         public void withModule(Module module) {
             this.moduleCode = module.getModuleCode();
@@ -163,8 +164,10 @@ public class UiModuleDetail {
             this.semestersOffered = module.getSemesters();
         }
 
-        public void withPosts(List<Post> posts) {
-            this.posts = posts;
+        public void withPosts(List<Post> posts, int primaryColor) {
+            this.posts = posts.stream()
+                    .map(post -> UiPost.fromDomain(post, primaryColor))
+                    .collect(Collectors.toList());
         }
 
         public UiModuleDetail build() {

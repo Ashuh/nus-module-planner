@@ -1,14 +1,9 @@
 package com.ashuh.nusmoduleplanner.moduledetail.presentation;
 
 import android.annotation.SuppressLint;
-import android.graphics.Typeface;
-import android.text.Html;
-import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,21 +13,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashuh.nusmoduleplanner.R;
-import com.ashuh.nusmoduleplanner.common.domain.model.post.Post;
+import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiPost;
 
-import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class DisqusPostAdapter extends RecyclerView.Adapter<DisqusPostAdapter.ViewHolder> {
-    private static final List<ChronoUnit> AGE_UNITS = new ArrayList<>(
-            Arrays.asList(ChronoUnit.YEARS, ChronoUnit.MONTHS, ChronoUnit.DAYS,
-                    ChronoUnit.HOURS, ChronoUnit.MINUTES));
-    private static final String AGE_TEXT = "%s %s ago";
-
-    private List<Post> posts = new ArrayList<>();
+    private List<UiPost> posts = new ArrayList<>();
 
     @NonNull
     @Override
@@ -44,29 +31,9 @@ public class DisqusPostAdapter extends RecyclerView.Adapter<DisqusPostAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        Post post = posts.get(position);
-        String author = post.getAuthor().getName();
-        String age = getAgeText(post.getCreatedAt());
-
-        String headingText = String.format("%s • %s", author, age);
-        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(headingText);
-
-        int color = viewHolder.getMessageTextView()
-                .getContext()
-                .getResources()
-                .getColor(R.color.primary, viewHolder.getMessageTextView().getContext().getTheme());
-        ForegroundColorSpan colorSpan = new ForegroundColorSpan(color);
-        stringBuilder.setSpan(colorSpan, 0, author.length(),
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        StyleSpan boldStyleSpan = new StyleSpan(Typeface.BOLD);
-        stringBuilder.setSpan(boldStyleSpan, 0, author.length(),
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        viewHolder.getTitleTextView().setText(stringBuilder);
-        Spanned spanned = Html.fromHtml(post.getMessage(), Html.FROM_HTML_MODE_LEGACY);
-        viewHolder.getMessageTextView().setText(spanned);
-        viewHolder.getMessageTextView().setMovementMethod(LinkMovementMethod.getInstance());
+        UiPost post = posts.get(position);
+        viewHolder.setTitle(buildTitle(post.getName(), post.getAge()));
+        viewHolder.setMessage(post.getMessage());
     }
 
     @Override
@@ -74,25 +41,16 @@ public class DisqusPostAdapter extends RecyclerView.Adapter<DisqusPostAdapter.Vi
         return posts.size();
     }
 
-    private String getAgeText(ZonedDateTime postTime) {
-        ZonedDateTime now = ZonedDateTime.now();
-
-        long age = 0;
-        ChronoUnit ageUnit = AGE_UNITS.get(AGE_UNITS.size() - 1);
-
-        for (ChronoUnit unit : AGE_UNITS) {
-            age = unit.between(postTime, now);
-            if (age > 0) {
-                ageUnit = unit;
-                break;
-            }
-        }
-
-        return String.format(AGE_TEXT, age, ageUnit);
+    private Spanned buildTitle(CharSequence name, CharSequence age) {
+        SpannableStringBuilder titleBuilder = new SpannableStringBuilder();
+        titleBuilder.append(name)
+                .append(" • ")
+                .append(age);
+        return titleBuilder;
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setPosts(List<Post> posts) {
+    public void setPosts(List<UiPost> posts) {
         this.posts = posts;
         notifyDataSetChanged();
     }
@@ -105,14 +63,15 @@ public class DisqusPostAdapter extends RecyclerView.Adapter<DisqusPostAdapter.Vi
             super(itemView);
             userTextView = itemView.findViewById(R.id.disqus_card_title);
             messageTextView = itemView.findViewById(R.id.disqus_card_message);
+            messageTextView.setMovementMethod(LinkMovementMethod.getInstance());
         }
 
-        public TextView getTitleTextView() {
-            return userTextView;
+        public void setTitle(CharSequence title) {
+            userTextView.setText(title);
         }
 
-        public TextView getMessageTextView() {
-            return messageTextView;
+        public void setMessage(CharSequence message) {
+            messageTextView.setText(message);
         }
     }
 }

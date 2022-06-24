@@ -71,9 +71,12 @@ public class ModuleDetailFragment extends Fragment {
                 = ((NusModulePlannerApplication) requireActivity().getApplication())
                 .appContainer.postRepository;
         String moduleCode = ModuleDetailFragmentArgs.fromBundle(getArguments()).getModuleCode();
+        int primaryColor = requireContext()
+                .getResources()
+                .getColor(R.color.primary, requireContext().getTheme());
 
         viewModel = new ViewModelProvider(this,
-                new ModuleDetailViewModelFactory(moduleRepository, postRepository,
+                new ModuleDetailViewModelFactory(moduleRepository, postRepository, primaryColor,
                         AcademicYear.getCurrent(), moduleCode))
                 .get(ModuleDetailViewModel.class);
     }

@@ -15,14 +15,16 @@ import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiModuleDetail
 public class ModuleDetailViewModel extends ViewModel {
     private final GetModuleWithPostsUseCase getModuleWithPostsUseCase;
     private final CreateModuleReadingUseCase createModuleReadingUseCase;
+    private final int primaryColor;
     private final LiveData<ModuleWithPosts> observableModuleWithPosts;
     private final LiveData<UiModuleDetail> observableState;
 
     public ModuleDetailViewModel(GetModuleWithPostsUseCase getModuleWithPostsUseCase,
                                  CreateModuleReadingUseCase createModuleReadingUseCase,
-                                 AcademicYear acadYear, String moduleCode) {
+                                 int primaryColor, AcademicYear acadYear, String moduleCode) {
         this.getModuleWithPostsUseCase = getModuleWithPostsUseCase;
         this.createModuleReadingUseCase = createModuleReadingUseCase;
+        this.primaryColor = primaryColor;
         observableModuleWithPosts = getModuleWithPostsUseCase.execute(acadYear, moduleCode);
         observableState = Transformations.map(observableModuleWithPosts, this::buildUiModuleDetail);
     }
@@ -32,7 +34,7 @@ public class ModuleDetailViewModel extends ViewModel {
         moduleWithPosts.getModule().ifPresent(builder::withModule);
         moduleWithPosts.getPaginatedPosts()
                 .map(PaginatedPosts::getPosts)
-                .ifPresent(builder::withPosts);
+                .ifPresent(posts -> builder.withPosts(posts, primaryColor));
         return builder.build();
     }
 
