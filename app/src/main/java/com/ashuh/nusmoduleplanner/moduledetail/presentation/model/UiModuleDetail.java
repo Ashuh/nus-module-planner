@@ -2,16 +2,14 @@ package com.ashuh.nusmoduleplanner.moduledetail.presentation.model;
 
 import androidx.annotation.NonNull;
 
-import com.ashuh.nusmoduleplanner.common.domain.model.module.Exam;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Module;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.model.post.Post;
 
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class UiModuleDetail {
@@ -34,9 +32,9 @@ public class UiModuleDetail {
     @NonNull
     private final String preclusion;
     @NonNull
-    private final Map<Semester, UiExam> semesterToExam;
+    private final Map<String, UiExam> semesterToExam;
     @NonNull
-    private final Set<Semester> semestersOffered;
+    private final List<String> semestersOffered;
     @NonNull
     private final List<UiPost> posts;
 
@@ -44,8 +42,8 @@ public class UiModuleDetail {
                           @NonNull String moduleCredit, @NonNull String department,
                           @NonNull String faculty, @NonNull String description,
                           @NonNull String prerequisite, @NonNull String coRequisite,
-                          @NonNull String preclusion, @NonNull Map<Semester, UiExam> semesterToExam,
-                          @NonNull Set<Semester> semestersOffered, @NonNull List<UiPost> posts) {
+                          @NonNull String preclusion, @NonNull Map<String, UiExam> semesterToExam,
+                          @NonNull List<String> semestersOffered, @NonNull List<UiPost> posts) {
         this.moduleCode = moduleCode;
         this.title = title;
         this.moduleCredit = moduleCredit;
@@ -106,12 +104,12 @@ public class UiModuleDetail {
     }
 
     @NonNull
-    public Map<Semester, UiExam> getExams() {
+    public Map<String, UiExam> getExams() {
         return semesterToExam;
     }
 
     @NonNull
-    public Set<Semester> getSemestersOffered() {
+    public List<String> getSemestersOffered() {
         return semestersOffered;
     }
 
@@ -130,8 +128,8 @@ public class UiModuleDetail {
         private String prerequisite = "";
         private String coRequisite = "";
         private String preclusion = "";
-        private Map<Semester, UiExam> semesterToExam = Collections.emptyMap();
-        private Set<Semester> semestersOffered = Collections.emptySet();
+        private Map<String, UiExam> semesterToExam = Collections.emptyMap();
+        private List<String> semestersOffered = Collections.emptyList();
         private List<UiPost> posts = Collections.emptyList();
 
         public void withModule(Module module) {
@@ -145,8 +143,17 @@ public class UiModuleDetail {
             this.coRequisite = module.getCoRequisite();
             this.preclusion = module.getPreclusion();
             this.semesterToExam = module.getExams().entrySet().stream()
-                    .collect(Collectors.toMap(Entry::getKey, e -> UiExam.fromDomain(e.getValue())));
-            this.semestersOffered = module.getSemesters();
+                    .sorted(Map.Entry.comparingByKey())
+                    .collect(Collectors.toMap(
+                            e -> e.getKey().toString(),
+                            e -> UiExam.fromDomain(e.getValue()),
+                            (x, y) -> y,
+                            LinkedHashMap::new)
+                    );
+            this.semestersOffered = module.getSemesters().stream()
+                    .sorted()
+                    .map(Semester::toString)
+                    .collect(Collectors.toList());
         }
 
         public void withPosts(List<Post> posts, int primaryColor) {

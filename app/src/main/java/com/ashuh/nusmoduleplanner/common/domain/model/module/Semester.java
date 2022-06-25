@@ -29,6 +29,15 @@ public enum Semester {
         throw new IllegalArgumentException("Invalid semester value: " + value);
     }
 
+    public static Semester fromString(String name) {
+        for (Semester semester : values()) {
+            if (semester.name.equals(name)) {
+                return semester;
+            }
+        }
+        throw new IllegalArgumentException("Invalid semester name: " + name);
+    }
+
     public int asInt() {
         return value;
     }

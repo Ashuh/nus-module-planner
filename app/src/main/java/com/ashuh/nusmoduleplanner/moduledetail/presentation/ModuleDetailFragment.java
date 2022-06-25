@@ -37,13 +37,12 @@ import com.ashuh.nusmoduleplanner.common.domain.repository.PostRepository;
 import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiExam;
 import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiModuleDetail;
 
-import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.StringJoiner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class ModuleDetailFragment extends Fragment {
     private static final String EXAM_HEADING_FORMAT = "%s Exam";
@@ -132,11 +131,8 @@ public class ModuleDetailFragment extends Fragment {
         adminInfoTextView.setText(adminInfo);
     }
 
-    private void setSemestersTextView(Collection<Semester> semesters) {
-        String semestersText = semesters.stream()
-                .sorted()
-                .map(Semester::toString)
-                .collect(Collectors.joining(" • "));
+    private void setSemestersTextView(List<String> semesters) {
+        String semestersText = String.join(" • ", semesters);
         semestersTextView.setText(semestersText);
     }
 
@@ -181,10 +177,10 @@ public class ModuleDetailFragment extends Fragment {
         }
     }
 
-    private void setExamInfoTextView(Map<Semester, UiExam> semesterToExam) {
+    private void setExamInfoTextView(Map<String, UiExam> semesterToExam) {
         SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
 
-        semesterToExam.keySet().stream().sorted()
+        semesterToExam.keySet()
                 .forEach(semester -> {
                     UiExam exam = semesterToExam.get(semester);
                     if (exam == null) {
@@ -205,7 +201,7 @@ public class ModuleDetailFragment extends Fragment {
         examInfoTextView.setText(stringBuilder);
     }
 
-    private void setAddToTimetableButtonListener(Set<Semester> semesters) {
+    private void setAddToTimetableButtonListener(List<String> semesters) {
         button.setOnClickListener(
                 view -> new ModuleSemesterMenu(requireContext(), button, semesters)
                         .show());
@@ -258,65 +254,31 @@ public class ModuleDetailFragment extends Fragment {
     }
 
     private class ModuleSemesterMenu extends PopupMenu {
-        private static final int ID_SEMESTER_1 = 1;
-        private static final int ID_SEMESTER_2 = 2;
-        private static final int ID_SPECIAL_TERM_1 = 3;
-        private static final int ID_SPECIAL_TERM_2 = 4;
-
-        private final Set<Semester> semesters;
+        private final List<String> semesterStrings;
+        Map<Integer, String> idToSemesterString = new HashMap<>();
 
         ModuleSemesterMenu(@NonNull Context context, @NonNull View anchor,
-                           Set<Semester> semesters) {
+                           List<String> semesterStrings) {
             super(context, anchor);
-            requireNonNull(semesters);
-            this.semesters = semesters;
+            requireNonNull(semesterStrings);
+            this.semesterStrings = semesterStrings;
 
             initMenuItems();
             setOnMenuItemClickListener(menuItem -> {
-                Semester semester;
-                switch (menuItem.getItemId()) {
-                    case ID_SEMESTER_1:
-                        semester = Semester.SEMESTER_1;
-                        break;
-                    case ID_SEMESTER_2:
-                        semester = Semester.SEMESTER_2;
-                        break;
-                    case ID_SPECIAL_TERM_1:
-                        semester = Semester.SPECIAL_TERM_1;
-                        break;
-                    case ID_SPECIAL_TERM_2:
-                        semester = Semester.SPECIAL_TERM_2;
-                        break;
-                    default:
-                        throw new IllegalStateException(
-                                "Unknown menu item id: " + menuItem.getItemId());
-                }
-
+                String semesterString = idToSemesterString.get(menuItem.getItemId());
+                Semester semester = Semester.fromString(semesterString);
                 viewModel.createModuleReading(semester);
                 return true;
             });
         }
 
         private void initMenuItems() {
-            for (Semester semester : semesters) {
-                int id;
-                switch (semester) {
-                    case SEMESTER_1:
-                        id = ID_SEMESTER_1;
-                        break;
-                    case SEMESTER_2:
-                        id = ID_SEMESTER_2;
-                        break;
-                    case SPECIAL_TERM_1:
-                        id = ID_SPECIAL_TERM_1;
-                        break;
-                    case SPECIAL_TERM_2:
-                        id = ID_SPECIAL_TERM_2;
-                        break;
-                    default:
-                        throw new IllegalStateException("Unknown semester type: " + semester);
-                }
-                getMenu().add(Menu.NONE, id, Menu.NONE, semester.toString());
+            int id = 0;
+
+            for (String semesterString : semesterStrings) {
+                idToSemesterString.put(id, semesterString);
+                getMenu().add(Menu.NONE, id, Menu.NONE, semesterString);
+                id++;
             }
         }
     }
