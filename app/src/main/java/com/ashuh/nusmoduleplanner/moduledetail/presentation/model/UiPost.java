@@ -2,14 +2,6 @@ package com.ashuh.nusmoduleplanner.moduledetail.presentation.model;
 
 import static java.util.Objects.requireNonNull;
 
-import android.graphics.Typeface;
-import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
-
 import androidx.annotation.NonNull;
 
 import com.ashuh.nusmoduleplanner.common.domain.model.post.Post;
@@ -24,13 +16,13 @@ public class UiPost {
     private static final String AGE_TEXT = "%s %s ago";
 
     @NonNull
-    private final Spanned name;
+    private final String name;
     @NonNull
     private final String age;
     @NonNull
-    private final Spanned message;
+    private final String message;
 
-    public UiPost(@NonNull Spanned name, @NonNull String age, @NonNull Spanned message) {
+    public UiPost(@NonNull String name, @NonNull String age, @NonNull String message) {
         requireNonNull(name);
         requireNonNull(age);
         requireNonNull(message);
@@ -39,25 +31,11 @@ public class UiPost {
         this.message = message;
     }
 
-    public static UiPost fromDomain(@NonNull Post post, int primaryColor) {
-        Spanned name = formatName(post.getAuthor().getName(), primaryColor);
+    public static UiPost fromDomain(@NonNull Post post) {
+        String name = post.getAuthor().getName();
         String age = calculateAge(post.getCreatedAt());
-        Spanned message = Html.fromHtml(post.getMessage(), Html.FROM_HTML_MODE_LEGACY);
+        String message = post.getMessage();
         return new UiPost(name, age, message);
-    }
-
-    private static Spanned formatName(String name, int color) {
-        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(name);
-
-        ForegroundColorSpan colorSpan = new ForegroundColorSpan(color);
-        stringBuilder.setSpan(colorSpan, 0, name.length(),
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        StyleSpan boldStyleSpan = new StyleSpan(Typeface.BOLD);
-        stringBuilder.setSpan(boldStyleSpan, 0, name.length(),
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        return stringBuilder;
     }
 
     private static String calculateAge(ZonedDateTime postTime) {
@@ -78,7 +56,7 @@ public class UiPost {
     }
 
     @NonNull
-    public Spanned getName() {
+    public String getName() {
         return name;
     }
 
@@ -88,7 +66,7 @@ public class UiPost {
     }
 
     @NonNull
-    public Spanned getMessage() {
+    public String getMessage() {
         return message;
     }
 }

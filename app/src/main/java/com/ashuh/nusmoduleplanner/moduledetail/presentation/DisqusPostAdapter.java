@@ -1,9 +1,14 @@
 package com.ashuh.nusmoduleplanner.moduledetail.presentation;
 
 import android.annotation.SuppressLint;
+import android.graphics.Typeface;
+import android.text.Html;
+import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,13 +37,33 @@ public class DisqusPostAdapter extends RecyclerView.Adapter<DisqusPostAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         UiPost post = posts.get(position);
-        viewHolder.setTitle(buildTitle(post.getName(), post.getAge()));
-        viewHolder.setMessage(post.getMessage());
+        int color = viewHolder.itemView.getContext()
+                .getResources()
+                .getColor(R.color.primary, viewHolder.itemView.getContext().getTheme());
+        Spanned formattedName = formatName(post.getName(), color);
+        Spanned title = buildTitle(formattedName, post.getAge());
+        Spanned message = Html.fromHtml(post.getMessage(), Html.FROM_HTML_MODE_LEGACY);
+        viewHolder.setTitle(title);
+        viewHolder.setMessage(message);
     }
 
     @Override
     public int getItemCount() {
         return posts.size();
+    }
+
+    private static Spanned formatName(String name, int color) {
+        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(name);
+
+        ForegroundColorSpan colorSpan = new ForegroundColorSpan(color);
+        stringBuilder.setSpan(colorSpan, 0, name.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        StyleSpan boldStyleSpan = new StyleSpan(Typeface.BOLD);
+        stringBuilder.setSpan(boldStyleSpan, 0, name.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        return stringBuilder;
     }
 
     private Spanned buildTitle(CharSequence name, CharSequence age) {

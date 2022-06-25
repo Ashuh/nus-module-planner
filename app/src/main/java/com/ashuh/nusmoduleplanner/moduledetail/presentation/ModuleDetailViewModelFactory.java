@@ -14,16 +14,14 @@ import org.jetbrains.annotations.NotNull;
 public class ModuleDetailViewModelFactory implements ViewModelProvider.Factory {
     private final ModuleRepository moduleRepository;
     private final PostRepository postRepository;
-    private final int primaryColor;
     private final AcademicYear acadYear;
     private final String moduleCode;
 
     public ModuleDetailViewModelFactory(ModuleRepository moduleRepository,
-                                        PostRepository postRepository, int primaryColor,
-                                        AcademicYear acadYear, String moduleCode) {
+                                        PostRepository postRepository, AcademicYear acadYear,
+                                        String moduleCode) {
         this.moduleRepository = moduleRepository;
         this.postRepository = postRepository;
-        this.primaryColor = primaryColor;
         this.acadYear = acadYear;
         this.moduleCode = moduleCode;
     }
@@ -35,7 +33,7 @@ public class ModuleDetailViewModelFactory implements ViewModelProvider.Factory {
                 = new GetModuleWithPostsUseCase(moduleRepository, postRepository);
         CreateModuleReadingUseCase createModuleReadingUseCase
                 = new CreateModuleReadingUseCase(moduleRepository);
-        return (T) new ModuleDetailViewModel(getModuleWithPostsUseCase,
-                createModuleReadingUseCase, primaryColor, acadYear, moduleCode);
+        return (T) new ModuleDetailViewModel(getModuleWithPostsUseCase, createModuleReadingUseCase,
+                acadYear, moduleCode);
     }
 }

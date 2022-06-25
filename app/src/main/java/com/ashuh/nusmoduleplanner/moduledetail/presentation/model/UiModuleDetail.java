@@ -156,9 +156,9 @@ public class UiModuleDetail {
                     .collect(Collectors.toList());
         }
 
-        public void withPosts(List<Post> posts, int primaryColor) {
+        public void withPosts(List<Post> posts) {
             this.posts = posts.stream()
-                    .map(post -> UiPost.fromDomain(post, primaryColor))
+                    .map(UiPost::fromDomain)
                     .collect(Collectors.toList());
         }
 
