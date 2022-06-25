@@ -37,6 +37,7 @@ import com.ashuh.nusmoduleplanner.common.domain.repository.PostRepository;
 import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiExam;
 import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiModuleDetail;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -178,24 +179,21 @@ public class ModuleDetailFragment extends Fragment {
     }
 
     private void setExamInfoTextView(Map<String, UiExam> semesterToExam) {
+        List<CharSequence> semesterExamStrings = new ArrayList<>();
+        semesterToExam.forEach((semester, exam) -> {
+            String examInfoHeading = String.format(EXAM_HEADING_FORMAT, semester);
+            String examInfo = String.format(EXAM_INFO_FORMAT, exam.getDate(), exam.getDuration());
+            SpannableStringBuilder curSemExamInfo
+                    = generateTextWithBoldHeading(examInfoHeading, examInfo);
+            semesterExamStrings.add(curSemExamInfo);
+        });
+
         SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
-
-        semesterToExam.keySet()
-                .forEach(semester -> {
-                    UiExam exam = semesterToExam.get(semester);
-                    if (exam == null) {
-                        return;
-                    }
-                    String examInfoHeading = String.format(EXAM_HEADING_FORMAT, semester);
-                    String examInfo = String.format(EXAM_INFO_FORMAT, exam.getDate(),
-                            exam.getDuration());
-                    SpannableStringBuilder curSemExamInfo
-                            = generateTextWithBoldHeading(examInfoHeading, examInfo);
-                    stringBuilder.append(curSemExamInfo).append("\n\n");
-                });
-
-        if (stringBuilder.length() > 0) {
-            stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
+        for (int i = 0; i < semesterExamStrings.size(); i++) {
+            stringBuilder.append(semesterExamStrings.get(i));
+            if (i < semesterExamStrings.size() - 1) {
+                stringBuilder.append("\n\n");
+            }
         }
 
         examInfoTextView.setText(stringBuilder);
