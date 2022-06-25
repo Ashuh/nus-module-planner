@@ -31,16 +31,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ashuh.nusmoduleplanner.R;
 import com.ashuh.nusmoduleplanner.common.NusModulePlannerApplication;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.AcademicYear;
-import com.ashuh.nusmoduleplanner.common.domain.model.module.Exam;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
 import com.ashuh.nusmoduleplanner.common.domain.repository.PostRepository;
-import com.ashuh.nusmoduleplanner.common.util.DateUtil;
+import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiExam;
 import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiModuleDetail;
 
-import java.time.Duration;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -50,6 +46,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ModuleDetailFragment extends Fragment {
+    private static final String EXAM_HEADING_FORMAT = "%s Exam";
+    private static final String EXAM_INFO_FORMAT = "%s • %s";
+
     private TextView titleTextView;
     private TextView codeTextView;
     private TextView adminInfoTextView;
@@ -111,8 +110,7 @@ public class ModuleDetailFragment extends Fragment {
     private void updateUi(UiModuleDetail state) {
         codeTextView.setText(state.getModuleCode());
         titleTextView.setText(state.getTitle());
-        setAdminInfoTextView(state.getDepartment(), state.getFaculty(),
-                state.getModuleCredit());
+        setAdminInfoTextView(state.getDepartment(), state.getFaculty(), state.getModuleCredit());
         setSemestersTextView(state.getSemestersOffered());
         setDescriptionTextView(state.getDescription());
         setRequirementsTextView(state.getPrerequisite(), state.getCoRequisite(),
@@ -183,18 +181,22 @@ public class ModuleDetailFragment extends Fragment {
         }
     }
 
-    private void setExamInfoTextView(Map<Semester, Exam> semesterToExam) {
+    private void setExamInfoTextView(Map<Semester, UiExam> semesterToExam) {
         SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
 
-        for (Semester semester : semesterToExam.keySet()) {
-            String examInfoHeading = semester + " Exam";
-            Exam exam = semesterToExam.get(semester);
-            assert exam != null;
-            String examInfo = generateExamInfoText(exam.getDate(), exam.getDuration());
-            SpannableStringBuilder curSemExamInfo
-                    = generateTextWithBoldHeading(examInfoHeading, examInfo);
-            stringBuilder.append(curSemExamInfo).append("\n\n");
-        }
+        semesterToExam.keySet().stream().sorted()
+                .forEach(semester -> {
+                    UiExam exam = semesterToExam.get(semester);
+                    if (exam == null) {
+                        return;
+                    }
+                    String examInfoHeading = String.format(EXAM_HEADING_FORMAT, semester);
+                    String examInfo = String.format(EXAM_INFO_FORMAT, exam.getDate(),
+                            exam.getDuration());
+                    SpannableStringBuilder curSemExamInfo
+                            = generateTextWithBoldHeading(examInfoHeading, examInfo);
+                    stringBuilder.append(curSemExamInfo).append("\n\n");
+                });
 
         if (stringBuilder.length() > 0) {
             stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
@@ -235,18 +237,6 @@ public class ModuleDetailFragment extends Fragment {
         }
 
         return ss;
-    }
-
-    private String generateExamInfoText(ZonedDateTime date, Duration examDuration) {
-        if (date == null) {
-            return "No Exam";
-        }
-
-        String examDateString = date
-                .withZoneSameInstant(ZoneId.systemDefault())
-                .format(DateUtil.DATE_FORMATTER_DISPLAY);
-        String examDurationString = (double) examDuration.toHours() + " hrs";
-        return examDateString + " " + examDurationString;
     }
 
     private static class ClickableModuleCode extends ClickableSpan {

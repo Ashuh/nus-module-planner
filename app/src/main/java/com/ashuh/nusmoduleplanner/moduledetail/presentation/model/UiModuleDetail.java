@@ -10,6 +10,7 @@ import com.ashuh.nusmoduleplanner.common.domain.model.post.Post;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,7 +34,7 @@ public class UiModuleDetail {
     @NonNull
     private final String preclusion;
     @NonNull
-    private final Map<Semester, Exam> semesterToExam;
+    private final Map<Semester, UiExam> semesterToExam;
     @NonNull
     private final Set<Semester> semestersOffered;
     @NonNull
@@ -43,7 +44,7 @@ public class UiModuleDetail {
                           @NonNull String moduleCredit, @NonNull String department,
                           @NonNull String faculty, @NonNull String description,
                           @NonNull String prerequisite, @NonNull String coRequisite,
-                          @NonNull String preclusion, @NonNull Map<Semester, Exam> semesterToExam,
+                          @NonNull String preclusion, @NonNull Map<Semester, UiExam> semesterToExam,
                           @NonNull Set<Semester> semestersOffered, @NonNull List<UiPost> posts) {
         this.moduleCode = moduleCode;
         this.title = title;
@@ -57,23 +58,6 @@ public class UiModuleDetail {
         this.semesterToExam = semesterToExam;
         this.semestersOffered = semestersOffered;
         this.posts = posts;
-    }
-
-    private static UiModuleDetail fromDomain(Module module) {
-        String moduleCode = module.getModuleCode();
-        String title = module.getTitle();
-        String moduleCredit = module.getModuleCredit().toString();
-        String department = module.getDepartment();
-        String faculty = module.getFaculty();
-        String description = module.getDescription();
-        String prerequisite = module.getPrerequisite();
-        String coRequisite = module.getCoRequisite();
-        String preclusion = module.getPreclusion();
-        Map<Semester, Exam> semesterToExam = module.getExams();
-        Set<Semester> semestersOffered = module.getSemesters();
-        List<UiPost> posts = Collections.emptyList();
-        return new UiModuleDetail(moduleCode, title, moduleCredit, department, faculty, description,
-                prerequisite, coRequisite, preclusion, semesterToExam, semestersOffered, posts);
     }
 
     @NonNull
@@ -122,7 +106,7 @@ public class UiModuleDetail {
     }
 
     @NonNull
-    public Map<Semester, Exam> getExams() {
+    public Map<Semester, UiExam> getExams() {
         return semesterToExam;
     }
 
@@ -146,7 +130,7 @@ public class UiModuleDetail {
         private String prerequisite = "";
         private String coRequisite = "";
         private String preclusion = "";
-        private Map<Semester, Exam> semesterToExam = Collections.emptyMap();
+        private Map<Semester, UiExam> semesterToExam = Collections.emptyMap();
         private Set<Semester> semestersOffered = Collections.emptySet();
         private List<UiPost> posts = Collections.emptyList();
 
@@ -160,7 +144,8 @@ public class UiModuleDetail {
             this.prerequisite = module.getPrerequisite();
             this.coRequisite = module.getCoRequisite();
             this.preclusion = module.getPreclusion();
-            this.semesterToExam = module.getExams();
+            this.semesterToExam = module.getExams().entrySet().stream()
+                    .collect(Collectors.toMap(Entry::getKey, e -> UiExam.fromDomain(e.getValue())));
             this.semestersOffered = module.getSemesters();
         }
 
