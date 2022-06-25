@@ -1,4 +1,4 @@
-package com.ashuh.nusmoduleplanner.timetable;
+package com.ashuh.nusmoduleplanner.timetable.presentation;
 
 import android.os.Bundle;
 

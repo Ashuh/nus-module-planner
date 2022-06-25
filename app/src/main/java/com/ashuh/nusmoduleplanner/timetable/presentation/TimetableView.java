@@ -1,11 +1,10 @@
-package com.ashuh.nusmoduleplanner.timetable;
+package com.ashuh.nusmoduleplanner.timetable.presentation;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 
 import com.ashuh.nusmoduleplanner.common.domain.model.module.ModuleReading;
-import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 
 import org.threeten.bp.DayOfWeek;
 
