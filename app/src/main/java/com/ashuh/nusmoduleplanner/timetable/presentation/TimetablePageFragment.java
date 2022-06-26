@@ -22,12 +22,10 @@ import com.ashuh.nusmoduleplanner.common.MainActivity;
 import com.ashuh.nusmoduleplanner.common.NusModulePlannerApplication;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.ModuleReading;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
-import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.Lesson;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonType;
 import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import me.jlurena.revolvingweekview.WeekView;
 import me.jlurena.revolvingweekview.WeekViewEvent;
@@ -53,31 +51,29 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
         ModuleRepository moduleRepository
                 = ((NusModulePlannerApplication) requireActivity().getApplication())
                 .appContainer.moduleRepository;
-
         viewModel = new ViewModelProvider(this,
                 new TimetableViewModelFactory(moduleRepository, semester))
                 .get(TimetableViewModel.class);
+        viewModel.getModuleReadingsObservable().observe(getViewLifecycleOwner(), this);
+        adapter = new AssignedModulesAdapter(viewModel);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_timetable_tab, container, false);
-        adapter = new AssignedModulesAdapter(viewModel);
-        RecyclerView recyclerView = rootView.findViewById(R.id.timetable_recycler_view);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(adapter));
-        itemTouchHelper.attachToRecyclerView(recyclerView);
-        return rootView;
+        return inflater.inflate(R.layout.fragment_timetable_tab, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         timetableView = view.findViewById(R.id.revolving_weekview);
         timetableView.setOnEventClickListener(this);
-        viewModel.getModuleReadingsObservable().observe(getViewLifecycleOwner(), this);
+        RecyclerView recyclerView = view.findViewById(R.id.timetable_recycler_view);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(adapter));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     @Override
