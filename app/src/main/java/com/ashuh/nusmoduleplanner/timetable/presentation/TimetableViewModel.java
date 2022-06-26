@@ -63,7 +63,7 @@ public class TimetableViewModel extends ViewModel {
         updateLessonNoUseCase.execute(moduleCode, semester, lessonType, newLessonNo);
     }
 
-    public void deleteTimetableEntry(String moduleCode, Semester semester) {
+    public void deleteModuleReading(String moduleCode, Semester semester) {
         deleteModuleReadingUseCase.execute(moduleCode, semester);
     }
 }

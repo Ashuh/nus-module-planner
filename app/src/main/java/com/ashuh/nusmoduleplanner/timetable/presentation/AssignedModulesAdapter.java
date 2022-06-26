@@ -23,7 +23,6 @@ import java.util.List;
 
 public class AssignedModulesAdapter
         extends RecyclerView.Adapter<AssignedModulesAdapter.ViewHolder> {
-
     private static final int MINUTES_PER_HOUR = 60;
 
     private final List<ModuleReading> assignedModules = new ArrayList<>();
@@ -98,8 +97,7 @@ public class AssignedModulesAdapter
 
     public void deleteModule(int id) {
         ModuleReading deleted = assignedModules.get(id);
-        assignedModules.remove(id);
-        viewModel.deleteTimetableEntry(deleted.getModule().getModuleCode(), deleted.getSemester());
+        viewModel.deleteModuleReading(deleted.getModule().getModuleCode(), deleted.getSemester());
         notifyItemChanged(id);
     }
 
