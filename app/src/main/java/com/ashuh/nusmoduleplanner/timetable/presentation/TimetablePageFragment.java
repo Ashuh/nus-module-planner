@@ -54,8 +54,8 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
         viewModel = new ViewModelProvider(this,
                 new TimetableViewModelFactory(moduleRepository, semester))
                 .get(TimetableViewModel.class);
-        viewModel.getModuleReadingsObservable().observe(getViewLifecycleOwner(), this);
-        adapter = new AssignedModulesAdapter(viewModel);
+        viewModel.getModuleReadingsObservable().observe(this, this);
+        adapter = new AssignedModulesAdapter();
     }
 
     @Nullable
@@ -101,11 +101,11 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
         if (entries == null) {
             return;
         }
-        adapter.setAssignedModules(entries);
+        adapter.setModules(entries);
         timetableView.setAssignedModules(entries);
     }
 
-    public static class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
+    public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
         private final AssignedModulesAdapter adapter;
 
         public SwipeToDeleteCallback(AssignedModulesAdapter adapter) {
@@ -123,7 +123,10 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
         @Override
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
             int position = viewHolder.getAdapterPosition();
-            adapter.deleteModule(position);
+            ModuleReading deletedReading = adapter.getModule(position);
+            String moduleCode = deletedReading.getModule().getModuleCode();
+            Semester semester = deletedReading.getSemester();
+            viewModel.deleteModuleReading(moduleCode, semester);
         }
     }
 }

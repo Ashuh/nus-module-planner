@@ -25,12 +25,8 @@ public class AssignedModulesAdapter
         extends RecyclerView.Adapter<AssignedModulesAdapter.ViewHolder> {
     private static final int MINUTES_PER_HOUR = 60;
 
-    private final List<ModuleReading> assignedModules = new ArrayList<>();
-    private final TimetableViewModel viewModel;
-
-    public AssignedModulesAdapter(TimetableViewModel viewModel) {
-        this.viewModel = viewModel;
-    }
+    @NonNull
+    private final List<ModuleReading> modules = new ArrayList<>();
 
     @NonNull
     @Override
@@ -44,7 +40,7 @@ public class AssignedModulesAdapter
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         Resources res = viewHolder.titleTextView.getContext().getResources();
 
-        ModuleReading entry = assignedModules.get(position);
+        ModuleReading entry = modules.get(position);
 
         String title = String.format(res.getString(R.string.module_card_title),
                 entry.getModule().getModuleCode(),
@@ -64,7 +60,7 @@ public class AssignedModulesAdapter
 
     @Override
     public int getItemCount() {
-        return assignedModules.size();
+        return modules.size();
     }
 
     private String generateExamInfoText(@NonNull Exam exam) {
@@ -89,16 +85,14 @@ public class AssignedModulesAdapter
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setAssignedModules(List<ModuleReading> assignedModules) {
-        this.assignedModules.clear();
-        this.assignedModules.addAll(assignedModules);
+    public void setModules(List<ModuleReading> modules) {
+        this.modules.clear();
+        this.modules.addAll(modules);
         notifyDataSetChanged();
     }
 
-    public void deleteModule(int id) {
-        ModuleReading deleted = assignedModules.get(id);
-        viewModel.deleteModuleReading(deleted.getModule().getModuleCode(), deleted.getSemester());
-        notifyItemChanged(id);
+    public ModuleReading getModule(int position) {
+        return modules.get(position);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
