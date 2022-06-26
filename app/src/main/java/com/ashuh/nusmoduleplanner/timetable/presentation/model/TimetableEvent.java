@@ -1,4 +1,4 @@
-package com.ashuh.nusmoduleplanner.timetable.presentation;
+package com.ashuh.nusmoduleplanner.timetable.presentation.model;
 
 import static java.util.Objects.requireNonNull;
 

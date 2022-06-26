@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 
 import com.ashuh.nusmoduleplanner.common.domain.model.module.ModuleReading;
+import com.ashuh.nusmoduleplanner.timetable.presentation.model.TimetableEvent;
 
 import org.threeten.bp.DayOfWeek;
 

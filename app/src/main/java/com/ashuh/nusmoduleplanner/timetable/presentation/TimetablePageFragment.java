@@ -24,6 +24,7 @@ import com.ashuh.nusmoduleplanner.common.domain.model.module.ModuleReading;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonType;
 import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
+import com.ashuh.nusmoduleplanner.timetable.presentation.model.TimetableEvent;
 
 import java.util.List;
 
