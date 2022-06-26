@@ -35,7 +35,6 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
     public static final String ARG_SEMESTER = "semester";
 
     private TimetableView timetableView;
-    private Semester semester;
     private TimetableViewModel viewModel;
     private AssignedModulesAdapter adapter;
 
@@ -46,8 +45,7 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
         assert args != null;
 
         int semInt = args.getInt(ARG_SEMESTER);
-        semester = Semester.fromInt(semInt);
-
+        Semester semester = Semester.fromInt(semInt);
         ModuleRepository moduleRepository
                 = ((NusModulePlannerApplication) requireActivity().getApplication())
                 .appContainer.moduleRepository;
@@ -81,13 +79,13 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
         TimetableEvent ttEvent = (TimetableEvent) event;
         String moduleCode = ttEvent.getModuleCode();
         LessonType lessonType = ttEvent.getLessonType();
-        viewModel.getAlternateLessons(moduleCode, semester, lessonType, ttEvent.getLessonNo())
+        viewModel.getAlternateLessons(moduleCode, lessonType, ttEvent.getLessonNo())
                 .observe(getViewLifecycleOwner(), altLessons -> {
                     if (altLessons == null || altLessons.size() <= 1) {
                         return;
                     }
-                    DialogFragment dialog = new LessonSelectDialogFragment(moduleCode, semester,
-                            lessonType, altLessons, viewModel);
+                    DialogFragment dialog = new LessonSelectDialogFragment(moduleCode, lessonType,
+                            altLessons, viewModel);
                     FragmentManager fragmentManager
                             = ((MainActivity) requireContext()).getSupportFragmentManager();
                     dialog.show(fragmentManager, "lessons");
@@ -125,8 +123,7 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
             int position = viewHolder.getAdapterPosition();
             ModuleReading deletedReading = adapter.getModule(position);
             String moduleCode = deletedReading.getModule().getModuleCode();
-            Semester semester = deletedReading.getSemester();
-            viewModel.deleteModuleReading(moduleCode, semester);
+            viewModel.deleteModuleReading(moduleCode);
         }
     }
 }

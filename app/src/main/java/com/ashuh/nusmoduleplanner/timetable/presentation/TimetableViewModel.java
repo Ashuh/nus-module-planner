@@ -29,20 +29,24 @@ public class TimetableViewModel extends ViewModel {
     private final DeleteModuleReadingUseCase deleteModuleReadingUseCase;
     @NonNull
     private final LiveData<List<ModuleReading>> observableModuleReadings;
+    @NonNull
+    private final Semester semester;
 
     public TimetableViewModel(@NonNull GetModuleReadingsUseCase getModuleReadingsUseCase,
                               @NonNull GetAlternateLessonsUseCase getAlternateLessonsUseCase,
                               @NonNull UpdateLessonNoUseCase updateLessonNoUseCase,
                               @NonNull DeleteModuleReadingUseCase deleteModuleReadingUseCase,
-                              Semester semester) {
+                              @NonNull Semester semester) {
         requireNonNull(getModuleReadingsUseCase);
         requireNonNull(getAlternateLessonsUseCase);
         requireNonNull(updateLessonNoUseCase);
         requireNonNull(deleteModuleReadingUseCase);
+        requireNonNull(semester);
         this.getModuleReadingsUseCase = getModuleReadingsUseCase;
         this.getAlternateLessonsUseCase = getAlternateLessonsUseCase;
         this.updateLessonNoUseCase = updateLessonNoUseCase;
         this.deleteModuleReadingUseCase = deleteModuleReadingUseCase;
+        this.semester = semester;
         this.observableModuleReadings = getModuleReadingsUseCase.execute(semester);
     }
 
@@ -52,18 +56,18 @@ public class TimetableViewModel extends ViewModel {
     }
 
     @NonNull
-    public LiveData<List<Lesson>> getAlternateLessons(String moduleCode, Semester semester,
-                                                      LessonType lessonType, String curLessonNo) {
+    public LiveData<List<Lesson>> getAlternateLessons(String moduleCode, LessonType lessonType,
+                                                      String curLessonNo) {
         return getAlternateLessonsUseCase.execute(AcademicYear.getCurrent(), moduleCode, semester,
                 lessonType, curLessonNo);
     }
 
-    public void updateAssignedLesson(String moduleCode, Semester semester, LessonType lessonType,
+    public void updateAssignedLesson(String moduleCode, LessonType lessonType,
                                      String newLessonNo) {
         updateLessonNoUseCase.execute(moduleCode, semester, lessonType, newLessonNo);
     }
 
-    public void deleteModuleReading(String moduleCode, Semester semester) {
+    public void deleteModuleReading(String moduleCode) {
         deleteModuleReadingUseCase.execute(moduleCode, semester);
     }
 }

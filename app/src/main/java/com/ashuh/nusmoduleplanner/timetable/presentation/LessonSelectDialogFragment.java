@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
-import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.Lesson;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonOccurrence;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonType;
@@ -25,16 +24,13 @@ public class LessonSelectDialogFragment extends DialogFragment implements
     private static final String TEXT_LESSON_INFO_FORMAT = "%s %s - %s %s\n";
 
     private final String moduleCode;
-    private final Semester semester;
     private final LessonType lessonType;
     private final List<Lesson> altLessonOptions;
     private final TimetableViewModel viewModel;
 
-    public LessonSelectDialogFragment(String moduleCode, Semester semester,
-                                      LessonType lessonType, List<Lesson> altLessonOptions,
-                                      TimetableViewModel viewModel) {
+    public LessonSelectDialogFragment(String moduleCode, LessonType lessonType,
+                                      List<Lesson> altLessonOptions, TimetableViewModel viewModel) {
         this.moduleCode = moduleCode;
-        this.semester = semester;
         this.lessonType = lessonType;
         Collections.sort(altLessonOptions);
         this.altLessonOptions = Collections.unmodifiableList(altLessonOptions);
@@ -80,6 +76,6 @@ public class LessonSelectDialogFragment extends DialogFragment implements
     @Override
     public void onClick(DialogInterface dialogInterface, int i) {
         String selectedLessonNo = altLessonOptions.get(i).getLessonNo();
-        viewModel.updateAssignedLesson(moduleCode, semester, lessonType, selectedLessonNo);
+        viewModel.updateAssignedLesson(moduleCode, lessonType, selectedLessonNo);
     }
 }
