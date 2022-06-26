@@ -77,7 +77,7 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         timetableView = view.findViewById(R.id.revolving_weekview);
         timetableView.setOnEventClickListener(this);
-        viewModel.getTimetableEntriesObservable().observe(getViewLifecycleOwner(), this);
+        viewModel.getModuleReadingsObservable().observe(getViewLifecycleOwner(), this);
     }
 
     @Override
@@ -85,14 +85,11 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
         TimetableEvent ttEvent = (TimetableEvent) event;
         String moduleCode = ttEvent.getModuleCode();
         LessonType lessonType = ttEvent.getLessonType();
-        viewModel.getLessons(moduleCode, semester, lessonType)
-                .observe(getViewLifecycleOwner(), lessons -> {
-                    if (lessons == null || lessons.size() <= 1) {
+        viewModel.getAlternateLessons(moduleCode, semester, lessonType, ttEvent.getLessonNo())
+                .observe(getViewLifecycleOwner(), altLessons -> {
+                    if (altLessons == null || altLessons.size() <= 1) {
                         return;
                     }
-                    List<Lesson> altLessons = lessons.stream()
-                            .filter(lesson -> !lesson.getLessonNo().equals(ttEvent.getLessonNo()))
-                            .collect(Collectors.toList());
                     DialogFragment dialog = new LessonSelectDialogFragment(moduleCode, semester,
                             lessonType, altLessons, viewModel);
                     FragmentManager fragmentManager
