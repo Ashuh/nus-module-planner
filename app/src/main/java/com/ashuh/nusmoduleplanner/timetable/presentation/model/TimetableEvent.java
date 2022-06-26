@@ -13,9 +13,9 @@ import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonType;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 import me.jlurena.revolvingweekview.DayTime;
 import me.jlurena.revolvingweekview.WeekViewEvent;
@@ -26,17 +26,14 @@ public class TimetableEvent extends WeekViewEvent {
     private final String moduleCode;
     private final LessonType lessonType;
     private final String lessonNo;
-    private final Set<String> allLessonNos;
 
     private TimetableEvent(String id, String name, String location, DayTime startTime,
                            DayTime endTime, String moduleCode, LessonType lessonType,
-                           String lessonNo,
-                           Set<String> allLessonNos) {
+                           String lessonNo) {
         super(id, name, location, startTime, endTime);
         this.moduleCode = moduleCode;
         this.lessonType = lessonType;
         this.lessonNo = lessonNo;
-        this.allLessonNos = allLessonNos;
     }
 
     public static List<TimetableEvent> fromTimetableEntry(@NonNull ModuleReading entry) {
@@ -44,21 +41,17 @@ public class TimetableEvent extends WeekViewEvent {
         String moduleCode = entry.getModule().getModuleCode();
         Color color = entry.getColor();
 
-        List<TimetableEvent> events = new ArrayList<>();
-        entry.getAssignedLessons().forEach(lesson -> {
-            LessonType lessonType = lesson.getLessonType();
-            Set<String> lessonNos = entry.getSemesterDatum().getLessonNos(lessonType);
-            lesson.getOccurrences().stream()
-                    .map(occurrence -> TimetableEvent.fromDomainTypes(moduleCode, lesson,
-                            occurrence, lessonNos, color))
-                    .forEach(events::add);
-        });
-        return events;
+        return entry.getAssignedLessons().stream()
+                .map(lesson -> lesson.getOccurrences().stream()
+                        .map(occurrence -> TimetableEvent.fromDomainTypes(moduleCode,
+                                lesson, occurrence, color))
+                        .collect(Collectors.toList()))
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
     }
 
     public static TimetableEvent fromDomainTypes(String moduleCode, Lesson lesson,
-                                                 LessonOccurrence occurrence, Set<String> lessonNos,
-                                                 Color color) {
+                                                 LessonOccurrence occurrence, Color color) {
         String id = moduleCode + lesson.getLessonNo() + occurrence; // TODO: use a better id
 
         me.jlurena.revolvingweekview.DayTime startTime
@@ -70,8 +63,7 @@ public class TimetableEvent extends WeekViewEvent {
                 lesson.getLessonType().getShortName(), lesson.getLessonNo());
 
         TimetableEvent event = new TimetableEvent(id, name, occurrence.getVenue(),
-                startTime, endTime, moduleCode, lesson.getLessonType(),
-                lesson.getLessonNo(), lessonNos);
+                startTime, endTime, moduleCode, lesson.getLessonType(), lesson.getLessonNo());
         event.setColor(color.toArgb());
         return event;
     }
