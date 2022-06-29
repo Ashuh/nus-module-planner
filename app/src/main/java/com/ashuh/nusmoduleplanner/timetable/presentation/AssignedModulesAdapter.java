@@ -11,22 +11,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashuh.nusmoduleplanner.R;
-import com.ashuh.nusmoduleplanner.common.domain.model.module.Exam;
-import com.ashuh.nusmoduleplanner.common.domain.model.module.ModuleReading;
-import com.ashuh.nusmoduleplanner.common.util.DateUtil;
+import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiModuleReading;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class AssignedModulesAdapter
         extends RecyclerView.Adapter<AssignedModulesAdapter.ViewHolder> {
-    private static final int MINUTES_PER_HOUR = 60;
+    private static final String EXAM_INFO_FORMAT = "Exam: %s";
+    private static final String TEXT_NO_EXAM = "No Exam";
 
     @NonNull
-    private final List<ModuleReading> modules = new ArrayList<>();
+    private final List<UiModuleReading> moduleReadings = new ArrayList<>();
 
     @NonNull
     @Override
@@ -39,60 +36,39 @@ public class AssignedModulesAdapter
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         Resources res = viewHolder.titleTextView.getContext().getResources();
-
-        ModuleReading entry = modules.get(position);
+        UiModuleReading moduleReading = moduleReadings.get(position);
 
         String title = String.format(res.getString(R.string.module_card_title),
-                entry.getModule().getModuleCode(),
-                entry.getModule().getTitle());
-
-        String examString = entry.getExam()
-                .map(this::generateExamInfoText)
-                .orElse("No Exam");
-
-        String description =
-                String.format(res.getString(R.string.module_card_description), examString,
-                        entry.getModule().getModuleCredit().getValue());
-
+                moduleReading.getModuleCode(), moduleReading.getTitle());
         viewHolder.getTitleTextView().setText(title);
+
+        String examDate = generateExamText(moduleReading.getExamDate());
+        String description = String.format(res.getString(R.string.module_card_description),
+                examDate, moduleReading.getModuleCredit());
         viewHolder.getDescriptionTextView().setText(description);
     }
 
     @Override
     public int getItemCount() {
-        return modules.size();
+        return moduleReadings.size();
     }
 
-    private String generateExamInfoText(@NonNull Exam exam) {
-        String examDateString = exam.getDate()
-                .withZoneSameInstant(ZoneId.systemDefault())
-                .format(DateUtil.DATE_FORMATTER_DISPLAY);
-        String examDurationString = (double) exam.getDuration().toMinutes() / MINUTES_PER_HOUR
-                + " hrs";
-        return examDateString + " " + examDurationString;
-    }
-
-    private String generateExamInfoText(ZonedDateTime examDate, int examDuration) {
-        if (examDate == null) {
-            return "No Exam";
+    private String generateExamText(@NonNull String examDate) {
+        if (examDate.isEmpty()) {
+            return TEXT_NO_EXAM;
         }
-
-        String examDateString = examDate
-                .withZoneSameInstant(ZoneId.systemDefault())
-                .format(DateUtil.DATE_FORMATTER_DISPLAY);
-        String examDurationString = (double) examDuration / MINUTES_PER_HOUR + " hrs";
-        return examDateString + " " + examDurationString;
+        return String.format(EXAM_INFO_FORMAT, examDate);
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setModules(List<ModuleReading> modules) {
-        this.modules.clear();
-        this.modules.addAll(modules);
+    public void setModuleReadings(List<UiModuleReading> moduleReadings) {
+        this.moduleReadings.clear();
+        this.moduleReadings.addAll(moduleReadings);
         notifyDataSetChanged();
     }
 
-    public ModuleReading getModule(int position) {
-        return modules.get(position);
+    public UiModuleReading getModule(int position) {
+        return moduleReadings.get(position);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

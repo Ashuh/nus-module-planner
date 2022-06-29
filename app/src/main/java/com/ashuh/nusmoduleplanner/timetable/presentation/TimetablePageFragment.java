@@ -20,19 +20,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ashuh.nusmoduleplanner.R;
 import com.ashuh.nusmoduleplanner.common.MainActivity;
 import com.ashuh.nusmoduleplanner.common.NusModulePlannerApplication;
-import com.ashuh.nusmoduleplanner.common.domain.model.module.ModuleReading;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonType;
 import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
 import com.ashuh.nusmoduleplanner.timetable.presentation.model.TimetableEvent;
-
-import java.util.List;
+import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiModuleReading;
 
 import me.jlurena.revolvingweekview.WeekView;
 import me.jlurena.revolvingweekview.WeekViewEvent;
 
 public class TimetablePageFragment extends Fragment implements WeekView.EventClickListener,
-        Observer<List<ModuleReading>> {
+        Observer<TimetableState> {
     public static final String ARG_SEMESTER = "semester";
 
     private TimetableView timetableView;
@@ -96,12 +94,12 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
     }
 
     @Override
-    public void onChanged(List<ModuleReading> entries) {
-        if (entries == null) {
+    public void onChanged(TimetableState state) {
+        if (state == null) {
             return;
         }
-        adapter.setModules(entries);
-        timetableView.setAssignedModules(entries);
+        adapter.setModuleReadings(state.getModuleReadings());
+        timetableView.setAssignedModules(state.getTimetableEvents());
     }
 
     public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
@@ -122,8 +120,8 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
         @Override
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
             int position = viewHolder.getAdapterPosition();
-            ModuleReading deletedReading = adapter.getModule(position);
-            String moduleCode = deletedReading.getModule().getModuleCode();
+            UiModuleReading deletedReading = adapter.getModule(position);
+            String moduleCode = deletedReading.getModuleCode();
             viewModel.deleteModuleReading(moduleCode);
         }
     }

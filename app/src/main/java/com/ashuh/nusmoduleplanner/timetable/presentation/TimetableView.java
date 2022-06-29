@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 
-import com.ashuh.nusmoduleplanner.common.domain.model.module.ModuleReading;
 import com.ashuh.nusmoduleplanner.timetable.presentation.model.TimetableEvent;
 
 import org.threeten.bp.DayOfWeek;
@@ -12,7 +11,6 @@ import org.threeten.bp.DayOfWeek;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 import me.jlurena.revolvingweekview.DateTimeInterpreter;
 import me.jlurena.revolvingweekview.WeekView;
@@ -27,8 +25,8 @@ public class TimetableView extends WeekView {
     private static final int TEXT_SIZE = 12;
     private static final int TEXT_SIZE_EVENT = 10;
 
-//    private Semester semester = null;
-    private List<ModuleReading> entries;
+    //    private Semester semester = null;
+    private List<TimetableEvent> events;
 
     public TimetableView(Context context) {
         super(context);
@@ -68,8 +66,8 @@ public class TimetableView extends WeekView {
 //        this.semester = semester;
 //    }
 
-    public void setAssignedModules(List<ModuleReading> entries) {
-        this.entries = entries;
+    public void setAssignedModules(List<TimetableEvent> events) {
+        this.events = events;
         notifyDatasetChanged();
     }
 
@@ -93,13 +91,10 @@ public class TimetableView extends WeekView {
     private class TimetableLoader implements WeekViewLoader {
         @Override
         public List<? extends WeekViewEvent> onWeekViewLoad() {
-            if (entries == null) {
+            if (events == null) {
                 return Collections.emptyList();
             }
-            return entries.stream()
-                    .map(TimetableEvent::fromTimetableEntry)
-                    .flatMap(List::stream)
-                    .collect(Collectors.toList());
+            return events;
         }
     }
 }

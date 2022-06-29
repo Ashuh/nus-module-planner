@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.ashuh.nusmoduleplanner.common.domain.model.module.AcademicYear;
@@ -15,8 +16,12 @@ import com.ashuh.nusmoduleplanner.timetable.domain.usecase.DeleteModuleReadingUs
 import com.ashuh.nusmoduleplanner.timetable.domain.usecase.GetAlternateLessonsUseCase;
 import com.ashuh.nusmoduleplanner.timetable.domain.usecase.GetModuleReadingsUseCase;
 import com.ashuh.nusmoduleplanner.timetable.domain.usecase.UpdateLessonNoUseCase;
+import com.ashuh.nusmoduleplanner.timetable.presentation.model.TimetableEvent;
+import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiModuleReading;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TimetableViewModel extends ViewModel {
     @NonNull
@@ -28,7 +33,7 @@ public class TimetableViewModel extends ViewModel {
     @NonNull
     private final DeleteModuleReadingUseCase deleteModuleReadingUseCase;
     @NonNull
-    private final LiveData<List<ModuleReading>> observableModuleReadings;
+    private final LiveData<TimetableState> observableState;
     @NonNull
     private final Semester semester;
 
@@ -47,12 +52,30 @@ public class TimetableViewModel extends ViewModel {
         this.updateLessonNoUseCase = updateLessonNoUseCase;
         this.deleteModuleReadingUseCase = deleteModuleReadingUseCase;
         this.semester = semester;
-        this.observableModuleReadings = getModuleReadingsUseCase.execute(semester);
+//        this.observableState = getModuleReadingsUseCase.execute(semester);
+        this.observableState = Transformations.map(getModuleReadingsUseCase.execute(semester),
+                TimetableViewModel::buildState);
+
     }
 
+    private static TimetableState buildState(Collection<ModuleReading> moduleReadings) {
+        List<TimetableEvent> uiTimetableEvents = moduleReadings.stream()
+                .map(TimetableEvent::fromTimetableEntry)
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+
+        List<UiModuleReading> uiModuleReadings = moduleReadings.stream()
+                .map(UiModuleReading::fromDomain)
+                .collect(Collectors.toList());
+
+        return new TimetableState(uiTimetableEvents, uiModuleReadings);
+
+    }
+
+
     @NonNull
-    public LiveData<List<ModuleReading>> getModuleReadingsObservable() {
-        return observableModuleReadings;
+    public LiveData<TimetableState> getModuleReadingsObservable() {
+        return observableState;
     }
 
     @NonNull
