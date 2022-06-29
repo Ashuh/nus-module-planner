@@ -20,69 +20,80 @@ import java.util.stream.Collectors;
 import me.jlurena.revolvingweekview.DayTime;
 import me.jlurena.revolvingweekview.WeekViewEvent;
 
-public class TimetableEvent extends WeekViewEvent {
+public class UiLessonOccurrence extends WeekViewEvent {
     private static final String EVENT_NAME_FORMAT = "%s\n[%s] %s";
+    private static int id = 0;
 
+    @NonNull
     private final String moduleCode;
+    @NonNull
     private final LessonType lessonType;
+    @NonNull
     private final String lessonNo;
 
-    private TimetableEvent(String id, String name, String location, DayTime startTime,
-                           DayTime endTime, String moduleCode, LessonType lessonType,
-                           String lessonNo) {
+    private UiLessonOccurrence(String id, String name, String location, DayTime startTime,
+                               DayTime endTime, @NonNull String moduleCode,
+                               @NonNull LessonType lessonType, @NonNull String lessonNo) {
         super(id, name, location, startTime, endTime);
+        requireNonNull(moduleCode);
+        requireNonNull(lessonType);
+        requireNonNull(lessonNo);
         this.moduleCode = moduleCode;
         this.lessonType = lessonType;
         this.lessonNo = lessonNo;
     }
 
-    public static List<TimetableEvent> fromTimetableEntry(@NonNull ModuleReading entry) {
-        requireNonNull(entry);
-        String moduleCode = entry.getModule().getModuleCode();
-        Color color = entry.getColor();
+    public static List<UiLessonOccurrence> fromModuleReading(@NonNull ModuleReading moduleReading) {
+        String moduleCode = moduleReading.getModule().getModuleCode();
+        Color color = moduleReading.getColor();
 
-        return entry.getAssignedLessons().stream()
+        return moduleReading.getAssignedLessons().stream()
                 .map(lesson -> lesson.getOccurrences().stream()
-                        .map(occurrence -> TimetableEvent.fromDomainTypes(moduleCode,
+                        .map(occurrence -> UiLessonOccurrence.fromDomainTypes(moduleCode,
                                 lesson, occurrence, color))
                         .collect(Collectors.toList()))
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
     }
 
-    public static TimetableEvent fromDomainTypes(String moduleCode, Lesson lesson,
-                                                 LessonOccurrence occurrence, Color color) {
-        String id = moduleCode + lesson.getLessonNo() + occurrence; // TODO: use a better id
+    public static UiLessonOccurrence fromDomainTypes(@NonNull String moduleCode,
+                                                     @NonNull Lesson lesson,
+                                                     @NonNull LessonOccurrence occurrence,
+                                                     @NonNull Color color) {
+        String id = generateId();
+        DayTime startTime = convertTime(occurrence.getDay(), occurrence.getStartTime());
+        DayTime endTime = convertTime(occurrence.getDay(), occurrence.getEndTime());
+        String name = String.format(EVENT_NAME_FORMAT, moduleCode, lesson.getLessonType(),
+                lesson.getLessonNo());
 
-        me.jlurena.revolvingweekview.DayTime startTime
-                = convertTime(occurrence.getDay(), occurrence.getStartTime());
-        me.jlurena.revolvingweekview.DayTime endTime
-                = convertTime(occurrence.getDay(), occurrence.getEndTime());
-
-        String name = String.format(EVENT_NAME_FORMAT, moduleCode,
-                lesson.getLessonType().getShortName(), lesson.getLessonNo());
-
-        TimetableEvent event = new TimetableEvent(id, name, occurrence.getVenue(),
+        UiLessonOccurrence event = new UiLessonOccurrence(id, name, occurrence.getVenue(),
                 startTime, endTime, moduleCode, lesson.getLessonType(), lesson.getLessonNo());
         event.setColor(color.toArgb());
         return event;
     }
 
-    public static me.jlurena.revolvingweekview.DayTime convertTime(DayOfWeek day, LocalTime time) {
+    private static String generateId() {
+        return String.valueOf(id++);
+    }
+
+    private static DayTime convertTime(DayOfWeek day, LocalTime time) {
         org.threeten.bp.DayOfWeek threetenDay = org.threeten.bp.DayOfWeek.valueOf(day.name());
         org.threeten.bp.LocalTime threetenTime
                 = org.threeten.bp.LocalTime.of(time.getHour(), time.getMinute());
-        return new me.jlurena.revolvingweekview.DayTime(threetenDay, threetenTime);
+        return new DayTime(threetenDay, threetenTime);
     }
 
+    @NonNull
     public String getModuleCode() {
         return moduleCode;
     }
 
+    @NonNull
     public LessonType getLessonType() {
         return lessonType;
     }
 
+    @NonNull
     public String getLessonNo() {
         return lessonNo;
     }

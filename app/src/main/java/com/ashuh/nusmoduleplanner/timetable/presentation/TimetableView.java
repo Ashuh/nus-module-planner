@@ -4,20 +4,23 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 
-import com.ashuh.nusmoduleplanner.timetable.presentation.model.TimetableEvent;
+import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiLessonOccurrence;
+import com.ashuh.nusmoduleplanner.timetable.presentation.model.blh;
 
 import org.threeten.bp.DayOfWeek;
 
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import me.jlurena.revolvingweekview.DateTimeInterpreter;
 import me.jlurena.revolvingweekview.WeekView;
 import me.jlurena.revolvingweekview.WeekViewEvent;
 
 public class TimetableView extends WeekView {
-
     private static final int HOUR_TIMETABLE_START = 8;
     private static final int HOUR_TIMETABLE_END = 22;
     private static final int HOUR_NOON = 12;
@@ -25,8 +28,7 @@ public class TimetableView extends WeekView {
     private static final int TEXT_SIZE = 12;
     private static final int TEXT_SIZE_EVENT = 10;
 
-    //    private Semester semester = null;
-    private List<TimetableEvent> events;
+    private List<UiLessonOccurrence> lessonOccurrences;
 
     public TimetableView(Context context) {
         super(context);
@@ -62,12 +64,8 @@ public class TimetableView extends WeekView {
         init();
     }
 
-//    public void setSemester(Semester semester) {
-//        this.semester = semester;
-//    }
-
-    public void setAssignedModules(List<TimetableEvent> events) {
-        this.events = events;
+    public void setAssignedModules(List<UiLessonOccurrence> occurrences) {
+        this.lessonOccurrences = occurrences;
         notifyDatasetChanged();
     }
 
@@ -91,10 +89,7 @@ public class TimetableView extends WeekView {
     private class TimetableLoader implements WeekViewLoader {
         @Override
         public List<? extends WeekViewEvent> onWeekViewLoad() {
-            if (events == null) {
-                return Collections.emptyList();
-            }
-            return events;
+            return Objects.requireNonNullElse(lessonOccurrences, Collections.emptyList());
         }
     }
 }

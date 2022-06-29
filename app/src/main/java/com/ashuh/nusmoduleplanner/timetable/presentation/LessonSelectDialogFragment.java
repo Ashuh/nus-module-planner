@@ -76,6 +76,6 @@ public class LessonSelectDialogFragment extends DialogFragment implements
     @Override
     public void onClick(DialogInterface dialogInterface, int i) {
         String selectedLessonNo = altLessonOptions.get(i).getLessonNo();
-        viewModel.updateAssignedLesson(moduleCode, lessonType, selectedLessonNo);
+        viewModel.updateAssignedLessonNo(moduleCode, lessonType, selectedLessonNo);
     }
 }

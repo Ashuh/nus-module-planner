@@ -23,7 +23,7 @@ import com.ashuh.nusmoduleplanner.common.NusModulePlannerApplication;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonType;
 import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
-import com.ashuh.nusmoduleplanner.timetable.presentation.model.TimetableEvent;
+import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiLessonOccurrence;
 import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiModuleReading;
 
 import me.jlurena.revolvingweekview.WeekView;
@@ -51,7 +51,7 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
         viewModel = new ViewModelProvider(this,
                 new TimetableViewModelFactory(moduleRepository, semester))
                 .get(TimetableViewModel.class);
-        viewModel.getModuleReadingsObservable().observe(this, this);
+        viewModel.getState().observe(this, this);
         adapter = new AssignedModulesAdapter();
     }
 
@@ -75,10 +75,10 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
 
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
-        TimetableEvent ttEvent = (TimetableEvent) event;
-        String moduleCode = ttEvent.getModuleCode();
-        LessonType lessonType = ttEvent.getLessonType();
-        viewModel.getAlternateLessons(moduleCode, lessonType, ttEvent.getLessonNo())
+        UiLessonOccurrence lessonOccurrence = (UiLessonOccurrence) event;
+        String moduleCode = lessonOccurrence.getModuleCode();
+        LessonType lessonType = lessonOccurrence.getLessonType();
+        viewModel.getAlternateLessons(moduleCode, lessonType, lessonOccurrence.getLessonNo())
                 .observe(getViewLifecycleOwner(), altLessons -> {
                     if (altLessons == null || altLessons.size() <= 1) {
                         return;
@@ -99,7 +99,7 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
             return;
         }
         adapter.setModuleReadings(state.getModuleReadings());
-        timetableView.setAssignedModules(state.getTimetableEvents());
+        timetableView.setAssignedModules(state.getLessonOccurrences());
     }
 
     public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
