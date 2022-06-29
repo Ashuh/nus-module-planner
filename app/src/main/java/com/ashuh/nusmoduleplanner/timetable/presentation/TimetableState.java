@@ -4,18 +4,18 @@ import static java.util.Objects.requireNonNull;
 
 import androidx.annotation.NonNull;
 
-import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiLessonOccurrence;
+import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiTimetableLessonOccurrence;
 import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiModuleReading;
 
 import java.util.List;
 
 public class TimetableState {
     @NonNull
-    private final List<UiLessonOccurrence> lessonOccurrences;
+    private final List<UiTimetableLessonOccurrence> lessonOccurrences;
     @NonNull
     private final List<UiModuleReading> moduleReadings;
 
-    public TimetableState(@NonNull List<UiLessonOccurrence> lessonOccurrences,
+    public TimetableState(@NonNull List<UiTimetableLessonOccurrence> lessonOccurrences,
                           @NonNull List<UiModuleReading> moduleReadings) {
         requireNonNull(lessonOccurrences);
         requireNonNull(moduleReadings);
@@ -24,7 +24,7 @@ public class TimetableState {
     }
 
     @NonNull
-    public List<UiLessonOccurrence> getLessonOccurrences() {
+    public List<UiTimetableLessonOccurrence> getLessonOccurrences() {
         return lessonOccurrences;
     }
 

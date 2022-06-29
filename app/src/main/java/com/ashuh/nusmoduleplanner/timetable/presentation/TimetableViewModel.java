@@ -16,7 +16,7 @@ import com.ashuh.nusmoduleplanner.timetable.domain.usecase.DeleteModuleReadingUs
 import com.ashuh.nusmoduleplanner.timetable.domain.usecase.GetAlternateLessonsUseCase;
 import com.ashuh.nusmoduleplanner.timetable.domain.usecase.GetModuleReadingsUseCase;
 import com.ashuh.nusmoduleplanner.timetable.domain.usecase.UpdateLessonNoUseCase;
-import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiLessonOccurrence;
+import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiTimetableLessonOccurrence;
 import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiModuleReading;
 
 import java.util.Collection;
@@ -58,8 +58,8 @@ public class TimetableViewModel extends ViewModel {
     }
 
     private static TimetableState buildState(Collection<ModuleReading> moduleReadings) {
-        List<UiLessonOccurrence> uiLessonOccurrences = moduleReadings.stream()
-                .map(UiLessonOccurrence::fromModuleReading)
+        List<UiTimetableLessonOccurrence> uiTimetableLessonOccurrences = moduleReadings.stream()
+                .map(UiTimetableLessonOccurrence::fromModuleReading)
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
 
@@ -67,7 +67,7 @@ public class TimetableViewModel extends ViewModel {
                 .map(UiModuleReading::fromDomain)
                 .collect(Collectors.toList());
 
-        return new TimetableState(uiLessonOccurrences, uiModuleReadings);
+        return new TimetableState(uiTimetableLessonOccurrences, uiModuleReadings);
 
     }
 

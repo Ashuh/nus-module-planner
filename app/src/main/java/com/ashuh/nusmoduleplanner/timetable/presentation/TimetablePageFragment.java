@@ -23,7 +23,7 @@ import com.ashuh.nusmoduleplanner.common.NusModulePlannerApplication;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonType;
 import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
-import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiLessonOccurrence;
+import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiTimetableLessonOccurrence;
 import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiModuleReading;
 
 import me.jlurena.revolvingweekview.WeekView;
@@ -75,7 +75,7 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
 
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
-        UiLessonOccurrence lessonOccurrence = (UiLessonOccurrence) event;
+        UiTimetableLessonOccurrence lessonOccurrence = (UiTimetableLessonOccurrence) event;
         String moduleCode = lessonOccurrence.getModuleCode();
         LessonType lessonType = lessonOccurrence.getLessonType();
         viewModel.getAlternateLessons(moduleCode, lessonType, lessonOccurrence.getLessonNo())

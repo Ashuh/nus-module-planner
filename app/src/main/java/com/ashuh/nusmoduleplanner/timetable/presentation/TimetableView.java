@@ -4,17 +4,14 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 
-import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiLessonOccurrence;
-import com.ashuh.nusmoduleplanner.timetable.presentation.model.blh;
+import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiTimetableLessonOccurrence;
 
 import org.threeten.bp.DayOfWeek;
 
-import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import me.jlurena.revolvingweekview.DateTimeInterpreter;
 import me.jlurena.revolvingweekview.WeekView;
@@ -28,7 +25,7 @@ public class TimetableView extends WeekView {
     private static final int TEXT_SIZE = 12;
     private static final int TEXT_SIZE_EVENT = 10;
 
-    private List<UiLessonOccurrence> lessonOccurrences;
+    private List<UiTimetableLessonOccurrence> lessonOccurrences;
 
     public TimetableView(Context context) {
         super(context);
@@ -64,7 +61,7 @@ public class TimetableView extends WeekView {
         init();
     }
 
-    public void setAssignedModules(List<UiLessonOccurrence> occurrences) {
+    public void setAssignedModules(List<UiTimetableLessonOccurrence> occurrences) {
         this.lessonOccurrences = occurrences;
         notifyDatasetChanged();
     }

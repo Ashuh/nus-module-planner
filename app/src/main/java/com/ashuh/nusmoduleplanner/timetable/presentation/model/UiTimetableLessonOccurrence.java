@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 import me.jlurena.revolvingweekview.DayTime;
 import me.jlurena.revolvingweekview.WeekViewEvent;
 
-public class UiLessonOccurrence extends WeekViewEvent {
+public class UiTimetableLessonOccurrence extends WeekViewEvent {
     private static final String EVENT_NAME_FORMAT = "%s\n[%s] %s";
     private static int id = 0;
 
@@ -31,9 +31,9 @@ public class UiLessonOccurrence extends WeekViewEvent {
     @NonNull
     private final String lessonNo;
 
-    private UiLessonOccurrence(String id, String name, String location, DayTime startTime,
-                               DayTime endTime, @NonNull String moduleCode,
-                               @NonNull LessonType lessonType, @NonNull String lessonNo) {
+    private UiTimetableLessonOccurrence(String id, String name, String location, DayTime startTime,
+                                        DayTime endTime, @NonNull String moduleCode,
+                                        @NonNull LessonType lessonType, @NonNull String lessonNo) {
         super(id, name, location, startTime, endTime);
         requireNonNull(moduleCode);
         requireNonNull(lessonType);
@@ -43,30 +43,30 @@ public class UiLessonOccurrence extends WeekViewEvent {
         this.lessonNo = lessonNo;
     }
 
-    public static List<UiLessonOccurrence> fromModuleReading(@NonNull ModuleReading moduleReading) {
+    public static List<UiTimetableLessonOccurrence> fromModuleReading(@NonNull ModuleReading moduleReading) {
         String moduleCode = moduleReading.getModule().getModuleCode();
         Color color = moduleReading.getColor();
 
         return moduleReading.getAssignedLessons().stream()
                 .map(lesson -> lesson.getOccurrences().stream()
-                        .map(occurrence -> UiLessonOccurrence.fromDomainTypes(moduleCode,
+                        .map(occurrence -> UiTimetableLessonOccurrence.fromDomainTypes(moduleCode,
                                 lesson, occurrence, color))
                         .collect(Collectors.toList()))
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
     }
 
-    public static UiLessonOccurrence fromDomainTypes(@NonNull String moduleCode,
-                                                     @NonNull Lesson lesson,
-                                                     @NonNull LessonOccurrence occurrence,
-                                                     @NonNull Color color) {
+    public static UiTimetableLessonOccurrence fromDomainTypes(@NonNull String moduleCode,
+                                                              @NonNull Lesson lesson,
+                                                              @NonNull LessonOccurrence occurrence,
+                                                              @NonNull Color color) {
         String id = generateId();
         DayTime startTime = convertTime(occurrence.getDay(), occurrence.getStartTime());
         DayTime endTime = convertTime(occurrence.getDay(), occurrence.getEndTime());
         String name = String.format(EVENT_NAME_FORMAT, moduleCode, lesson.getLessonType(),
                 lesson.getLessonNo());
 
-        UiLessonOccurrence event = new UiLessonOccurrence(id, name, occurrence.getVenue(),
+        UiTimetableLessonOccurrence event = new UiTimetableLessonOccurrence(id, name, occurrence.getVenue(),
                 startTime, endTime, moduleCode, lesson.getLessonType(), lesson.getLessonNo());
         event.setColor(color.toArgb());
         return event;
