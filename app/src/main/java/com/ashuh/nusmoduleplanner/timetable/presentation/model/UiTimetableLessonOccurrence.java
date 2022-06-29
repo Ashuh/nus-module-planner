@@ -43,7 +43,8 @@ public class UiTimetableLessonOccurrence extends WeekViewEvent {
         this.lessonNo = lessonNo;
     }
 
-    public static List<UiTimetableLessonOccurrence> fromModuleReading(@NonNull ModuleReading moduleReading) {
+    public static List<UiTimetableLessonOccurrence> fromModuleReading(
+            @NonNull ModuleReading moduleReading) {
         String moduleCode = moduleReading.getModule().getModuleCode();
         Color color = moduleReading.getColor();
 
@@ -63,10 +64,11 @@ public class UiTimetableLessonOccurrence extends WeekViewEvent {
         String id = generateId();
         DayTime startTime = convertTime(occurrence.getDay(), occurrence.getStartTime());
         DayTime endTime = convertTime(occurrence.getDay(), occurrence.getEndTime());
-        String name = String.format(EVENT_NAME_FORMAT, moduleCode, lesson.getLessonType(),
-                lesson.getLessonNo());
+        String name = String.format(EVENT_NAME_FORMAT, moduleCode,
+                lesson.getLessonType().getShortName(), lesson.getLessonNo());
 
-        UiTimetableLessonOccurrence event = new UiTimetableLessonOccurrence(id, name, occurrence.getVenue(),
+        UiTimetableLessonOccurrence event = new UiTimetableLessonOccurrence(id, name,
+                occurrence.getVenue(),
                 startTime, endTime, moduleCode, lesson.getLessonType(), lesson.getLessonNo());
         event.setColor(color.toArgb());
         return event;
