@@ -83,8 +83,7 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
                     if (altLessons == null || altLessons.size() <= 1) {
                         return;
                     }
-                    DialogFragment dialog = new LessonSelectDialogFragment(moduleCode, lessonType,
-                            altLessons, viewModel);
+                    DialogFragment dialog = new LessonSelectDialogFragment(altLessons);
                     FragmentManager fragmentManager
                             = ((MainActivity) requireContext()).getSupportFragmentManager();
                     dialog.show(fragmentManager, "lessons");

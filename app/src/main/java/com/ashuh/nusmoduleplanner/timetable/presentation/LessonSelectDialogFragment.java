@@ -8,14 +8,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
-import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.Lesson;
-import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonOccurrence;
-import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonType;
+import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiLesson;
+import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiLessonOccurrence;
 
-import java.time.format.TextStyle;
-import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 public class LessonSelectDialogFragment extends DialogFragment implements
         DialogInterface.OnClickListener {
@@ -23,18 +19,10 @@ public class LessonSelectDialogFragment extends DialogFragment implements
     private static final String TEXT_CLASS_INFO_FORMAT = "[%s] %s\n";
     private static final String TEXT_LESSON_INFO_FORMAT = "%s %s - %s %s\n";
 
-    private final String moduleCode;
-    private final LessonType lessonType;
-    private final List<Lesson> altLessonOptions;
-    private final TimetableViewModel viewModel;
+    private final List<UiLesson> alternateLessons;
 
-    public LessonSelectDialogFragment(String moduleCode, LessonType lessonType,
-                                      List<Lesson> altLessonOptions, TimetableViewModel viewModel) {
-        this.moduleCode = moduleCode;
-        this.lessonType = lessonType;
-        Collections.sort(altLessonOptions);
-        this.altLessonOptions = Collections.unmodifiableList(altLessonOptions);
-        this.viewModel = viewModel;
+    public LessonSelectDialogFragment(List<UiLesson> alternateLessons) {
+        this.alternateLessons = alternateLessons;
     }
 
     @NonNull
@@ -47,25 +35,22 @@ public class LessonSelectDialogFragment extends DialogFragment implements
     }
 
     private CharSequence[] getDialogItems() {
-        return altLessonOptions.stream()
+        return alternateLessons.stream()
                 .map(this::getDialogString)
                 .toArray(CharSequence[]::new);
     }
 
-    private String getDialogString(Lesson lesson) {
+    private String getDialogString(UiLesson lesson) {
         String classInfoText = String.format(TEXT_CLASS_INFO_FORMAT,
-                lesson.getLessonType().getShortName(),
-                lesson.getLessonNo());
+                lesson.getLessonType(), lesson.getLessonNo());
         StringBuilder builder = new StringBuilder(classInfoText);
 
-        String weeksDescription = "temp"; // TODO: implement
-
-        for (LessonOccurrence occurrence : lesson.getOccurrences()) {
+        for (UiLessonOccurrence occurrence : lesson.getOccurrences()) {
             String lessonInfoText = String.format(TEXT_LESSON_INFO_FORMAT,
-                    occurrence.getDay().getDisplayName(TextStyle.SHORT, Locale.getDefault()),
+                    occurrence.getDay(),
                     occurrence.getStartTime(),
                     occurrence.getEndTime(),
-                    weeksDescription);
+                    occurrence.getWeeks());
 
             builder.append(lessonInfoText);
         }
@@ -75,7 +60,6 @@ public class LessonSelectDialogFragment extends DialogFragment implements
 
     @Override
     public void onClick(DialogInterface dialogInterface, int i) {
-        String selectedLessonNo = altLessonOptions.get(i).getLessonNo();
-        viewModel.updateAssignedLessonNo(moduleCode, lessonType, selectedLessonNo);
+        alternateLessons.get(i).onClick();
     }
 }
