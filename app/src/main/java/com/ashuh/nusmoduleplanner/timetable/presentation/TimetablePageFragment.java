@@ -35,7 +35,7 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
 
     private TimetableView timetableView;
     private TimetableViewModel viewModel;
-    private AssignedModulesAdapter adapter;
+    private ModuleReadingAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,7 +52,7 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
                 new TimetableViewModelFactory(moduleRepository, semester))
                 .get(TimetableViewModel.class);
         viewModel.getState().observe(this, this);
-        adapter = new AssignedModulesAdapter();
+        adapter = new ModuleReadingAdapter();
     }
 
     @Nullable
@@ -102,9 +102,9 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
     }
 
     public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
-        private final AssignedModulesAdapter adapter;
+        private final ModuleReadingAdapter adapter;
 
-        public SwipeToDeleteCallback(AssignedModulesAdapter adapter) {
+        public SwipeToDeleteCallback(ModuleReadingAdapter adapter) {
             super(ItemTouchHelper.RIGHT, ItemTouchHelper.RIGHT);
             this.adapter = adapter;
         }

@@ -17,8 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class AssignedModulesAdapter
-        extends RecyclerView.Adapter<AssignedModulesAdapter.ViewHolder> {
+public class ModuleReadingAdapter
+        extends RecyclerView.Adapter<ModuleReadingAdapter.ViewHolder> {
     private static final String EXAM_INFO_FORMAT = "Exam: %s";
     private static final String TEXT_NO_EXAM = "No Exam";
 
@@ -30,7 +30,7 @@ public class AssignedModulesAdapter
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.timetable_card_layout, parent, false);
-        return new AssignedModulesAdapter.ViewHolder(view);
+        return new ModuleReadingAdapter.ViewHolder(view);
     }
 
     @Override
