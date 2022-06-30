@@ -27,14 +27,14 @@ public class UiModule {
     @NonNull
     private final Map<String, UiExam> semesterToExam;
     @NonNull
-    private final List<String> semestersOffered;
+    private final List<UiSemester> semestersOffered;
 
     public UiModule(@NonNull String moduleCode, @NonNull String title,
                     @NonNull String moduleCredit, @NonNull String department,
                     @NonNull String faculty, @NonNull String description,
                     @NonNull String prerequisite, @NonNull String coRequisite,
                     @NonNull String preclusion, @NonNull Map<String, UiExam> semesterToExam,
-                    @NonNull List<String> semestersOffered) {
+                    @NonNull List<UiSemester> semestersOffered) {
         this.moduleCode = moduleCode;
         this.title = title;
         this.moduleCredit = moduleCredit;
@@ -99,7 +99,7 @@ public class UiModule {
     }
 
     @NonNull
-    public List<String> getSemestersOffered() {
+    public List<UiSemester> getSemestersOffered() {
         return semestersOffered;
     }
 }

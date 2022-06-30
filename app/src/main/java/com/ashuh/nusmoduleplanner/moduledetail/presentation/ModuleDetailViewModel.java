@@ -15,6 +15,7 @@ import com.ashuh.nusmoduleplanner.moduledetail.domain.usecase.GetModuleWithPosts
 import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiExam;
 import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiModule;
 import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiPost;
+import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiSemester;
 
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
@@ -39,11 +40,10 @@ public class ModuleDetailViewModel extends ViewModel {
         this.getModuleWithPostsUseCase = getModuleWithPostsUseCase;
         this.createModuleReadingUseCase = createModuleReadingUseCase;
         observableModuleWithPosts = getModuleWithPostsUseCase.execute(acadYear, moduleCode);
-        observableState = Transformations
-                .map(observableModuleWithPosts, ModuleDetailViewModel::buildState);
+        observableState = Transformations.map(observableModuleWithPosts, this::buildState);
     }
 
-    private static ModuleDetailState buildState(ModuleWithPosts moduleWithPosts) {
+    private ModuleDetailState buildState(ModuleWithPosts moduleWithPosts) {
         ModuleDetailState.Builder builder = new ModuleDetailState.Builder();
         moduleWithPosts.getModule()
                 .ifPresent(module -> {
@@ -61,7 +61,7 @@ public class ModuleDetailViewModel extends ViewModel {
         return builder.build();
     }
 
-    private static UiModule mapModule(Module module) {
+    private UiModule mapModule(Module module) {
         String moduleCode = module.getModuleCode();
         String title = module.getTitle();
         String moduleCredit = module.getModuleCredit().toString();
@@ -79,9 +79,9 @@ public class ModuleDetailViewModel extends ViewModel {
                         (x, y) -> y,
                         LinkedHashMap::new)
                 );
-        List<String> semestersOffered = module.getSemesters().stream()
+        List<UiSemester> semestersOffered = module.getSemesters().stream()
                 .sorted()
-                .map(Semester::toString)
+                .map(this::mapSemester)
                 .collect(Collectors.toList());
 
         return new UiModule(moduleCode, title, moduleCredit, department, faculty, description,
@@ -93,6 +93,11 @@ public class ModuleDetailViewModel extends ViewModel {
         String age = calculatePostAge(post.getCreatedAt());
         String message = post.getMessage();
         return new UiPost(name, age, message);
+    }
+
+    private UiSemester mapSemester(Semester semester) {
+        Runnable onClick = () -> createModuleReading(semester);
+        return new UiSemester(semester.name(), onClick);
     }
 
     private static String calculatePostAge(ZonedDateTime postTime) {
@@ -112,10 +117,6 @@ public class ModuleDetailViewModel extends ViewModel {
         return String.format(AGE_TEXT, age, ageUnit);
     }
 
-    public LiveData<ModuleDetailState> getState() {
-        return observableState;
-    }
-
     public void createModuleReading(Semester semester) {
         ModuleWithPosts moduleWithPosts = observableModuleWithPosts.getValue();
         if (moduleWithPosts == null) {
@@ -123,5 +124,9 @@ public class ModuleDetailViewModel extends ViewModel {
         }
         moduleWithPosts.getModule()
                 .ifPresent(module -> createModuleReadingUseCase.execute(module, semester));
+    }
+
+    public LiveData<ModuleDetailState> getState() {
+        return observableState;
     }
 }

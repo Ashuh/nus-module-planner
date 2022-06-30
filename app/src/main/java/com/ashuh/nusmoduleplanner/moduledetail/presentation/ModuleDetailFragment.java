@@ -31,11 +31,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ashuh.nusmoduleplanner.R;
 import com.ashuh.nusmoduleplanner.common.NusModulePlannerApplication;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.AcademicYear;
-import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
 import com.ashuh.nusmoduleplanner.common.domain.repository.PostRepository;
 import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiExam;
 import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiModule;
+import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiSemester;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,6 +44,7 @@ import java.util.Map;
 import java.util.StringJoiner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class ModuleDetailFragment extends Fragment {
     private static final String EXAM_HEADING_FORMAT = "%s Exam";
@@ -133,8 +134,10 @@ public class ModuleDetailFragment extends Fragment {
         adminInfoTextView.setText(adminInfo);
     }
 
-    private void setSemestersTextView(List<String> semesters) {
-        String semestersText = String.join(" • ", semesters);
+    private void setSemestersTextView(List<UiSemester> semesters) {
+        String semestersText = semesters.stream()
+                .map(UiSemester::getSemester)
+                .collect(Collectors.joining(" • "));
         semestersTextView.setText(semestersText);
     }
 
@@ -200,10 +203,10 @@ public class ModuleDetailFragment extends Fragment {
         examInfoTextView.setText(stringBuilder);
     }
 
-    private void setAddToTimetableButtonListener(List<String> semesters) {
-        button.setOnClickListener(
-                view -> new ModuleSemesterMenu(requireContext(), button, semesters)
-                        .show());
+    private void setAddToTimetableButtonListener(List<UiSemester> semesters) {
+        button.setOnClickListener(view
+                -> new ModuleSemesterMenu(requireContext(), button, semesters)
+                .show());
     }
 
     private SpannableStringBuilder generateTextWithBoldHeading(CharSequence heading,
@@ -252,21 +255,21 @@ public class ModuleDetailFragment extends Fragment {
         }
     }
 
-    private class ModuleSemesterMenu extends PopupMenu {
-        private final List<String> semesterStrings;
-        Map<Integer, String> idToSemesterString = new HashMap<>();
+    private static class ModuleSemesterMenu extends PopupMenu {
+        private final List<UiSemester> semesters;
+        Map<Integer, UiSemester> idToSemester = new HashMap<>();
 
         ModuleSemesterMenu(@NonNull Context context, @NonNull View anchor,
-                           List<String> semesterStrings) {
+                           List<UiSemester> semesters) {
             super(context, anchor);
-            requireNonNull(semesterStrings);
-            this.semesterStrings = semesterStrings;
+            requireNonNull(semesters);
+            this.semesters = semesters;
 
             initMenuItems();
             setOnMenuItemClickListener(menuItem -> {
-                String semesterString = idToSemesterString.get(menuItem.getItemId());
-                Semester semester = Semester.fromString(semesterString);
-                viewModel.createModuleReading(semester);
+                UiSemester semester = idToSemester.get(menuItem.getItemId());
+                assert semester != null;
+                semester.onClick();
                 return true;
             });
         }
@@ -274,9 +277,9 @@ public class ModuleDetailFragment extends Fragment {
         private void initMenuItems() {
             int id = 0;
 
-            for (String semesterString : semesterStrings) {
-                idToSemesterString.put(id, semesterString);
-                getMenu().add(Menu.NONE, id, Menu.NONE, semesterString);
+            for (UiSemester semester : semesters) {
+                idToSemester.put(id, semester);
+                getMenu().add(Menu.NONE, id, Menu.NONE, semester.getSemester());
                 id++;
             }
         }
