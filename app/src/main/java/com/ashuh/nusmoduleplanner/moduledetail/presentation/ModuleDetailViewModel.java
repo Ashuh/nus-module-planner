@@ -13,7 +13,7 @@ import com.ashuh.nusmoduleplanner.moduledetail.domain.model.ModuleWithPosts;
 import com.ashuh.nusmoduleplanner.moduledetail.domain.usecase.CreateModuleReadingUseCase;
 import com.ashuh.nusmoduleplanner.moduledetail.domain.usecase.GetModuleWithPostsUseCase;
 import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiExam;
-import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiModuleDetail;
+import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiModule;
 import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiPost;
 
 import java.time.ZonedDateTime;
@@ -47,7 +47,7 @@ public class ModuleDetailViewModel extends ViewModel {
         ModuleDetailState.Builder builder = new ModuleDetailState.Builder();
         moduleWithPosts.getModule()
                 .ifPresent(module -> {
-                    UiModuleDetail uiModule = mapModule(module);
+                    UiModule uiModule = mapModule(module);
                     builder.setModule(uiModule);
                 });
         moduleWithPosts.getPaginatedPosts()
@@ -61,7 +61,7 @@ public class ModuleDetailViewModel extends ViewModel {
         return builder.build();
     }
 
-    private static UiModuleDetail mapModule(Module module) {
+    private static UiModule mapModule(Module module) {
         String moduleCode = module.getModuleCode();
         String title = module.getTitle();
         String moduleCredit = module.getModuleCredit().toString();
@@ -84,7 +84,7 @@ public class ModuleDetailViewModel extends ViewModel {
                 .map(Semester::toString)
                 .collect(Collectors.toList());
 
-        return new UiModuleDetail(moduleCode, title, moduleCredit, department, faculty, description,
+        return new UiModule(moduleCode, title, moduleCredit, department, faculty, description,
                 prerequisite, coRequisite, preclusion, semesterToExam, semestersOffered);
     }
 

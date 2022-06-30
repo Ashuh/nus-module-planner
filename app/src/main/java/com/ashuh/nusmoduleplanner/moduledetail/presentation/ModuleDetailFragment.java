@@ -35,7 +35,7 @@ import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
 import com.ashuh.nusmoduleplanner.common.domain.repository.PostRepository;
 import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiExam;
-import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiModuleDetail;
+import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiModule;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -109,7 +109,7 @@ public class ModuleDetailFragment extends Fragment {
         postAdapter.setPosts(state.getPosts());
     }
 
-    private void updateModuleUi(UiModuleDetail module) {
+    private void updateModuleUi(UiModule module) {
         codeTextView.setText(module.getModuleCode());
         titleTextView.setText(module.getTitle());
         setAdminInfoTextView(module.getDepartment(), module.getFaculty(), module.getModuleCredit());

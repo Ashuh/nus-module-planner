@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import java.util.List;
 import java.util.Map;
 
-public class UiModuleDetail {
+public class UiModule {
     @NonNull
     private final String moduleCode;
     @NonNull
@@ -29,12 +29,12 @@ public class UiModuleDetail {
     @NonNull
     private final List<String> semestersOffered;
 
-    public UiModuleDetail(@NonNull String moduleCode, @NonNull String title,
-                          @NonNull String moduleCredit, @NonNull String department,
-                          @NonNull String faculty, @NonNull String description,
-                          @NonNull String prerequisite, @NonNull String coRequisite,
-                          @NonNull String preclusion, @NonNull Map<String, UiExam> semesterToExam,
-                          @NonNull List<String> semestersOffered) {
+    public UiModule(@NonNull String moduleCode, @NonNull String title,
+                    @NonNull String moduleCredit, @NonNull String department,
+                    @NonNull String faculty, @NonNull String description,
+                    @NonNull String prerequisite, @NonNull String coRequisite,
+                    @NonNull String preclusion, @NonNull Map<String, UiExam> semesterToExam,
+                    @NonNull List<String> semestersOffered) {
         this.moduleCode = moduleCode;
         this.title = title;
         this.moduleCredit = moduleCredit;
