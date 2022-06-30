@@ -1,6 +1,5 @@
 package com.ashuh.nusmoduleplanner.common.data.local.dao;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;

@@ -37,9 +37,9 @@ public abstract class ApiBaseDetailedModule extends ApiBaseModule {
 
     public ApiBaseDetailedModule(String moduleCode, String title, @NonNull String description,
                                  @NonNull String faculty, @NonNull String department,
-                                 @Nullable ApiWorkloadResponse workload, @Nullable String preclusion,
-                                 @Nullable String prerequisite, @Nullable String coRequisite,
-                                 double moduleCredit) {
+                                 @Nullable ApiWorkloadResponse workload,
+                                 @Nullable String preclusion, @Nullable String prerequisite,
+                                 @Nullable String coRequisite, double moduleCredit) {
         super(moduleCode, title);
         requireNonNull(description);
         requireNonNull(faculty);
