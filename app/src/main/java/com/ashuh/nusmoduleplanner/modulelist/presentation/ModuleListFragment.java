@@ -40,17 +40,18 @@ public class ModuleListFragment extends Fragment implements SearchView.OnQueryTe
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_modules, container, false);
+        return inflater.inflate(R.layout.fragment_modules, container, false);
+    }
 
-        SearchView searchView = rootView.findViewById(R.id.search_view);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        SearchView searchView = view.findViewById(R.id.search_view);
         searchView.setOnQueryTextListener(this);
 
-        RecyclerView recyclerView = rootView.findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-
-        return rootView;
     }
 
     @Override
