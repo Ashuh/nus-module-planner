@@ -12,7 +12,9 @@ import androidx.lifecycle.ViewModel;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.AcademicYear;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.ModuleInfo;
 import com.ashuh.nusmoduleplanner.modulelist.domain.usecase.GetModuleInfoUseCase;
+import com.ashuh.nusmoduleplanner.modulelist.presentation.model.UiModuleInfo;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
@@ -24,7 +26,7 @@ public class ModuleListViewModel extends ViewModel {
     @NonNull
     private final GetModuleInfoUseCase getModuleInfoUseCase;
     private final LiveData<List<ModuleInfo>> allModules;
-    private final MediatorLiveData<List<ModuleInfo>> filteredModules;
+    private final MediatorLiveData<ModuleListState> observableState;
     private final MutableLiveData<Predicate<ModuleInfo>> filterPredicate
             = new MutableLiveData<>(PREDICATE_SHOW_ALL);
 
@@ -33,27 +35,39 @@ public class ModuleListViewModel extends ViewModel {
         this.getModuleInfoUseCase = getModuleInfoUseCase;
         allModules = getModuleInfoUseCase.execute(AcademicYear.getCurrent());
 
-        filteredModules = new MediatorLiveData<>();
-        filteredModules.addSource(allModules, unfiltered -> {
+        observableState = new MediatorLiveData<>();
+        observableState.addSource(allModules, unfiltered -> {
             Predicate<ModuleInfo> predicate = filterPredicate.getValue();
-            assert predicate != null;
-            List<ModuleInfo> filtered = unfiltered.stream()
-                    .filter(predicate)
-                    .collect(Collectors.toList());
-            filteredModules.setValue(filtered);
+            ModuleListState state = buildState(unfiltered, predicate);
+            observableState.setValue(state);
         });
-        filteredModules.addSource(filterPredicate, predicate -> {
+        observableState.addSource(filterPredicate, predicate -> {
             List<ModuleInfo> unfiltered
                     = requireNonNullElse(allModules.getValue(), Collections.emptyList());
-            List<ModuleInfo> filtered = unfiltered.stream()
-                    .filter(predicate)
-                    .collect(Collectors.toList());
-            filteredModules.setValue(filtered);
+            ModuleListState state = buildState(unfiltered, predicate);
+            observableState.setValue(state);
         });
     }
 
-    public LiveData<List<ModuleInfo>> getModuleListObservable() {
-        return filteredModules;
+    public ModuleListState buildState(Collection<ModuleInfo> modules,
+                                      Predicate<ModuleInfo> predicate) {
+        List<UiModuleInfo> uiModules = modules.stream()
+                .filter(predicate)
+                .map(ModuleListViewModel::mapModuleInfo)
+                .collect(Collectors.toList());
+        return new ModuleListState(uiModules);
+    }
+
+    public static UiModuleInfo mapModuleInfo(ModuleInfo moduleInfo) {
+        String moduleCode = moduleInfo.getModuleCode();
+        String title = moduleInfo.getTitle();
+        String department = moduleInfo.getDepartment();
+        String moduleCredit = moduleInfo.getModuleCredit().toString();
+        return new UiModuleInfo(moduleCode, title, department, moduleCredit);
+    }
+
+    public LiveData<ModuleListState> getState() {
+        return observableState;
     }
 
     public void filter(String query) {

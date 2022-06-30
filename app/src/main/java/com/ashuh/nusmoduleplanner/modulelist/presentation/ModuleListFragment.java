@@ -9,6 +9,7 @@ import android.widget.SearchView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,20 +18,23 @@ import com.ashuh.nusmoduleplanner.R;
 import com.ashuh.nusmoduleplanner.common.NusModulePlannerApplication;
 import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
 
-public class ModuleListFragment extends Fragment implements SearchView.OnQueryTextListener {
+public class ModuleListFragment extends Fragment implements SearchView.OnQueryTextListener,
+        Observer<ModuleListState> {
+    private ModuleListAdapter adapter;
     private ModuleListViewModel viewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        adapter = new ModuleListAdapter();
         ModuleRepository moduleRepository
                 = ((NusModulePlannerApplication) requireActivity().getApplication())
                 .appContainer.moduleRepository;
-
         viewModel = new ViewModelProvider(this,
                 new ModuleListViewModelFactory(moduleRepository))
                 .get(ModuleListViewModel.class);
+        viewModel.getState().observe(this, this);
     }
 
     @Override
@@ -44,9 +48,7 @@ public class ModuleListFragment extends Fragment implements SearchView.OnQueryTe
         RecyclerView recyclerView = rootView.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        ModuleListAdapter adapter = new ModuleListAdapter();
         recyclerView.setAdapter(adapter);
-        viewModel.getModuleListObservable().observe(getViewLifecycleOwner(), adapter);
 
         return rootView;
     }
@@ -60,5 +62,10 @@ public class ModuleListFragment extends Fragment implements SearchView.OnQueryTe
     public boolean onQueryTextChange(String query) {
         viewModel.filter(query);
         return true;
+    }
+
+    @Override
+    public void onChanged(ModuleListState state) {
+        adapter.setModules(state.getModules());
     }
 }

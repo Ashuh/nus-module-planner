@@ -8,20 +8,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashuh.nusmoduleplanner.R;
-import com.ashuh.nusmoduleplanner.common.domain.model.module.ModuleInfo;
+import com.ashuh.nusmoduleplanner.modulelist.presentation.model.UiModuleInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.ViewHolder>
-        implements Observer<List<ModuleInfo>> {
+public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.ViewHolder> {
     @NonNull
-    private final List<ModuleInfo> modules = new ArrayList<>();
+    private List<UiModuleInfo> modules = new ArrayList<>();
 
     @NonNull
     @Override
@@ -34,7 +32,7 @@ public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ModuleListAdapter.ViewHolder viewHolder, int position) {
-        ModuleInfo module = modules.get(position);
+        UiModuleInfo module = modules.get(position);
         viewHolder.setModule(module);
     }
 
@@ -43,13 +41,9 @@ public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.Vi
         return modules.size();
     }
 
-    @Override
-    public void onChanged(List<ModuleInfo> modules) {
-        if (modules == null) {
-            return;
-        }
-        this.modules.clear();
-        this.modules.addAll(modules);
+    public void setModules(@NonNull List<UiModuleInfo> modules) {
+        requireNonNull(modules);
+        this.modules = modules;
         notifyDataSetChanged();
     }
 
@@ -66,7 +60,7 @@ public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.Vi
             descriptionTextView = view.findViewById(R.id.module_card_desc);
         }
 
-        public void setModule(@NonNull ModuleInfo module) {
+        public void setModule(@NonNull UiModuleInfo module) {
             requireNonNull(module);
             String title = String.format(TEXT_TITLE, module.getModuleCode(), module.getTitle());
             String desc = String
