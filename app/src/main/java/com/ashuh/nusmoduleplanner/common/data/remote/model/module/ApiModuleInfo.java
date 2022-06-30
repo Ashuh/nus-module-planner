@@ -47,8 +47,8 @@ public class ApiModuleInfo extends ApiBaseDetailedModule {
                 .map(ApiModuleInfoSemesterDatum::toDomain)
                 .collect(java.util.stream.Collectors.toList());
 
-        return new ModuleInfo(moduleCode, title, description, domainModuleCredit, faculty,
-                department, domainWorkload, domainPrerequisite, domainPreclusion, domainCoRequisite,
+        return new ModuleInfo(moduleCode, title, description, domainModuleCredit, department,
+                faculty, domainWorkload, domainPrerequisite, domainPreclusion, domainCoRequisite,
                 domainSemesterData);
     }
 }
