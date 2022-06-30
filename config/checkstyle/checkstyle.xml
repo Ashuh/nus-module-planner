@@ -17,12 +17,6 @@
         <property name="message" value="Line has trailing spaces."/>
     </module>
 
-    <!-- For each spacing -->
-    <module name="RegexpSingleline">
-        <property name="format" value="^\s*for \(.*?([^ ]:|:[^ ])"/>
-        <property name="message" value="Space needed around ':' character."/>
-    </module>
-
     <!-- Checks for Size Violations.                    -->
     <!-- See http://checkstyle.sf.net/config_sizes.html -->
     <module name="LineLength">
@@ -76,8 +70,9 @@
         <module name="ParenPad"/>
         <module name="TypecastParenPad"/>
         <module name="WhitespaceAfter"/>
-        <module name="WhitespaceAround"/>
-
+        <module name="WhitespaceAround">
+            <property name="ignoreEnhancedForColon" value="false" />
+        </module>
 
         <!-- Modifier Checks                                    -->
         <!-- See http://checkstyle.sf.net/config_modifiers.html -->
