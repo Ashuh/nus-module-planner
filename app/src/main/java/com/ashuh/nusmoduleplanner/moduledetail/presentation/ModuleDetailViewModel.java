@@ -97,7 +97,7 @@ public class ModuleDetailViewModel extends ViewModel {
 
     private UiSemester mapSemester(Semester semester) {
         Runnable onClick = () -> createModuleReading(semester);
-        return new UiSemester(semester.name(), onClick);
+        return new UiSemester(semester.toString(), onClick);
     }
 
     private static String calculatePostAge(ZonedDateTime postTime) {
