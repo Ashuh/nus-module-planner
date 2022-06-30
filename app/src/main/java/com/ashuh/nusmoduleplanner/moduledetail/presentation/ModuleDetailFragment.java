@@ -104,17 +104,21 @@ public class ModuleDetailFragment extends Fragment {
         viewModel.getState().observe(getViewLifecycleOwner(), this::updateUi);
     }
 
-    private void updateUi(UiModuleDetail state) {
-        codeTextView.setText(state.getModuleCode());
-        titleTextView.setText(state.getTitle());
-        setAdminInfoTextView(state.getDepartment(), state.getFaculty(), state.getModuleCredit());
-        setSemestersTextView(state.getSemestersOffered());
-        setDescriptionTextView(state.getDescription());
-        setRequirementsTextView(state.getPrerequisite(), state.getCoRequisite(),
-                state.getPreclusion());
-        setExamInfoTextView(state.getExams());
-        setAddToTimetableButtonListener(state.getSemestersOffered());
+    private void updateUi(ModuleDetailState state) {
+        state.getModule().ifPresent(this::updateModuleUi);
         postAdapter.setPosts(state.getPosts());
+    }
+
+    private void updateModuleUi(UiModuleDetail module) {
+        codeTextView.setText(module.getModuleCode());
+        titleTextView.setText(module.getTitle());
+        setAdminInfoTextView(module.getDepartment(), module.getFaculty(), module.getModuleCredit());
+        setSemestersTextView(module.getSemestersOffered());
+        setDescriptionTextView(module.getDescription());
+        setRequirementsTextView(module.getPrerequisite(), module.getCoRequisite(),
+                module.getPreclusion());
+        setExamInfoTextView(module.getExams());
+        setAddToTimetableButtonListener(module.getSemestersOffered());
     }
 
     private void setAdminInfoTextView(String department, String faculty, String moduleCredit) {
