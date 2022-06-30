@@ -86,7 +86,6 @@ public class ModuleDetailFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
         titleTextView = view.findViewById(R.id.module_title);
         codeTextView = view.findViewById(R.id.module_code);
         adminInfoTextView = view.findViewById(R.id.module_admin_info);
