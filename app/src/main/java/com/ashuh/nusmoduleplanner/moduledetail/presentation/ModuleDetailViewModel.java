@@ -11,6 +11,7 @@ import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.model.post.PaginatedPosts;
 import com.ashuh.nusmoduleplanner.common.domain.model.post.Post;
 import com.ashuh.nusmoduleplanner.common.util.DateUtil;
+import com.ashuh.nusmoduleplanner.common.util.StringUtil;
 import com.ashuh.nusmoduleplanner.moduledetail.domain.model.ModuleWithPosts;
 import com.ashuh.nusmoduleplanner.moduledetail.domain.usecase.CreateModuleReadingUseCase;
 import com.ashuh.nusmoduleplanner.moduledetail.domain.usecase.GetModuleWithPostsUseCase;
@@ -35,8 +36,6 @@ public class ModuleDetailViewModel extends ViewModel {
     private static final int MINUTES_PER_HOUR = 60;
     private static final String AGE_TEXT = "%s %s ago";
     private static final String DURATION_FORMAT = "%s hrs";
-    private static final String HOURS_FORMAT = "0.#";
-    private static final DecimalFormat HOURS_FORMATTER = new DecimalFormat(HOURS_FORMAT);
 
     private final GetModuleWithPostsUseCase getModuleWithPostsUseCase;
     private final CreateModuleReadingUseCase createModuleReadingUseCase;
@@ -109,7 +108,8 @@ public class ModuleDetailViewModel extends ViewModel {
                 .withZoneSameInstant(ZoneId.systemDefault())
                 .format(DateUtil.DATE_FORMATTER_DISPLAY);
         double hours = (double) exam.getDuration().toMinutes() / MINUTES_PER_HOUR;
-        String hoursFormatted = HOURS_FORMATTER.format(hours);
+//        String hoursFormatted = HOURS_FORMATTER.format(hours);
+        String hoursFormatted = StringUtil.doubleWithoutTrailingZeros(hours);
         String duration = String.format(Locale.ENGLISH, DURATION_FORMAT, hoursFormatted);
         return new UiExam(date, duration);
     }
