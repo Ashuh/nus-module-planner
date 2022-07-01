@@ -49,7 +49,7 @@ public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.Vi
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private static final String TEXT_TITLE = "%s %s";
-        private static final String TEXT_ADMIN_INFO = "%s • %s MCs";
+        private static final String TEXT_ADMIN_INFO = "%s • %s";
 
         private final TextView titleTextView;
         private final TextView descriptionTextView;
