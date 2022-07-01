@@ -8,12 +8,14 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.ashuh.nusmoduleplanner.common.domain.model.module.AcademicYear;
+import com.ashuh.nusmoduleplanner.common.domain.model.module.Exam;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.ModuleReading;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Weeks;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.Lesson;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonOccurrence;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonType;
+import com.ashuh.nusmoduleplanner.common.util.DateUtil;
 import com.ashuh.nusmoduleplanner.timetable.domain.usecase.DeleteModuleReadingUseCase;
 import com.ashuh.nusmoduleplanner.timetable.domain.usecase.GetAlternateLessonsUseCase;
 import com.ashuh.nusmoduleplanner.timetable.domain.usecase.GetModuleReadingsUseCase;
@@ -23,6 +25,7 @@ import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiLessonOccurrenc
 import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiModuleReading;
 import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiTimetableLessonOccurrence;
 
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.Collection;
@@ -77,10 +80,22 @@ public class TimetableViewModel extends ViewModel {
                 .collect(Collectors.toList());
 
         List<UiModuleReading> uiModuleReadings = moduleReadings.stream()
-                .map(UiModuleReading::fromDomain)
+                .map(TimetableViewModel::mapModuleReading)
                 .collect(Collectors.toList());
 
         return new TimetableState(uiTimetableLessonOccurrences, uiModuleReadings);
+    }
+
+    private static UiModuleReading mapModuleReading(ModuleReading moduleReading) {
+        String moduleCode = moduleReading.getModule().getModuleCode();
+        String title = moduleReading.getModule().getTitle();
+        String moduleCredit = moduleReading.getModule().getModuleCredit().toString();
+        String examDate = moduleReading.getExam()
+                .map(Exam::getDate)
+                .map(DateUtil::formatZonedDateTimeForDisplay)
+                .orElse("");
+        int color = moduleReading.getColor().toArgb();
+        return new UiModuleReading(moduleCode, title, moduleCredit, examDate, color);
     }
 
     @NonNull
