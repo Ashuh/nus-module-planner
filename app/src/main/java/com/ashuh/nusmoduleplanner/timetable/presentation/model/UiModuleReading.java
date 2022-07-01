@@ -8,7 +8,6 @@ import com.ashuh.nusmoduleplanner.common.domain.model.module.Exam;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.ModuleReading;
 import com.ashuh.nusmoduleplanner.common.util.DateUtil;
 
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 public class UiModuleReading {
@@ -48,8 +47,7 @@ public class UiModuleReading {
     }
 
     private static String formatDate(ZonedDateTime dateTime) {
-        return dateTime.withZoneSameInstant(ZoneId.systemDefault())
-                .format(DateUtil.DATE_FORMATTER_DISPLAY);
+        return DateUtil.formatZonedDateTimeForDisplay(dateTime);
     }
 
     @NonNull

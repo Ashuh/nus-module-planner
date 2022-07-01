@@ -20,8 +20,6 @@ import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiModule;
 import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiPost;
 import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiSemester;
 
-import java.text.DecimalFormat;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
@@ -104,11 +102,8 @@ public class ModuleDetailViewModel extends ViewModel {
     }
 
     private static UiExam mapExam(Exam exam) {
-        String date = exam.getDate()
-                .withZoneSameInstant(ZoneId.systemDefault())
-                .format(DateUtil.DATE_FORMATTER_DISPLAY);
+        String date = DateUtil.formatZonedDateTimeForDisplay(exam.getDate());
         double hours = (double) exam.getDuration().toMinutes() / MINUTES_PER_HOUR;
-//        String hoursFormatted = HOURS_FORMATTER.format(hours);
         String hoursFormatted = StringUtil.doubleWithoutTrailingZeros(hours);
         String duration = String.format(Locale.ENGLISH, DURATION_FORMAT, hoursFormatted);
         return new UiExam(date, duration);
