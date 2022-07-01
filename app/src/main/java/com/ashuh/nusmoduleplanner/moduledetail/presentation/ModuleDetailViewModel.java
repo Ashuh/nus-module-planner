@@ -5,10 +5,12 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.ashuh.nusmoduleplanner.common.domain.model.module.AcademicYear;
+import com.ashuh.nusmoduleplanner.common.domain.model.module.Exam;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Module;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.model.post.PaginatedPosts;
 import com.ashuh.nusmoduleplanner.common.domain.model.post.Post;
+import com.ashuh.nusmoduleplanner.common.util.DateUtil;
 import com.ashuh.nusmoduleplanner.moduledetail.domain.model.ModuleWithPosts;
 import com.ashuh.nusmoduleplanner.moduledetail.domain.usecase.CreateModuleReadingUseCase;
 import com.ashuh.nusmoduleplanner.moduledetail.domain.usecase.GetModuleWithPostsUseCase;
@@ -17,17 +19,24 @@ import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiModule;
 import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiPost;
 import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiSemester;
 
+import java.text.DecimalFormat;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ModuleDetailViewModel extends ViewModel {
     private static final List<ChronoUnit> AGE_UNITS = List.of(ChronoUnit.YEARS, ChronoUnit.MONTHS,
             ChronoUnit.DAYS, ChronoUnit.HOURS, ChronoUnit.MINUTES);
+    private static final int MINUTES_PER_HOUR = 60;
     private static final String AGE_TEXT = "%s %s ago";
+    private static final String DURATION_FORMAT = "%s hrs";
+    private static final String HOURS_FORMAT = "0.#";
+    private static final DecimalFormat HOURS_FORMATTER = new DecimalFormat(HOURS_FORMAT);
 
     private final GetModuleWithPostsUseCase getModuleWithPostsUseCase;
     private final CreateModuleReadingUseCase createModuleReadingUseCase;
@@ -75,7 +84,7 @@ public class ModuleDetailViewModel extends ViewModel {
                 .sorted(Map.Entry.comparingByKey())
                 .collect(Collectors.toMap(
                         e -> e.getKey().toString(),
-                        e -> UiExam.fromDomain(e.getValue()),
+                        e -> mapExam(e.getValue()),
                         (x, y) -> y,
                         LinkedHashMap::new)
                 );
@@ -93,6 +102,16 @@ public class ModuleDetailViewModel extends ViewModel {
         String age = calculatePostAge(post.getCreatedAt());
         String message = post.getMessage();
         return new UiPost(name, age, message);
+    }
+
+    private static UiExam mapExam(Exam exam) {
+        String date = exam.getDate()
+                .withZoneSameInstant(ZoneId.systemDefault())
+                .format(DateUtil.DATE_FORMATTER_DISPLAY);
+        double hours = (double) exam.getDuration().toMinutes() / MINUTES_PER_HOUR;
+        String hoursFormatted = HOURS_FORMATTER.format(hours);
+        String duration = String.format(Locale.ENGLISH, DURATION_FORMAT, hoursFormatted);
+        return new UiExam(date, duration);
     }
 
     private UiSemester mapSemester(Semester semester) {
