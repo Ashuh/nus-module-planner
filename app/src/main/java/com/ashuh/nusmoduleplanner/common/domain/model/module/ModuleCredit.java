@@ -2,6 +2,8 @@ package com.ashuh.nusmoduleplanner.common.domain.model.module;
 
 import androidx.annotation.NonNull;
 
+import com.ashuh.nusmoduleplanner.common.util.StringUtil;
+
 public class ModuleCredit {
     private final double value;
 
@@ -16,6 +18,6 @@ public class ModuleCredit {
     @NonNull
     @Override
     public String toString() {
-        return value + " MCs";
+        return StringUtil.doubleWithoutTrailingZeros(value) + " MCs";
     }
 }
