@@ -1,7 +1,6 @@
 package com.ashuh.nusmoduleplanner.common.data.remote.model.module.weeks;
 
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNullElse;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,7 +15,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 
 @JsonAdapter(ApiWeeksResponse.ApiWeeksResponseDeserializer.class)

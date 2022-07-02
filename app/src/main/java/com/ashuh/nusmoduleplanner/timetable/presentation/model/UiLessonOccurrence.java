@@ -4,11 +4,6 @@ import static java.util.Objects.requireNonNull;
 
 import androidx.annotation.NonNull;
 
-import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonOccurrence;
-
-import java.time.format.TextStyle;
-import java.util.Locale;
-
 public class UiLessonOccurrence {
     @NonNull
     private final String day;

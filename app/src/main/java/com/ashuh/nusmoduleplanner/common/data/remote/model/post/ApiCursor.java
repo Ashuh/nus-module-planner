@@ -7,8 +7,6 @@ import androidx.annotation.NonNull;
 import com.ashuh.nusmoduleplanner.common.domain.model.post.Cursor;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Objects;
-
 public class ApiCursor {
     @NonNull
     @SerializedName("next")
