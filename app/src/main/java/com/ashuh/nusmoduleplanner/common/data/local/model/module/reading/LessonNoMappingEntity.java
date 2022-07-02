@@ -8,6 +8,8 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonType;
+
 @Entity(
         foreignKeys = @ForeignKey(
                 entity = ModuleReadingEntity.class,
@@ -22,20 +24,20 @@ import androidx.room.PrimaryKey;
 )
 public class LessonNoMappingEntity {
     @NonNull
-    private final String lessonType; // TODO: ENUM
+    private final LessonType lessonType;
     @NonNull
     private final String lessonNo;
     @PrimaryKey(autoGenerate = true)
     private long id;
     private long ownerId;
 
-    public LessonNoMappingEntity(@NonNull String lessonType, @NonNull String lessonNo) {
+    public LessonNoMappingEntity(@NonNull LessonType lessonType, @NonNull String lessonNo) {
         this.lessonType = requireNonNull(lessonType);
         this.lessonNo = requireNonNull(lessonNo);
     }
 
     @NonNull
-    public String getLessonType() {
+    public LessonType getLessonType() {
         return lessonType;
     }
 

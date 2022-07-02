@@ -57,8 +57,7 @@ public class ModuleReadingAggregate {
 
         List<LessonNoMappingEntity> mappings = new ArrayList<>();
         moduleReading.getLessonAssignmentMapping().forEach((lessonType, lessonNo) -> {
-            LessonNoMappingEntity mapping
-                    = new LessonNoMappingEntity(lessonType.name(), lessonNo);
+            LessonNoMappingEntity mapping = new LessonNoMappingEntity(lessonType, lessonNo);
             mappings.add(mapping);
         });
 
@@ -74,7 +73,7 @@ public class ModuleReadingAggregate {
 
         Map<LessonType, String> lessonTypeToLessonNo = new HashMap<>();
         lessonNoMappings.forEach(mapping -> {
-            LessonType lessonType = LessonType.valueOf(mapping.getLessonType());
+            LessonType lessonType = mapping.getLessonType();
             String lessonNo = mapping.getLessonNo();
             lessonTypeToLessonNo.put(lessonType, lessonNo);
         });
