@@ -14,9 +14,9 @@ import com.ashuh.nusmoduleplanner.R;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.android.material.tabs.TabLayoutMediator.TabConfigurationStrategy;
 
-public class TimetablePagerFragment extends Fragment {
-
+public class TimetablePagerFragment extends Fragment implements TabConfigurationStrategy {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -25,13 +25,17 @@ public class TimetablePagerFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        TimetablePagerAdapter adapter = new TimetablePagerAdapter(this);
         ViewPager2 viewPager = view.findViewById(R.id.pager);
+        TimetablePagerAdapter adapter = new TimetablePagerAdapter(this);
         viewPager.setAdapter(adapter);
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
+        new TabLayoutMediator(tabLayout, viewPager, this).attach();
+    }
 
-        new TabLayoutMediator(tabLayout, viewPager,
-                (tab, position) -> tab.setText(Semester.fromInt(position + 1).toString()))
-                .attach();
+    @Override
+    public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+        int semInt = position + 1;
+        String text = Semester.fromInt(semInt).toString();
+        tab.setText(text);
     }
 }
