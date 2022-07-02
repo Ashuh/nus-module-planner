@@ -2,6 +2,8 @@ package com.ashuh.nusmoduleplanner.timetable.presentation;
 
 import static java.util.Objects.requireNonNull;
 
+import android.graphics.Color;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
@@ -25,7 +27,8 @@ import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiLessonOccurrenc
 import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiModuleReading;
 import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiTimetableLessonOccurrence;
 
-import java.time.ZonedDateTime;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.Collection;
@@ -33,7 +36,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+import me.jlurena.revolvingweekview.DayTime;
+
 public class TimetableViewModel extends ViewModel {
+    private static final String FORMAT_LESSON_OCCURRENCE_NAME = "%s\n[%s] %s";
     private static final String FORMAT_DATE_RANGE = "%s-%s";
     private static final String FORMAT_SINGLE_WEEK = "Week %d";
     private static final String FORMAT_CONTINUOUS_WEEKS = "Weeks %d-%d";
@@ -61,7 +67,7 @@ public class TimetableViewModel extends ViewModel {
                               @NonNull Semester semester) {
         this.getModuleReadingsUseCase = requireNonNull(getModuleReadingsUseCase);
         this.getAlternateLessonsUseCase = requireNonNull(getAlternateLessonsUseCase);
-        this.updateLessonNoUseCase =  requireNonNull(updateLessonNoUseCase);
+        this.updateLessonNoUseCase = requireNonNull(updateLessonNoUseCase);
         this.deleteModuleReadingUseCase = requireNonNull(deleteModuleReadingUseCase);
         this.semester = requireNonNull(semester);
         this.observableState = Transformations.map(getModuleReadingsUseCase.execute(semester),
@@ -70,7 +76,7 @@ public class TimetableViewModel extends ViewModel {
 
     private static TimetableState buildState(Collection<ModuleReading> moduleReadings) {
         List<UiTimetableLessonOccurrence> uiTimetableLessonOccurrences = moduleReadings.stream()
-                .map(UiTimetableLessonOccurrence::fromModuleReading)
+                .map(TimetableViewModel::buildTimetableOccurrences)
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
 
@@ -79,6 +85,16 @@ public class TimetableViewModel extends ViewModel {
                 .collect(Collectors.toList());
 
         return new TimetableState(uiTimetableLessonOccurrences, uiModuleReadings);
+    }
+
+    private static List<UiTimetableLessonOccurrence> buildTimetableOccurrences(
+            ModuleReading moduleReading) {
+        String moduleCode = moduleReading.getModule().getModuleCode();
+        Color color = moduleReading.getColor();
+        return moduleReading.getAssignedLessons().stream()
+                .map(lesson -> buildTimetableOccurrences(lesson, moduleCode, color))
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
     }
 
     private static UiModuleReading mapModuleReading(ModuleReading moduleReading) {
@@ -91,6 +107,39 @@ public class TimetableViewModel extends ViewModel {
                 .orElse("");
         int color = moduleReading.getColor().toArgb();
         return new UiModuleReading(moduleCode, title, moduleCredit, examDate, color);
+    }
+
+    private static List<UiTimetableLessonOccurrence> buildTimetableOccurrences(Lesson lesson,
+                                                                               String moduleCode,
+                                                                               Color color) {
+        LessonType lessonType = lesson.getLessonType();
+        String lessonNo = lesson.getLessonNo();
+        return lesson.getOccurrences().stream()
+                .map(occurrence -> TimetableViewModel.buildTimetableLessonOccurrence(occurrence,
+                        moduleCode,
+                        lessonType, lessonNo, color))
+                .collect(Collectors.toList());
+    }
+
+    private static UiTimetableLessonOccurrence buildTimetableLessonOccurrence(
+            LessonOccurrence occurrence, String moduleCode,
+            LessonType lessonType, String lessonNo, Color color) {
+        DayTime startTime = convertTime(occurrence.getDay(), occurrence.getStartTime());
+        DayTime endTime = convertTime(occurrence.getDay(), occurrence.getEndTime());
+        String name = String.format(FORMAT_LESSON_OCCURRENCE_NAME, moduleCode,
+                lessonType.getShortName(), lessonNo);
+        UiTimetableLessonOccurrence uiOccurrence
+                = new UiTimetableLessonOccurrence(name, occurrence.getVenue(), startTime,
+                endTime, moduleCode, lessonType, lessonNo);
+        uiOccurrence.setColor(color.toArgb());
+        return uiOccurrence;
+    }
+
+    private static DayTime convertTime(DayOfWeek day, LocalTime time) {
+        org.threeten.bp.DayOfWeek threetenDay = org.threeten.bp.DayOfWeek.valueOf(day.name());
+        org.threeten.bp.LocalTime threetenTime
+                = org.threeten.bp.LocalTime.of(time.getHour(), time.getMinute());
+        return new DayTime(threetenDay, threetenTime);
     }
 
     @NonNull
@@ -117,21 +166,11 @@ public class TimetableViewModel extends ViewModel {
         LessonType domainLessonType = lesson.getLessonType();
         String lessonType = domainLessonType.getShortName();
         String lessonNo = lesson.getLessonNo();
-        List<UiLessonOccurrence> occurrences = mapLessonOccurrences(lesson.getOccurrences());
-        Runnable onClick = () -> updateAssignedLessonNo(moduleCode, domainLessonType, lessonNo);
-        return new UiLesson(lessonType, lessonNo, occurrences, onClick);
-    }
-
-    private static List<UiLessonOccurrence> mapLessonOccurrences(
-            Collection<LessonOccurrence> occurrences) {
-        return occurrences.stream()
+        List<UiLessonOccurrence> occurrences = lesson.getOccurrences().stream()
                 .map(TimetableViewModel::mapLessonOccurrence)
                 .collect(Collectors.toList());
-    }
-
-    public void updateAssignedLessonNo(String moduleCode, LessonType lessonType,
-                                       String newLessonNo) {
-        updateLessonNoUseCase.execute(moduleCode, semester, lessonType, newLessonNo);
+        Runnable onClick = () -> updateAssignedLessonNo(moduleCode, domainLessonType, lessonNo);
+        return new UiLesson(lessonType, lessonNo, occurrences, onClick);
     }
 
     private static UiLessonOccurrence mapLessonOccurrence(LessonOccurrence occurrence) {
@@ -140,6 +179,11 @@ public class TimetableViewModel extends ViewModel {
         String endTime = occurrence.getEndTime().toString();
         String weeks = mapWeeks(occurrence.getWeeks());
         return new UiLessonOccurrence(day, startTime, endTime, weeks);
+    }
+
+    public void updateAssignedLessonNo(String moduleCode, LessonType lessonType,
+                                       String newLessonNo) {
+        updateLessonNoUseCase.execute(moduleCode, semester, lessonType, newLessonNo);
     }
 
     private static String mapWeeks(Weeks weeks) {

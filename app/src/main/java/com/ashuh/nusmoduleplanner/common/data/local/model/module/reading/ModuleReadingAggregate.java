@@ -56,7 +56,7 @@ public class ModuleReadingAggregate {
                 = new ModuleReadingEntity(moduleCode, semester, color);
 
         List<LessonNoMappingEntity> mappings = new ArrayList<>();
-        moduleReading.getLessonAssignmentMapping().forEach((lessonType, lessonNo) -> {
+        moduleReading.getLessonNoMapping().forEach((lessonType, lessonNo) -> {
             LessonNoMappingEntity mapping = new LessonNoMappingEntity(lessonType, lessonNo);
             mappings.add(mapping);
         });

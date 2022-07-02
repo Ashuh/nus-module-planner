@@ -121,7 +121,7 @@ public class ModuleReading {
     }
 
     @NonNull
-    public Map<LessonType, String> getLessonAssignmentMapping() {
+    public Map<LessonType, String> getLessonNoMapping() {
         return lessonTypeToLessonNo;
     }
 
