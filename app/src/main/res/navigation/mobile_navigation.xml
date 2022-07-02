@@ -7,15 +7,15 @@
 
     <fragment
         android:id="@+id/nav_timetable"
-        android:name="com.ashuh.nusmoduleplanner.ui.timetable.TimetablePagerFragment"
+        android:name="com.ashuh.nusmoduleplanner.timetable.presentation.TimetablePagerFragment"
         android:label="@string/menu_timetable"
         tools:layout="@layout/fragment_timetable" />
 
     <fragment
         android:id="@+id/nav_modules"
-        android:name="com.ashuh.nusmoduleplanner.ui.modules.ModuleListFragment"
+        android:name="com.ashuh.nusmoduleplanner.modulelist.presentation.ModuleListFragment"
         android:label="@string/menu_modules"
-        tools:layout="@layout/fragment_modules" >
+        tools:layout="@layout/fragment_modules">
         <action
             android:id="@+id/action_nav_modules_to_nav_module_detail"
             app:destination="@id/nav_module_detail" />
@@ -23,7 +23,8 @@
 
     <fragment
         android:id="@+id/nav_module_detail"
-        android:name="com.ashuh.nusmoduleplanner.ui.moduledetail.ModuleDetailFragment"
+        android:name="com.ashuh.nusmoduleplanner.moduledetail.presentation.ModuleDetailFragment"
+        android:label="Module Details"
         tools:layout="@layout/fragment_module_detail">
         <argument
             android:name="moduleCode"
