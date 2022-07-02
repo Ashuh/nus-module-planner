@@ -1,5 +1,7 @@
 package com.ashuh.nusmoduleplanner.common.data.remote.model.post;
 
+import static java.util.Objects.requireNonNull;
+
 import androidx.annotation.NonNull;
 
 import com.ashuh.nusmoduleplanner.common.domain.model.post.Cursor;
@@ -23,10 +25,8 @@ public class ApiCursor {
 
     public ApiCursor(@NonNull String prev, @NonNull String next, boolean hasPrev, boolean hasNext,
                      int total) {
-        Objects.requireNonNull(prev);
-        Objects.requireNonNull(next);
-        this.prev = prev;
-        this.next = next;
+        this.prev = requireNonNull(prev);
+        this.next = requireNonNull(next);
         this.hasPrev = hasPrev;
         this.hasNext = hasNext;
         this.total = total;

@@ -67,8 +67,7 @@ public class PrerequisiteTreeNodeEntity {
 
     public PrerequisiteTreeNodeEntity(@NonNull String type, @Nullable String prerequisiteModuleCode,
                                       int treeIndex, @Nullable Integer parentTreeIndex) {
-        requireNonNull(type);
-        this.type = type;
+        this.type = requireNonNull(type);
         this.prerequisiteModuleCode = prerequisiteModuleCode;
         this.treeIndex = treeIndex;
         this.parentTreeIndex = parentTreeIndex;

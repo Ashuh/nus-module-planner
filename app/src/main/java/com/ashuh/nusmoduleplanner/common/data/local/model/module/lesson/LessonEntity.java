@@ -35,10 +35,8 @@ public class LessonEntity {
     private long ownerId;
 
     public LessonEntity(@NonNull String lessonType, @NonNull String classNo, int size) {
-        requireNonNull(lessonType);
-        requireNonNull(classNo);
-        this.lessonType = lessonType;
-        this.classNo = classNo;
+        this.lessonType = requireNonNull(lessonType);
+        this.classNo = requireNonNull(classNo);
         this.size = size;
     }
 

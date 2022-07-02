@@ -20,14 +20,15 @@ public class GetAlternateLessonsUseCase {
     private final ModuleRepository moduleRepository;
 
     public GetAlternateLessonsUseCase(@NonNull ModuleRepository moduleRepository) {
-        requireNonNull(moduleRepository);
-        this.moduleRepository = moduleRepository;
+        this.moduleRepository = requireNonNull(moduleRepository);
     }
 
     @NonNull
-    public LiveData<List<Lesson>> execute(AcademicYear academicYear, String moduleCode,
-                                          Semester semester, LessonType lessonType,
-                                          String currentLessonNo) {
+    public LiveData<List<Lesson>> execute(@NonNull AcademicYear academicYear,
+                                          @NonNull String moduleCode,
+                                          @NonNull Semester semester,
+                                          @NonNull LessonType lessonType,
+                                          @NonNull String currentLessonNo) {
         return Transformations.map(moduleRepository.getModule(academicYear.toString(), moduleCode),
                 module -> module.getSemesterDatum(semester)
                         .map(datum -> datum.getLessons(lessonType))

@@ -29,10 +29,8 @@ public class LessonAggregate {
 
     public LessonAggregate(@NonNull LessonEntity lesson,
                            @NonNull List<LessonOccurrenceAggregate> lessonOccurrenceAggregates) {
-        requireNonNull(lesson);
-        requireNonNull(lessonOccurrenceAggregates);
-        this.lesson = lesson;
-        this.lessonOccurrenceAggregates = lessonOccurrenceAggregates;
+        this.lesson = requireNonNull(lesson);
+        this.lessonOccurrenceAggregates = requireNonNull(lessonOccurrenceAggregates);
     }
 
     @NonNull

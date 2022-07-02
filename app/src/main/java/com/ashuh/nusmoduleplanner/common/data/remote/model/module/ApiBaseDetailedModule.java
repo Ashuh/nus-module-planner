@@ -41,12 +41,9 @@ public abstract class ApiBaseDetailedModule extends ApiBaseModule {
                                  @Nullable String preclusion, @Nullable String prerequisite,
                                  @Nullable String coRequisite, double moduleCredit) {
         super(moduleCode, title);
-        requireNonNull(description);
-        requireNonNull(faculty);
-        requireNonNull(department);
-        this.description = description;
-        this.faculty = faculty;
-        this.department = department;
+        this.description = requireNonNull(description);
+        this.faculty = requireNonNull(faculty);
+        this.department = requireNonNull(department);
         this.workload = workload;
         this.preclusion = preclusion;
         this.prerequisite = prerequisite;

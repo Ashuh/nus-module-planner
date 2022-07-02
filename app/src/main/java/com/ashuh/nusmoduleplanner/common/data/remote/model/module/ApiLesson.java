@@ -50,20 +50,13 @@ public class ApiLesson {
     public ApiLesson(@NonNull String classNo, @NonNull String startTime, @NonNull String endTime,
                      @NonNull ApiWeeksResponse weeks, @NonNull String venue, @NonNull String day,
                      @NonNull String lessonType, @Nullable Integer size) {
-        requireNonNull(classNo);
-        requireNonNull(startTime);
-        requireNonNull(endTime);
-        requireNonNull(weeks);
-        requireNonNull(venue);
-        requireNonNull(day);
-        requireNonNull(lessonType);
-        this.classNo = classNo;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.weeks = weeks;
-        this.venue = venue;
-        this.day = day;
-        this.lessonType = lessonType;
+        this.classNo = requireNonNull(classNo);
+        this.startTime = requireNonNull(startTime);
+        this.endTime = requireNonNull(endTime);
+        this.weeks = requireNonNull(weeks);
+        this.venue = requireNonNull(venue);
+        this.day = requireNonNull(day);
+        this.lessonType = requireNonNull(lessonType);
         this.size = size;
     }
 

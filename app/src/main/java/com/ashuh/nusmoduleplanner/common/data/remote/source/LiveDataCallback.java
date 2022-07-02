@@ -17,8 +17,7 @@ public class LiveDataCallback<T> implements Callback<T> {
     private final MutableLiveData<T> livedata;
 
     LiveDataCallback(@NonNull MutableLiveData<T> livedata) {
-        requireNonNull(livedata);
-        this.livedata = livedata;
+        this.livedata = requireNonNull(livedata);
     }
 
     @Override

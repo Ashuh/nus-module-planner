@@ -14,8 +14,7 @@ public class ModuleInfoSemesterDatum {
     protected final Exam exam;
 
     public ModuleInfoSemesterDatum(@NonNull Semester semester, @Nullable Exam exam) {
-        requireNonNull(semester);
-        this.semester = semester;
+        this.semester = requireNonNull(semester);
         this.exam = exam;
     }
 

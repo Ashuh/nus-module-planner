@@ -1,5 +1,8 @@
 package com.ashuh.nusmoduleplanner.timetable.presentation;
 
+import static java.util.Objects.requireNonNull;
+
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -10,21 +13,22 @@ import com.ashuh.nusmoduleplanner.timetable.domain.usecase.GetAlternateLessonsUs
 import com.ashuh.nusmoduleplanner.timetable.domain.usecase.GetModuleReadingsUseCase;
 import com.ashuh.nusmoduleplanner.timetable.domain.usecase.UpdateLessonNoUseCase;
 
-import org.jetbrains.annotations.NotNull;
-
 
 public class TimetableViewModelFactory implements ViewModelProvider.Factory {
+    @NonNull
     private final ModuleRepository moduleRepository;
+    @NonNull
     private final Semester semester;
 
-    public TimetableViewModelFactory(ModuleRepository moduleRepository, Semester semester) {
-        this.moduleRepository = moduleRepository;
-        this.semester = semester;
+    public TimetableViewModelFactory(@NonNull ModuleRepository moduleRepository,
+                                     @NonNull Semester semester) {
+        this.moduleRepository = requireNonNull(moduleRepository);
+        this.semester = requireNonNull(semester);
     }
 
-    @NotNull
+    @NonNull
     @Override
-    public <T extends ViewModel> T create(@NotNull Class<T> aClass) {
+    public <T extends ViewModel> T create(@NonNull Class<T> aClass) {
         GetModuleReadingsUseCase getModuleReadingsUseCase
                 = new GetModuleReadingsUseCase(moduleRepository);
         GetAlternateLessonsUseCase getAlternateLessonsUseCase

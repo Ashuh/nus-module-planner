@@ -17,8 +17,7 @@ public class ApiAndPrerequisiteTreeNode implements ApiPrerequisiteTreeNode {
     private final Set<ApiPrerequisiteTreeNode> prerequisites;
 
     public ApiAndPrerequisiteTreeNode(@NonNull Set<ApiPrerequisiteTreeNode> prerequisites) {
-        requireNonNull(prerequisites);
-        this.prerequisites = prerequisites;
+        this.prerequisites = requireNonNull(prerequisites);
     }
 
     @NonNull

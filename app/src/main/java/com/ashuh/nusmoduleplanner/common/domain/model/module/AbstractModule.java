@@ -42,27 +42,17 @@ public abstract class AbstractModule<T extends ModuleInfoSemesterDatum> {
                           @Nullable Workload workload, @NonNull String prerequisite,
                           @NonNull String preclusion, @NonNull String coRequisite,
                           @NonNull List<T> semesterData) {
-        requireNonNull(moduleCode);
-        requireNonNull(title);
-        requireNonNull(description);
-        requireNonNull(moduleCredit);
-        requireNonNull(department);
-        requireNonNull(faculty);
-        requireNonNull(prerequisite);
-        requireNonNull(preclusion);
-        requireNonNull(coRequisite);
-        requireNonNull(semesterData);
-        this.moduleCode = moduleCode;
-        this.title = title;
-        this.description = description;
-        this.moduleCredit = moduleCredit;
-        this.department = department;
-        this.faculty = faculty;
+        this.moduleCode = requireNonNull(moduleCode);
+        this.title = requireNonNull(title);
+        this.description = requireNonNull(description);
+        this.moduleCredit = requireNonNull(moduleCredit);
+        this.department = requireNonNull(department);
+        this.faculty = requireNonNull(faculty);
         this.workload = workload;
-        this.prerequisite = prerequisite;
-        this.preclusion = preclusion;
-        this.coRequisite = coRequisite;
-        this.semesterData = semesterData;
+        this.prerequisite = requireNonNull(prerequisite);
+        this.preclusion = requireNonNull(preclusion);
+        this.coRequisite = requireNonNull(coRequisite);
+        this.semesterData = requireNonNull(semesterData);
     }
 
     @NonNull

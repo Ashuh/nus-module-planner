@@ -59,16 +59,11 @@ public class TimetableViewModel extends ViewModel {
                               @NonNull UpdateLessonNoUseCase updateLessonNoUseCase,
                               @NonNull DeleteModuleReadingUseCase deleteModuleReadingUseCase,
                               @NonNull Semester semester) {
-        requireNonNull(getModuleReadingsUseCase);
-        requireNonNull(getAlternateLessonsUseCase);
-        requireNonNull(updateLessonNoUseCase);
-        requireNonNull(deleteModuleReadingUseCase);
-        requireNonNull(semester);
-        this.getModuleReadingsUseCase = getModuleReadingsUseCase;
-        this.getAlternateLessonsUseCase = getAlternateLessonsUseCase;
-        this.updateLessonNoUseCase = updateLessonNoUseCase;
-        this.deleteModuleReadingUseCase = deleteModuleReadingUseCase;
-        this.semester = semester;
+        this.getModuleReadingsUseCase = requireNonNull(getModuleReadingsUseCase);
+        this.getAlternateLessonsUseCase = requireNonNull(getAlternateLessonsUseCase);
+        this.updateLessonNoUseCase =  requireNonNull(updateLessonNoUseCase);
+        this.deleteModuleReadingUseCase = requireNonNull(deleteModuleReadingUseCase);
+        this.semester = requireNonNull(semester);
         this.observableState = Transformations.map(getModuleReadingsUseCase.execute(semester),
                 TimetableViewModel::buildState);
     }

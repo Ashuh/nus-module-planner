@@ -32,10 +32,8 @@ public class WeeksAggregate {
 
     public WeeksAggregate(@NonNull WeeksEntity weeksEntity,
                           @NonNull List<WeekNumberEntity> weekNumbers) {
-        requireNonNull(weeksEntity);
-        requireNonNull(weekNumbers);
-        this.weeksEntity = weeksEntity;
-        this.weekNumbers = weekNumbers;
+        this.weeksEntity = requireNonNull(weeksEntity);
+        this.weekNumbers = requireNonNull(weekNumbers);
     }
 
     @NonNull

@@ -1,5 +1,7 @@
 package com.ashuh.nusmoduleplanner.moduledetail.presentation.model;
 
+import static java.util.Objects.requireNonNull;
+
 import androidx.annotation.NonNull;
 
 import java.util.List;
@@ -29,23 +31,23 @@ public class UiModule {
     @NonNull
     private final List<UiSemester> semestersOffered;
 
-    public UiModule(@NonNull String moduleCode, @NonNull String title,
-                    @NonNull String moduleCredit, @NonNull String department,
-                    @NonNull String faculty, @NonNull String description,
-                    @NonNull String prerequisite, @NonNull String coRequisite,
-                    @NonNull String preclusion, @NonNull Map<String, UiExam> semesterToExam,
+    public UiModule(@NonNull String moduleCode, @NonNull String title, @NonNull String moduleCredit,
+                    @NonNull String department, @NonNull String faculty,
+                    @NonNull String description, @NonNull String prerequisite,
+                    @NonNull String coRequisite, @NonNull String preclusion,
+                    @NonNull Map<String, UiExam> semesterToExam,
                     @NonNull List<UiSemester> semestersOffered) {
-        this.moduleCode = moduleCode;
-        this.title = title;
-        this.moduleCredit = moduleCredit;
-        this.department = department;
-        this.faculty = faculty;
-        this.description = description;
-        this.prerequisite = prerequisite;
-        this.coRequisite = coRequisite;
-        this.preclusion = preclusion;
-        this.semesterToExam = semesterToExam;
-        this.semestersOffered = semestersOffered;
+        this.moduleCode = requireNonNull(moduleCode);
+        this.title = requireNonNull(title);
+        this.moduleCredit = requireNonNull(moduleCredit);
+        this.department = requireNonNull(department);
+        this.faculty = requireNonNull(faculty);
+        this.description = requireNonNull(description);
+        this.prerequisite = requireNonNull(prerequisite);
+        this.coRequisite = requireNonNull(coRequisite);
+        this.preclusion = requireNonNull(preclusion);
+        this.semesterToExam = requireNonNull(semesterToExam);
+        this.semestersOffered = requireNonNull(semestersOffered);
     }
 
     @NonNull

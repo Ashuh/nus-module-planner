@@ -22,7 +22,7 @@ import androidx.room.PrimaryKey;
 )
 public class LessonNoMappingEntity {
     @NonNull
-    private final String lessonType;
+    private final String lessonType; // TODO: ENUM
     @NonNull
     private final String lessonNo;
     @PrimaryKey(autoGenerate = true)
@@ -30,10 +30,8 @@ public class LessonNoMappingEntity {
     private long ownerId;
 
     public LessonNoMappingEntity(@NonNull String lessonType, @NonNull String lessonNo) {
-        requireNonNull(lessonType);
-        requireNonNull(lessonNo);
-        this.lessonType = lessonType;
-        this.lessonNo = lessonNo;
+        this.lessonType = requireNonNull(lessonType);
+        this.lessonNo = requireNonNull(lessonNo);
     }
 
     @NonNull

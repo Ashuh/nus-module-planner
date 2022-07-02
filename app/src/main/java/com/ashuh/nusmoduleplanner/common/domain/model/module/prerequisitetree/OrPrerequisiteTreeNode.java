@@ -11,8 +11,8 @@ public class OrPrerequisiteTreeNode extends LogicalPrerequisiteTreeNode {
         super();
     }
 
-    public OrPrerequisiteTreeNode(@NonNull Set<PrerequisiteTreeNode> prerequisites) {
-        super(prerequisites);
+    public OrPrerequisiteTreeNode(@NonNull Set<PrerequisiteTreeNode> children) {
+        super(children);
     }
 
     @Override

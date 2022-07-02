@@ -35,14 +35,12 @@ public class UiTimetableLessonOccurrence extends WeekViewEvent {
                                         DayTime endTime, @NonNull String moduleCode,
                                         @NonNull LessonType lessonType, @NonNull String lessonNo) {
         super(id, name, location, startTime, endTime);
-        requireNonNull(moduleCode);
-        requireNonNull(lessonType);
-        requireNonNull(lessonNo);
-        this.moduleCode = moduleCode;
-        this.lessonType = lessonType;
-        this.lessonNo = lessonNo;
+        this.moduleCode = requireNonNull(moduleCode);
+        this.lessonType = requireNonNull(lessonType);
+        this.lessonNo = requireNonNull(lessonNo);
     }
 
+    //TODO: move to ViewModel
     public static List<UiTimetableLessonOccurrence> fromModuleReading(
             @NonNull ModuleReading moduleReading) {
         String moduleCode = moduleReading.getModule().getModuleCode();

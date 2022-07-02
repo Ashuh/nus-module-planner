@@ -29,10 +29,6 @@ public class Post {
                 boolean isHighlighted, boolean isSpam, boolean isEdited, boolean isDeleted,
                 @NonNull String message, @NonNull String rawMessage, @NonNull Author author,
                 @NonNull ZonedDateTime createdAt) {
-        requireNonNull(message);
-        requireNonNull(rawMessage);
-        requireNonNull(author);
-        requireNonNull(createdAt);
         this.id = id;
         this.dislikes = dislikes;
         this.likes = likes;
@@ -42,10 +38,10 @@ public class Post {
         this.isSpam = isSpam;
         this.isEdited = isEdited;
         this.isDeleted = isDeleted;
-        this.message = message;
-        this.rawMessage = rawMessage;
-        this.author = author;
-        this.createdAt = createdAt;
+        this.message = requireNonNull(message);
+        this.rawMessage = requireNonNull(rawMessage);
+        this.author = requireNonNull(author);
+        this.createdAt = requireNonNull(createdAt);
     }
 
     public String getId() {

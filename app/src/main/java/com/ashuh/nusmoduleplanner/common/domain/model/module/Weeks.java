@@ -1,12 +1,13 @@
 package com.ashuh.nusmoduleplanner.common.domain.model.module;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNullElse;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,21 +22,18 @@ public class Weeks {
     private final List<Integer> weeks;
 
     public Weeks(@NonNull LocalDate start, @NonNull LocalDate end, @Nullable Integer weekInterval,
-                 @Nullable List<Integer> weeks) {
-        requireNonNull(start);
-        requireNonNull(end);
-        this.start = start;
-        this.end = end;
+                 @NonNull List<Integer> weeks) {
+        this.start = requireNonNull(start);
+        this.end = requireNonNull(end);
         this.weekInterval = weekInterval;
-        this.weeks = weeks == null ? new ArrayList<>() : weeks;
+        this.weeks = requireNonNull(weeks);
     }
 
     public Weeks(@NonNull List<Integer> weeks) {
-        requireNonNull(weeks);
-        this.weeks = weeks;
+        this.weeks = requireNonNull(weeks);
         this.start = null;
         this.end = null;
-        this.weekInterval = 0;
+        this.weekInterval = null;
     }
 
     @NonNull

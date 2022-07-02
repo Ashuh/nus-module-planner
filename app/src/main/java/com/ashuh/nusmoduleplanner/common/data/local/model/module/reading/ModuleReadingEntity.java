@@ -33,10 +33,8 @@ public class ModuleReadingEntity {
     private long id;
 
     public ModuleReadingEntity(@NonNull String moduleCode, @NonNull Semester semester, int color) {
-        requireNonNull(moduleCode);
-        requireNonNull(semester);
-        this.moduleCode = moduleCode;
-        this.semester = semester;
+        this.moduleCode = requireNonNull(moduleCode);
+        this.semester = requireNonNull(semester);
         this.color = color;
     }
 

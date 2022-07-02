@@ -28,10 +28,8 @@ public class ApiWeekRange {
 
     public ApiWeekRange(@NonNull String start, @NonNull String end, @Nullable Integer weekInterval,
                         @Nullable List<Integer> weeks) {
-        requireNonNull(start);
-        requireNonNull(end);
-        this.start = start;
-        this.end = end;
+        this.start = requireNonNull(start);
+        this.end = requireNonNull(end);
         this.weekInterval = weekInterval;
         this.weeks = weeks;
     }

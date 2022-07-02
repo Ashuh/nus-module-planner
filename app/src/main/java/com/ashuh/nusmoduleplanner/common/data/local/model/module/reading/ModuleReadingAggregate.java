@@ -42,12 +42,9 @@ public class ModuleReadingAggregate {
     public ModuleReadingAggregate(@NonNull ModuleReadingEntity timetableEntry,
                                   @NonNull List<LessonNoMappingEntity> lessonNoMappings,
                                   @NonNull ModuleAggregate moduleAggregate) {
-        requireNonNull(timetableEntry);
-        requireNonNull(lessonNoMappings);
-        requireNonNull(moduleAggregate);
-        this.timetableEntry = timetableEntry;
-        this.lessonNoMappings = lessonNoMappings;
-        this.moduleAggregate = moduleAggregate;
+        this.timetableEntry = requireNonNull(timetableEntry);
+        this.lessonNoMappings = requireNonNull(lessonNoMappings);
+        this.moduleAggregate = requireNonNull(moduleAggregate);
     }
 
     @NonNull

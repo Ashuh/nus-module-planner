@@ -71,22 +71,14 @@ public class ApiPost {
                    int points, int likes, int dislikes, int numReports, boolean isSpam,
                    boolean isHighlighted, boolean isDeletedByAuthor, boolean isDeleted,
                    boolean isApproved, boolean isFlagged, boolean isEdited, boolean canVote) {
-        requireNonNull(forum);
-        requireNonNull(thread);
-        requireNonNull(createdAt);
-        requireNonNull(message);
-        requireNonNull(rawMessage);
-        requireNonNull(editableUntil);
-        requireNonNull(author);
-        requireNonNull(id);
-        this.forum = forum;
-        this.thread = thread;
-        this.createdAt = createdAt;
-        this.message = message;
-        this.rawMessage = rawMessage;
-        this.editableUntil = editableUntil;
-        this.author = author;
-        this.id = id;
+        this.forum =  requireNonNull(forum);
+        this.thread = requireNonNull(thread);
+        this.createdAt =  requireNonNull(createdAt);
+        this.message =  requireNonNull(message);
+        this.rawMessage = requireNonNull(rawMessage);
+        this.editableUntil = requireNonNull(editableUntil);
+        this.author =  requireNonNull(author);
+        this.id = requireNonNull(id);
         this.points = points;
         this.likes = likes;
         this.dislikes = dislikes;

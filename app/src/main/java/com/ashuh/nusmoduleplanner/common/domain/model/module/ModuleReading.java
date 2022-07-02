@@ -28,19 +28,14 @@ public class ModuleReading {
     public ModuleReading(@NonNull Module module, @NonNull Semester semester,
                          @NonNull Map<LessonType, String> lessonTypeToLessonNo,
                          @NonNull Color color) {
-        requireNonNull(module);
-        requireNonNull(semester);
-        requireNonNull(lessonTypeToLessonNo);
-        requireNonNull(color);
+        this.module = requireNonNull(module);
+        this.semester = requireNonNull(semester);
+        this.lessonTypeToLessonNo = requireNonNull(lessonTypeToLessonNo);
+        this.color = requireNonNull(color);
 
         if (!isValidReading(module, semester, lessonTypeToLessonNo)) {
             throw new IllegalArgumentException("Invalid ModuleReading");
         }
-
-        this.module = module;
-        this.semester = semester;
-        this.lessonTypeToLessonNo = lessonTypeToLessonNo;
-        this.color = color;
     }
 
     private static boolean isValidReading(Module module, Semester semester,
@@ -106,10 +101,7 @@ public class ModuleReading {
     public List<Lesson> getAssignedLessons() {
         List<Lesson> lessons = new ArrayList<>();
         lessonTypeToLessonNo.forEach((lessonType, lessonNo) -> {
-            Optional<Lesson> lesson = getLesson(lessonType, lessonNo); // throw
-            System.out.println(
-                    "lessonType: " + lessonType + ", lessonNo: " + lessonNo + ", lesson: "
-                            + lesson);
+            Optional<Lesson> lesson = getLesson(lessonType, lessonNo);
             assert lesson.isPresent();
             lessons.add(lesson.get());
         });

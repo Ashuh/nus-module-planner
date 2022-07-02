@@ -54,26 +54,16 @@ public class ApiAuthor {
                      @NonNull String location, @NonNull String joinedAt, @NonNull String id,
                      @NonNull ApiAvatar avatar, boolean isPowerContributor, boolean isAnonymous,
                      boolean isPrivate, boolean isPrimary) {
-        requireNonNull(userName);
-        requireNonNull(about);
-        requireNonNull(name);
-        requireNonNull(profileUrl);
-        requireNonNull(url);
-        requireNonNull(signedUrl);
-        requireNonNull(location);
-        requireNonNull(joinedAt);
-        requireNonNull(id);
-        requireNonNull(avatar);
-        this.userName = userName;
-        this.about = about;
-        this.name = name;
-        this.profileUrl = profileUrl;
-        this.url = url;
-        this.signedUrl = signedUrl;
-        this.location = location;
-        this.joinedAt = joinedAt;
-        this.id = id;
-        this.avatar = avatar;
+        this.userName =  requireNonNull(userName);
+        this.about = requireNonNull(about);
+        this.name = requireNonNull(name);
+        this.profileUrl = requireNonNull(profileUrl);
+        this.url = requireNonNull(url);
+        this.signedUrl = requireNonNull(signedUrl);
+        this.location = requireNonNull(location);
+        this.joinedAt = requireNonNull(joinedAt);
+        this.id = requireNonNull(id);
+        this.avatar = requireNonNull(avatar);
         this.isPowerContributor = isPowerContributor;
         this.isAnonymous = isAnonymous;
         this.isPrivate = isPrivate;

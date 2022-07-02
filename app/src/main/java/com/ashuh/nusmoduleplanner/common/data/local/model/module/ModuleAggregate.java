@@ -65,14 +65,11 @@ public class ModuleAggregate {
                            @Nullable WorkloadEntity workload,
                            @Nullable PrerequisiteTreeAggregate prerequisiteTreeAggregate,
                            @NonNull List<String> fulfillRequirements) {
-        requireNonNull(module);
-        requireNonNull(semesterDatumAggregates);
-        requireNonNull(fulfillRequirements);
-        this.module = module;
-        this.semesterDatumAggregates = semesterDatumAggregates;
+        this.module = requireNonNull(module);
+        this.semesterDatumAggregates =  requireNonNull(semesterDatumAggregates);
         this.workload = workload;
         this.prerequisiteTreeAggregate = prerequisiteTreeAggregate;
-        this.fulfillRequirements = fulfillRequirements;
+        this.fulfillRequirements = requireNonNull(fulfillRequirements);
     }
 
     public static ModuleAggregate fromDomain(@NonNull Module module) {

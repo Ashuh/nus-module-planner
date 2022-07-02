@@ -11,10 +11,8 @@ public class UiSemester {
     private final Runnable onClick;
 
     public UiSemester(@NonNull String semester, @NonNull Runnable onClick) {
-        requireNonNull(semester);
-        requireNonNull(onClick);
-        this.semester = semester;
-        this.onClick = onClick;
+        this.semester =  requireNonNull(semester);
+        this.onClick = requireNonNull(onClick);
     }
 
     @NonNull

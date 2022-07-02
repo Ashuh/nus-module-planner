@@ -1,5 +1,7 @@
 package com.ashuh.nusmoduleplanner.timetable.presentation.model;
 
+import static java.util.Objects.requireNonNull;
+
 import androidx.annotation.NonNull;
 
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonOccurrence;
@@ -19,18 +21,10 @@ public class UiLessonOccurrence {
 
     public UiLessonOccurrence(@NonNull String day, @NonNull String startTime,
                               @NonNull String endTime, @NonNull String weeks) {
-        this.day = day;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.weeks = weeks;
-    }
-
-    public static UiLessonOccurrence fromDomain(LessonOccurrence lessonOccurrence) {
-        String day = lessonOccurrence.getDay().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
-        String startTime = lessonOccurrence.getStartTime().toString();
-        String endTime = lessonOccurrence.getEndTime().toString();
-        String weeks = lessonOccurrence.getWeeks().toString();
-        return new UiLessonOccurrence(day, startTime, endTime, weeks);
+        this.day = requireNonNull(day);
+        this.startTime = requireNonNull(startTime);
+        this.endTime = requireNonNull(endTime);
+        this.weeks = requireNonNull(weeks);
     }
 
     @NonNull

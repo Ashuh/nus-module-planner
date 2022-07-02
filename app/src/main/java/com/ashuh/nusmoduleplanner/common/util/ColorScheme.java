@@ -3,6 +3,8 @@ package com.ashuh.nusmoduleplanner.common.util;
 
 import android.graphics.Color;
 
+import androidx.annotation.NonNull;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,6 +19,7 @@ public enum ColorScheme {
             Colors.GOOGLE_PURPLE,
             Colors.GOOGLE_PINK);
 
+    @NonNull
     private final List<Color> colors;
 
     ColorScheme(Color... colors) {
@@ -27,10 +30,12 @@ public enum ColorScheme {
         return colors.size();
     }
 
+    @NonNull
     public Color getColor(int index) {
         return colors.get(index % colors.size());
     }
 
+    @NonNull
     public Color getRandomColor() {
         return colors.get((int) (Math.random() * colors.size()));
     }

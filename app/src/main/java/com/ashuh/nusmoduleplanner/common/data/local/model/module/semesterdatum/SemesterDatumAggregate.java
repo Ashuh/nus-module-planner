@@ -41,11 +41,9 @@ public class SemesterDatumAggregate {
     public SemesterDatumAggregate(@NonNull SemesterDatumEntity semesterDatum,
                                   @Nullable ExamEntity exam,
                                   @NonNull List<LessonAggregate> lessonAggregates) {
-        requireNonNull(semesterDatum);
-        requireNonNull(lessonAggregates);
-        this.semesterDatum = semesterDatum;
+        this.semesterDatum = requireNonNull(semesterDatum);
         this.exam = exam;
-        this.lessonAggregates = lessonAggregates;
+        this.lessonAggregates =  requireNonNull(lessonAggregates);
     }
 
     public static SemesterDatumAggregate fromDomain(@NonNull ModuleSemesterDatum semesterDatum) {

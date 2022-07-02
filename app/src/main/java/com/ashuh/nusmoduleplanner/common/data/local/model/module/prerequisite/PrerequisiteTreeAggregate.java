@@ -33,10 +33,8 @@ public class PrerequisiteTreeAggregate {
 
     public PrerequisiteTreeAggregate(@NonNull PrerequisiteTreeEntity tree,
                                      @NonNull List<PrerequisiteTreeNodeEntity> nodes) {
-        requireNonNull(tree);
-        requireNonNull(nodes);
-        this.tree = tree;
-        this.nodes = nodes;
+        this.tree = requireNonNull(tree);
+        this.nodes = requireNonNull(nodes);
     }
 
     @NonNull

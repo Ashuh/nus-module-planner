@@ -11,8 +11,8 @@ public class AndPrerequisiteTreeNode extends LogicalPrerequisiteTreeNode {
         super();
     }
 
-    public AndPrerequisiteTreeNode(@NonNull Set<PrerequisiteTreeNode> prerequisites) {
-        super(prerequisites);
+    public AndPrerequisiteTreeNode(@NonNull Set<PrerequisiteTreeNode> children) {
+        super(children);
     }
 
     @Override

@@ -28,10 +28,8 @@ public class LessonOccurrenceAggregate {
 
     public LessonOccurrenceAggregate(@NonNull LessonOccurrenceEntity lessonOccurrence,
                                      @NonNull WeeksAggregate weeksAggregate) {
-        requireNonNull(lessonOccurrence);
-        requireNonNull(weeksAggregate);
-        this.lessonOccurrence = lessonOccurrence;
-        this.weeksAggregate = weeksAggregate;
+        this.lessonOccurrence =  requireNonNull(lessonOccurrence);
+        this.weeksAggregate = requireNonNull(weeksAggregate);
     }
 
     @NonNull

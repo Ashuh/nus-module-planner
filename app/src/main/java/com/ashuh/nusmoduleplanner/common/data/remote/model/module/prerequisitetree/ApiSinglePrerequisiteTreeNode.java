@@ -14,8 +14,7 @@ public class ApiSinglePrerequisiteTreeNode implements ApiPrerequisiteTreeNode {
     private final String prerequisite;
 
     public ApiSinglePrerequisiteTreeNode(@NonNull String prerequisite) {
-        requireNonNull(prerequisite);
-        this.prerequisite = prerequisite;
+        this.prerequisite = requireNonNull(prerequisite);
     }
 
     @NonNull

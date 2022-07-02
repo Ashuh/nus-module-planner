@@ -15,9 +15,8 @@ public enum Semester {
     private final String name;
 
     Semester(int value, @NonNull String name) {
-        requireNonNull(name);
         this.value = value;
-        this.name = name;
+        this.name = requireNonNull(name);
     }
 
     public static Semester fromInt(int value) {

@@ -17,18 +17,12 @@ public class Author {
     private final Avatar avatar;
 
     public Author(@NonNull String name, @NonNull String userName, @NonNull String id,
-                  @NonNull String profileUrl,
-                  @NonNull Avatar avatar) {
-        requireNonNull(name);
-        requireNonNull(userName);
-        requireNonNull(id);
-        requireNonNull(profileUrl);
-        requireNonNull(avatar);
-        this.name = name;
-        this.userName = userName;
-        this.profileUrl = profileUrl;
-        this.id = id;
-        this.avatar = avatar;
+                  @NonNull String profileUrl, @NonNull Avatar avatar) {
+        this.name = requireNonNull(name);
+        this.userName = requireNonNull(userName);
+        this.id = requireNonNull(id);
+        this.profileUrl =  requireNonNull(profileUrl);
+        this.avatar = requireNonNull(avatar);
     }
 
     @NonNull

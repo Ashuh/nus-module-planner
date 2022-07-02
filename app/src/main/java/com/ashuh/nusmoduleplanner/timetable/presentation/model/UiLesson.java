@@ -1,5 +1,7 @@
 package com.ashuh.nusmoduleplanner.timetable.presentation.model;
 
+import static java.util.Objects.requireNonNull;
+
 import androidx.annotation.NonNull;
 
 import java.util.List;
@@ -16,10 +18,10 @@ public class UiLesson {
 
     public UiLesson(@NonNull String lessonType, @NonNull String lessonNo,
                     @NonNull List<UiLessonOccurrence> occurrences, @NonNull Runnable onClick) {
-        this.lessonType = lessonType;
-        this.lessonNo = lessonNo;
-        this.occurrences = occurrences;
-        this.onClick = onClick;
+        this.lessonType = requireNonNull(lessonType);
+        this.lessonNo = requireNonNull(lessonNo);
+        this.occurrences = requireNonNull(occurrences);
+        this.onClick = requireNonNull(onClick);
     }
 
     @NonNull

@@ -24,12 +24,9 @@ public class ApiAvatar extends ApiAvatarUrl {
     public ApiAvatar(String permalink, String cache, @NonNull ApiAvatarUrl xLarge,
                      @NonNull ApiAvatarUrl large, @NonNull ApiAvatarUrl small, boolean isCustom) {
         super(permalink, cache);
-        requireNonNull(xLarge);
-        requireNonNull(large);
-        requireNonNull(small);
-        this.xLarge = xLarge;
-        this.large = large;
-        this.small = small;
+        this.xLarge = requireNonNull(xLarge);
+        this.large = requireNonNull(large);
+        this.small = requireNonNull(small);
         this.isCustom = isCustom;
     }
 

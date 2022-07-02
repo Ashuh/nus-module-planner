@@ -13,12 +13,11 @@ public class UpdateLessonNoUseCase {
     private final ModuleRepository moduleRepository;
 
     public UpdateLessonNoUseCase(@NonNull ModuleRepository moduleRepository) {
-        requireNonNull(moduleRepository);
-        this.moduleRepository = moduleRepository;
+        this.moduleRepository = requireNonNull(moduleRepository);
     }
 
-    public void execute(String moduleCode, Semester semester, LessonType lessonType,
-                        String newLessonNo) {
+    public void execute(@NonNull String moduleCode, @NonNull Semester semester,
+                        @NonNull LessonType lessonType, @NonNull String newLessonNo) {
         moduleRepository.updateLessonNoMapping(moduleCode, semester, lessonType, newLessonNo);
     }
 }

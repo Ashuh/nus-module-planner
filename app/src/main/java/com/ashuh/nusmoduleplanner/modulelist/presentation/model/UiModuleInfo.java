@@ -16,14 +16,10 @@ public class UiModuleInfo {
 
     public UiModuleInfo(@NonNull String moduleCode, @NonNull String title,
                         @NonNull String department, @NonNull String moduleCredit) {
-        requireNonNull(moduleCode);
-        requireNonNull(title);
-        requireNonNull(department);
-        requireNonNull(moduleCredit);
-        this.moduleCode = moduleCode;
-        this.title = title;
-        this.department = department;
-        this.moduleCredit = moduleCredit;
+        this.moduleCode = requireNonNull(moduleCode);
+        this.title =  requireNonNull(title);
+        this.department = requireNonNull(department);
+        this.moduleCredit = requireNonNull(moduleCredit);
     }
 
     @NonNull

@@ -21,10 +21,8 @@ public class ApiPaginatedPosts {
     private final List<ApiPost> posts;
 
     public ApiPaginatedPosts(@NonNull ApiCursor cursor, @NonNull List<ApiPost> posts) {
-        requireNonNull(cursor);
-        requireNonNull(posts);
-        this.cursor = cursor;
-        this.posts = posts;
+        this.cursor = requireNonNull(cursor);
+        this.posts = requireNonNull(posts);
     }
 
     @NonNull

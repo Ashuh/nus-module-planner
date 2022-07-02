@@ -34,8 +34,7 @@ public class PrerequisiteTreeEntity {
     }
 
     public void setOwnerModuleCode(@NonNull String ownerModuleCode) {
-        requireNonNull(ownerModuleCode);
-        this.ownerModuleCode = ownerModuleCode;
+        this.ownerModuleCode = requireNonNull(ownerModuleCode);
     }
 
     public long getId() {

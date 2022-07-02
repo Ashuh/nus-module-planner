@@ -25,35 +25,28 @@ public class ModuleLocalDataSource {
     private final ModuleDao moduleDao;
 
     public ModuleLocalDataSource(@NonNull ModuleDao moduleDao) {
-        requireNonNull(moduleDao);
-        this.moduleDao = moduleDao;
+        this.moduleDao = requireNonNull(moduleDao);
     }
 
-    public void storeModule(Module module) {
-        if (module == null) {
-            return;
-        }
+    public void storeModule(@NonNull Module module) {
         executor.execute(() -> {
             ModuleAggregate moduleAggregate = ModuleAggregate.fromDomain(module);
             moduleDao.insertModule(moduleAggregate);
         });
     }
 
-    public LiveData<List<ModuleReading>> getModuleReadings(Semester semester) {
+    public LiveData<List<ModuleReading>> getModuleReadings(@NonNull Semester semester) {
         return Transformations.map(moduleDao.getModuleReadings(semester),
                 readingAggregates -> readingAggregates.stream()
                         .map(ModuleReadingAggregate::toDomain)
                         .collect(Collectors.toList()));
     }
 
-    public void deleteModuleReading(String moduleCode, Semester semester) {
+    public void deleteModuleReading(@NonNull String moduleCode, @NonNull Semester semester) {
         executor.execute(() -> moduleDao.deleteModuleReading(moduleCode, semester));
     }
 
-    public void storeModuleReading(ModuleReading moduleReading) {
-        if (moduleReading == null) {
-            return;
-        }
+    public void storeModuleReading(@NonNull ModuleReading moduleReading) {
         executor.execute(() -> {
             ModuleReadingAggregate moduleReadingAggregate
                     = ModuleReadingAggregate.fromDomain(moduleReading);
@@ -61,8 +54,10 @@ public class ModuleLocalDataSource {
         });
     }
 
-    public void updateLessonAssignmentMapping(String moduleCode, Semester semester,
-                                              LessonType lessonType, String newLessonNo) {
+    public void updateLessonAssignmentMapping(@NonNull String moduleCode,
+                                              @NonNull Semester semester,
+                                              @NonNull LessonType lessonType,
+                                              @NonNull String newLessonNo) {
         executor.execute(() -> moduleDao.updateLessonNoMapping(moduleCode, semester,
                 lessonType, newLessonNo));
     }

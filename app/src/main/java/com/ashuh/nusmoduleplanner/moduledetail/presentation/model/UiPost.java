@@ -13,12 +13,9 @@ public class UiPost {
     private final String message;
 
     public UiPost(@NonNull String name, @NonNull String age, @NonNull String message) {
-        requireNonNull(name);
-        requireNonNull(age);
-        requireNonNull(message);
-        this.name = name;
-        this.age = age;
-        this.message = message;
+        this.name = requireNonNull(name);
+        this.age = requireNonNull(age);
+        this.message = requireNonNull(message);
     }
 
     @NonNull

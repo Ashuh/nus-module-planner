@@ -21,13 +21,11 @@ public class ModuleRemoteDataSource {
     private final NusModsApi nusModsApi;
 
     public ModuleRemoteDataSource(@NonNull NusModsApi nusModsApi) {
-        requireNonNull(nusModsApi);
-        this.nusModsApi = nusModsApi;
+        this.nusModsApi = requireNonNull(nusModsApi);
     }
 
     @NonNull
     public LiveData<List<ModuleInfo>> getAllModuleInfo(@NonNull String acadYear) {
-        requireNonNull(acadYear);
         MutableLiveData<List<ApiModuleInfo>> observableApiModuleInfo = new MutableLiveData<>();
         nusModsApi.getModuleInfo(acadYear).enqueue(new LiveDataCallback<>(observableApiModuleInfo));
         return Transformations.map(observableApiModuleInfo, apiModuleInfoList ->
@@ -39,8 +37,6 @@ public class ModuleRemoteDataSource {
 
     @NonNull
     public LiveData<Module> getModule(@NonNull String acadYear, @NonNull String moduleCode) {
-        requireNonNull(acadYear);
-        requireNonNull(moduleCode);
         MutableLiveData<ApiModule> observableApiModule = new MutableLiveData<>();
         nusModsApi.getModule(acadYear, moduleCode)
                 .enqueue(new LiveDataCallback<>(observableApiModule));

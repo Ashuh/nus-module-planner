@@ -34,7 +34,7 @@ public class SemesterDatumEntity {
     private String ownerModuleCode;
 
     public SemesterDatumEntity(@NonNull Semester semester) {
-        this.semester = semester;
+        this.semester = requireNonNull(semester);
     }
 
     public long getId() {
@@ -51,8 +51,7 @@ public class SemesterDatumEntity {
     }
 
     public void setOwnerModuleCode(@NonNull String ownerModuleCode) {
-        requireNonNull(ownerModuleCode);
-        this.ownerModuleCode = ownerModuleCode;
+        this.ownerModuleCode = requireNonNull(ownerModuleCode);
     }
 
     @NonNull

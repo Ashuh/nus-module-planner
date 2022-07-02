@@ -18,13 +18,11 @@ public class Workload {
     private final List<Double> workloads;
 
     public Workload(@NonNull List<Double> workloads) {
-        requireNonNull(workloads);
+        this.workloads = requireNonNull(workloads);
 
         if (!isValidWorkload(workloads)) {
             throw new IllegalArgumentException("List size is not equal to " + VALID_LIST_SIZE);
         }
-
-        this.workloads = workloads;
     }
 
     public static boolean isValidWorkload(List<Double> workloads) {

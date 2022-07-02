@@ -20,8 +20,7 @@ public class ModuleSemesterDatum extends ModuleInfoSemesterDatum {
     public ModuleSemesterDatum(@NonNull Semester semester, @Nullable Exam exam,
                                @NonNull LessonMap lessons) {
         super(semester, exam);
-        requireNonNull(lessons);
-        this.lessons = lessons;
+        this.lessons = requireNonNull(lessons);
     }
 
     @NonNull

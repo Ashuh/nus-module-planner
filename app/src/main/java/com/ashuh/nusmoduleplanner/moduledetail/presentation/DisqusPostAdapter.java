@@ -1,5 +1,7 @@
 package com.ashuh.nusmoduleplanner.moduledetail.presentation;
 
+import static java.util.Objects.requireNonNull;
+
 import android.annotation.SuppressLint;
 import android.graphics.Typeface;
 import android.text.Html;
@@ -24,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DisqusPostAdapter extends RecyclerView.Adapter<DisqusPostAdapter.ViewHolder> {
+    @NonNull
     private List<UiPost> posts = new ArrayList<>();
 
     @NonNull
@@ -75,8 +78,8 @@ public class DisqusPostAdapter extends RecyclerView.Adapter<DisqusPostAdapter.Vi
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setPosts(List<UiPost> posts) {
-        this.posts = posts;
+    public void setPosts(@NonNull List<UiPost> posts) {
+        this.posts = requireNonNull(posts);
         notifyDataSetChanged();
     }
 

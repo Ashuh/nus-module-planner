@@ -16,7 +16,6 @@ import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiModuleReading;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ModuleReadingAdapter
         extends RecyclerView.Adapter<ModuleReadingAdapter.ViewHolder> {
     private static final String EXAM_INFO_FORMAT = "Exam: %s";

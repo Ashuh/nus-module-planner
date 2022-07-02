@@ -16,10 +16,8 @@ public class ApiAvatarUrl {
     protected final String cache;
 
     public ApiAvatarUrl(@NonNull String permalink, @NonNull String cache) {
-        requireNonNull(permalink);
-        requireNonNull(cache);
-        this.permalink = permalink;
-        this.cache = cache;
+        this.permalink = requireNonNull(permalink);
+        this.cache = requireNonNull(cache);
     }
 
     @NonNull

@@ -20,13 +20,11 @@ public class PostRemoteDataSource {
     private final DisqusApi disqusApi;
 
     public PostRemoteDataSource(@NonNull DisqusApi disqusApi) {
-        requireNonNull(disqusApi);
-        this.disqusApi = disqusApi;
+        this.disqusApi = requireNonNull(disqusApi);
     }
 
     @NonNull
     public LiveData<PaginatedPosts> getPosts(@NonNull String moduleCode) {
-        requireNonNull(moduleCode);
         MutableLiveData<ApiPaginatedPosts> observablePosts = new MutableLiveData<>();
         disqusApi.getPosts(API_KEY, FORUM_ID, moduleCode)
                 .enqueue(new LiveDataCallback<>(observablePosts));

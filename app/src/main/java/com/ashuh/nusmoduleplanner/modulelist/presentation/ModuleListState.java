@@ -13,8 +13,7 @@ public class ModuleListState {
     private final List<UiModuleInfo> modules;
 
     public ModuleListState(@NonNull List<UiModuleInfo> modules) {
-        requireNonNull(modules);
-        this.modules = modules;
+        this.modules = requireNonNull(modules);
     }
 
     @NonNull

@@ -42,8 +42,7 @@ public class ModuleListAdapter extends RecyclerView.Adapter<ModuleListAdapter.Vi
     }
 
     public void setModules(@NonNull List<UiModuleInfo> modules) {
-        requireNonNull(modules);
-        this.modules = modules;
+        this.modules = requireNonNull(modules);
         notifyDataSetChanged();
     }
 

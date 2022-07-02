@@ -24,8 +24,7 @@ public class ApiModuleInfo extends ApiBaseDetailedModule {
                          @NonNull List<ApiModuleInfoSemesterDatum> semesterData) {
         super(moduleCode, title, description, faculty, department, workload, preclusion,
                 prerequisite, coRequisite, moduleCredit);
-        requireNonNull(semesterData);
-        this.semesterData = semesterData;
+        this.semesterData = requireNonNull(semesterData);
     }
 
     @NonNull

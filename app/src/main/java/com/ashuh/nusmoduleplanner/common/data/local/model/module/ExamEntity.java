@@ -36,8 +36,7 @@ public class ExamEntity {
     private long ownerId;
 
     public ExamEntity(@NonNull String date, int duration) {
-        requireNonNull(date);
-        this.date = date;
+        this.date = requireNonNull(date);
         this.duration = duration;
     }
 

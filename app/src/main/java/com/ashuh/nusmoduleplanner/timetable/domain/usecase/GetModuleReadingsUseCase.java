@@ -16,12 +16,11 @@ public class GetModuleReadingsUseCase {
     private final ModuleRepository moduleRepository;
 
     public GetModuleReadingsUseCase(@NonNull ModuleRepository moduleRepository) {
-        requireNonNull(moduleRepository);
-        this.moduleRepository = moduleRepository;
+        this.moduleRepository = requireNonNull(moduleRepository);
     }
 
     @NonNull
-    public LiveData<List<ModuleReading>> execute(Semester semester) {
+    public LiveData<List<ModuleReading>> execute(@NonNull Semester semester) {
         return moduleRepository.getModuleReadings(semester);
     }
 }

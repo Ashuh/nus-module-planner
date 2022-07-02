@@ -21,13 +21,13 @@ public class GetModuleWithPostsUseCase {
 
     public GetModuleWithPostsUseCase(@NonNull ModuleRepository moduleRepository,
                                      @NonNull PostRepository postRepository) {
-        requireNonNull(moduleRepository);
-        requireNonNull(postRepository);
-        this.moduleRepository = moduleRepository;
-        this.postRepository = postRepository;
+        this.moduleRepository = requireNonNull(moduleRepository);
+        this.postRepository = requireNonNull(postRepository);
     }
 
-    public LiveData<ModuleWithPosts> execute(AcademicYear academicYear, String moduleCode) {
+    @NonNull
+    public LiveData<ModuleWithPosts> execute(@NonNull AcademicYear academicYear,
+                                             @NonNull String moduleCode) {
         LiveData<Module> observableModule
                 = moduleRepository.getModule(academicYear.toString(), moduleCode);
         LiveData<PaginatedPosts> observablePosts = postRepository.getPosts(moduleCode);

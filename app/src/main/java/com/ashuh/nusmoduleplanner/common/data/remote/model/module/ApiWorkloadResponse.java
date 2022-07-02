@@ -1,6 +1,9 @@
 package com.ashuh.nusmoduleplanner.common.data.remote.model.module;
 
+import static java.util.Objects.requireNonNull;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Workload;
 import com.google.gson.JsonDeserializationContext;
@@ -15,27 +18,22 @@ import java.util.List;
 
 @JsonAdapter(ApiWorkloadResponse.ApiWorkloadResponseDeserializer.class)
 public class ApiWorkloadResponse {
+    @Nullable
     private final String workloadString;
+    @Nullable
     private final List<Double> workloadList;
 
     public ApiWorkloadResponse(@NonNull String workloadString) {
-        this.workloadString = workloadString;
+        this.workloadString = requireNonNull(workloadString);
         this.workloadList = null;
     }
 
     public ApiWorkloadResponse(@NonNull List<Double> workloadList) {
-        this.workloadList = workloadList;
+        this.workloadList = requireNonNull(workloadList);
         this.workloadString = null;
     }
 
-    public String getWorkloadString() {
-        return workloadString;
-    }
-
-    public List<Double> getWorkloadList() {
-        return workloadList;
-    }
-
+    @NonNull
     public Workload toDomain() {
         if (getType() != List.class) {
             return new Workload(List.of(0.0, 0.0, 0.0, 0.0, 0.0));
@@ -44,7 +42,7 @@ public class ApiWorkloadResponse {
         return new Workload(workloadList);
     }
 
-    public Class<?> getType() {
+    private Class<?> getType() {
         if (workloadString != null) {
             return String.class;
         } else {

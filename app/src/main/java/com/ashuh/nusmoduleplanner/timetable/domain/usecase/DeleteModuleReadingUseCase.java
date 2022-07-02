@@ -12,11 +12,10 @@ public class DeleteModuleReadingUseCase {
     private final ModuleRepository moduleRepository;
 
     public DeleteModuleReadingUseCase(@NonNull ModuleRepository moduleRepository) {
-        requireNonNull(moduleRepository);
-        this.moduleRepository = moduleRepository;
+        this.moduleRepository = requireNonNull(moduleRepository);
     }
 
-    public void execute(String moduleCode, Semester semester) {
+    public void execute(@NonNull String moduleCode, @NonNull Semester semester) {
         moduleRepository.deleteModuleReading(moduleCode, semester);
     }
 }

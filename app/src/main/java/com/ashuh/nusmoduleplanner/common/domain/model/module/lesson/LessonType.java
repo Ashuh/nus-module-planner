@@ -20,10 +20,8 @@ public enum LessonType {
     private final String shortName;
 
     LessonType(@NonNull String name, @NonNull String shortName) {
-        requireNonNull(name);
-        requireNonNull(shortName);
-        this.name = name;
-        this.shortName = shortName;
+        this.name = requireNonNull(name);
+        this.shortName = requireNonNull(shortName);
     }
 
     @NonNull

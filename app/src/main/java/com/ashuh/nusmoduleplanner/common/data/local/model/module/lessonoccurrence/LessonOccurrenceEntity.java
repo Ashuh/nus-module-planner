@@ -40,14 +40,10 @@ public class LessonOccurrenceEntity {
 
     public LessonOccurrenceEntity(@NonNull DayOfWeek day, @NonNull String startTime,
                                   @NonNull String endTime, @NonNull String venue) {
-        requireNonNull(day);
-        requireNonNull(startTime);
-        requireNonNull(endTime);
-        requireNonNull(venue);
-        this.day = day;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.venue = venue;
+        this.day = requireNonNull(day);
+        this.startTime = requireNonNull(startTime);
+        this.endTime = requireNonNull(endTime);
+        this.venue = requireNonNull(venue);
     }
 
     @NonNull

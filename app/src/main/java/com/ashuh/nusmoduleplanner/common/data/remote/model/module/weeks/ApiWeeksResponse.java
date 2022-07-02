@@ -1,6 +1,7 @@
 package com.ashuh.nusmoduleplanner.common.data.remote.model.module.weeks;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNullElse;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +16,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 @JsonAdapter(ApiWeeksResponse.ApiWeeksResponseDeserializer.class)
@@ -25,17 +27,16 @@ public class ApiWeeksResponse {
     private final ApiWeekRange weekRangeResponse;
 
     public ApiWeeksResponse(@NonNull List<Integer> listResponse) {
-        requireNonNull(listResponse);
-        this.listResponse = listResponse;
+        this.listResponse = requireNonNull(listResponse);
         this.weekRangeResponse = null;
     }
 
     public ApiWeeksResponse(@NonNull ApiWeekRange weekRangeResponse) {
-        requireNonNull(weekRangeResponse);
-        this.weekRangeResponse = weekRangeResponse;
+        this.weekRangeResponse = requireNonNull(weekRangeResponse);
         this.listResponse = null;
     }
 
+    @NonNull
     public Weeks toDomain() {
         if (listResponse != null) {
             return new Weeks(listResponse);

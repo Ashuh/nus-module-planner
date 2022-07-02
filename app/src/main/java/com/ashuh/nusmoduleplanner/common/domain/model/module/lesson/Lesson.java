@@ -26,13 +26,10 @@ public class Lesson implements Comparable<Lesson> {
 
     public Lesson(@NonNull String lessonNo, @NonNull LessonType lessonType, int size,
                   @NonNull List<LessonOccurrence> occurrences) {
-        requireNonNull(lessonNo);
-        requireNonNull(lessonType);
-        requireNonNull(occurrences);
-        this.lessonNo = lessonNo;
-        this.lessonType = lessonType;
+        this.lessonNo = requireNonNull(lessonNo);
+        this.lessonType = requireNonNull(lessonType);
         this.size = size;
-        this.occurrences = occurrences;
+        this.occurrences = requireNonNull(occurrences);
     }
 
     @NonNull

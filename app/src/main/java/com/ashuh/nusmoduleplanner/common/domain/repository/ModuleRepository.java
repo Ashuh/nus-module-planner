@@ -5,28 +5,28 @@ import androidx.lifecycle.LiveData;
 
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Module;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.ModuleInfo;
-import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.ModuleReading;
+import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonType;
 
 import java.util.List;
 
 public interface ModuleRepository {
     @NonNull
-    LiveData<List<ModuleInfo>> getAllModuleInfo(String acadYear);
+    LiveData<List<ModuleInfo>> getAllModuleInfo(@NonNull String acadYear);
 
     @NonNull
-    LiveData<Module> getModule(String acadYear, String moduleCode);
+    LiveData<Module> getModule(@NonNull String acadYear, @NonNull String moduleCode);
 
     @NonNull
-    LiveData<List<ModuleReading>> getModuleReadings(Semester semester);
+    LiveData<List<ModuleReading>> getModuleReadings(@NonNull Semester semester);
 
-    void storeModule(Module module);
+    void storeModule(@NonNull Module module);
 
-    void storeModuleReading(ModuleReading moduleReading);
+    void storeModuleReading(@NonNull ModuleReading moduleReading);
 
-    void deleteModuleReading(String moduleCode, Semester semester);
+    void deleteModuleReading(@NonNull String moduleCode, @NonNull Semester semester);
 
-    void updateLessonNoMapping(String moduleCode, Semester semType, LessonType lessonType,
-                               String newLessonNo);
+    void updateLessonNoMapping(@NonNull String moduleCode, @NonNull Semester semType,
+                               @NonNull LessonType lessonType, @NonNull String newLessonNo);
 }

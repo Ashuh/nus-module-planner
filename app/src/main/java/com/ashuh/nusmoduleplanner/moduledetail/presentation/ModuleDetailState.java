@@ -19,9 +19,8 @@ public class ModuleDetailState {
     private final List<UiPost> posts;
 
     public ModuleDetailState(@Nullable UiModule module, @NonNull List<UiPost> posts) {
-        requireNonNull(posts);
         this.module = module;
-        this.posts = posts;
+        this.posts = requireNonNull(posts);
     }
 
     public Optional<UiModule> getModule() {

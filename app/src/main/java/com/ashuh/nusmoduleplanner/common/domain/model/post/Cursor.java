@@ -10,8 +10,7 @@ public class Cursor {
     private final boolean hasNext;
 
     public Cursor(@NonNull String next, boolean hasNext) {
-        requireNonNull(next);
-        this.next = next;
+        this.next = requireNonNull(next);
         this.hasNext = hasNext;
     }
 

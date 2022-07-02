@@ -17,11 +17,10 @@ public class CreateModuleReadingUseCase {
     private final ModuleRepository moduleRepository;
 
     public CreateModuleReadingUseCase(@NonNull ModuleRepository moduleRepository) {
-        requireNonNull(moduleRepository);
-        this.moduleRepository = moduleRepository;
+        this.moduleRepository = requireNonNull(moduleRepository);
     }
 
-    public void execute(Module module, Semester semester) {
+    public void execute(@NonNull Module module, @NonNull Semester semester) {
         Color color = ColorScheme.GOOGLE.getRandomColor();
         ModuleReading moduleReading =
                 ModuleReading.withDefaultLessonMapping(module, semester, color);

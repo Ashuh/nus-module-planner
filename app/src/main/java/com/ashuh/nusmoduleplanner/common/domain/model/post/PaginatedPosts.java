@@ -13,10 +13,8 @@ public class PaginatedPosts {
     private final List<Post> posts;
 
     public PaginatedPosts(@NonNull Cursor cursor, @NonNull List<Post> posts) {
-        requireNonNull(cursor);
-        requireNonNull(posts);
-        this.cursor = cursor;
-        this.posts = posts;
+        this.cursor = requireNonNull(cursor);
+        this.posts = requireNonNull(posts);
     }
 
     @NonNull

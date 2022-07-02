@@ -13,12 +13,9 @@ public class Avatar {
     private final String urlXLarge;
 
     public Avatar(@NonNull String urlSmall, @NonNull String urlLarge, @NonNull String urlXLarge) {
-        requireNonNull(urlSmall);
-        requireNonNull(urlLarge);
-        requireNonNull(urlXLarge);
-        this.urlSmall = urlSmall;
-        this.urlLarge = urlLarge;
-        this.urlXLarge = urlXLarge;
+        this.urlSmall = requireNonNull(urlSmall);
+        this.urlLarge = requireNonNull(urlLarge);
+        this.urlXLarge = requireNonNull(urlXLarge);
     }
 
     @NonNull

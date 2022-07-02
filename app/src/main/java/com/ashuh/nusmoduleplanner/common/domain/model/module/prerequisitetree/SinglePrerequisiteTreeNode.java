@@ -13,8 +13,7 @@ public class SinglePrerequisiteTreeNode implements PrerequisiteTreeNode {
     private final String moduleCode;
 
     public SinglePrerequisiteTreeNode(@NonNull String moduleCode) {
-        requireNonNull(moduleCode);
-        this.moduleCode = moduleCode;
+        this.moduleCode = requireNonNull(moduleCode);
     }
 
     @NonNull

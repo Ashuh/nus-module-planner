@@ -17,10 +17,8 @@ public class TimetableState {
 
     public TimetableState(@NonNull List<UiTimetableLessonOccurrence> lessonOccurrences,
                           @NonNull List<UiModuleReading> moduleReadings) {
-        requireNonNull(lessonOccurrences);
-        requireNonNull(moduleReadings);
-        this.lessonOccurrences = lessonOccurrences;
-        this.moduleReadings = moduleReadings;
+        this.lessonOccurrences = requireNonNull(lessonOccurrences);
+        this.moduleReadings = requireNonNull(moduleReadings);
     }
 
     @NonNull

@@ -15,10 +15,8 @@ public abstract class ApiBaseModule {
     protected final String title;
 
     public ApiBaseModule(@NonNull String moduleCode, @NonNull String title) {
-        requireNonNull(moduleCode);
-        requireNonNull(title);
-        this.moduleCode = moduleCode;
-        this.title = title;
+        this.moduleCode = requireNonNull(moduleCode);
+        this.title = requireNonNull(title);
     }
 
     @NonNull

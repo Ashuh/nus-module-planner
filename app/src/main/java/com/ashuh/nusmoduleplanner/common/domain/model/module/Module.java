@@ -28,10 +28,8 @@ public class Module extends AbstractModule<ModuleSemesterDatum> {
                   @Nullable PrerequisiteTreeNode prerequisiteTree) {
         super(moduleCode, title, description, moduleCredit, department, faculty, workload,
                 prerequisite, preclusion, coRequisite, semesterData);
-        requireNonNull(academicYear);
-        requireNonNull(fulfillRequirements);
-        this.academicYear = academicYear;
-        this.fulfillRequirements = fulfillRequirements;
+        this.academicYear = requireNonNull(academicYear);
+        this.fulfillRequirements = requireNonNull(fulfillRequirements);
         this.prerequisiteTree = prerequisiteTree;
     }
 

@@ -11,10 +11,8 @@ public class UiExam {
     private final String duration;
 
     public UiExam(@NonNull String date, @NonNull String duration) {
-        requireNonNull(date);
-        requireNonNull(duration);
-        this.date = date;
-        this.duration = duration;
+        this.date = requireNonNull(date);
+        this.duration = requireNonNull(duration);
     }
 
     @NonNull

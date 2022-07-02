@@ -15,9 +15,8 @@ public abstract class LogicalPrerequisiteTreeNode implements PrerequisiteTreeNod
         this.children = new HashSet<>();
     }
 
-    LogicalPrerequisiteTreeNode(@NonNull Set<PrerequisiteTreeNode> prerequisites) {
-        requireNonNull(prerequisites);
-        this.children = prerequisites;
+    LogicalPrerequisiteTreeNode(@NonNull Set<PrerequisiteTreeNode> children) {
+        this.children = requireNonNull(children);
     }
 
     @NonNull

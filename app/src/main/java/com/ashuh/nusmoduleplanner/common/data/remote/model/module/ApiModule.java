@@ -42,10 +42,8 @@ public class ApiModule extends ApiBaseDetailedModule {
                      @Nullable List<String> fulfillRequirements) {
         super(moduleCode, title, description, faculty, department, workload, preclusion,
                 prerequisite, coRequisite, moduleCredit);
-        requireNonNull(acadYear);
-        requireNonNull(semesterData);
-        this.acadYear = acadYear;
-        this.semesterData = semesterData;
+        this.acadYear = requireNonNull(acadYear);
+        this.semesterData = requireNonNull(semesterData);
         this.prerequisiteTree = prerequisiteTree;
         this.fulfillRequirements = fulfillRequirements;
     }

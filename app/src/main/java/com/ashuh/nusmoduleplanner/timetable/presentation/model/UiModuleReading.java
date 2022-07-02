@@ -17,14 +17,10 @@ public class UiModuleReading {
 
     public UiModuleReading(@NonNull String moduleCode, @NonNull String title,
                            @NonNull String moduleCredit, @NonNull String examDate, int color) {
-        requireNonNull(moduleCode);
-        requireNonNull(title);
-        requireNonNull(moduleCredit);
-        requireNonNull(examDate);
-        this.moduleCode = moduleCode;
-        this.title = title;
-        this.moduleCredit = moduleCredit;
-        this.examDate = examDate;
+        this.moduleCode = requireNonNull(moduleCode);
+        this.title = requireNonNull(title);
+        this.moduleCredit = requireNonNull(moduleCredit);
+        this.examDate = requireNonNull(examDate);
         this.color = color;
     }
 

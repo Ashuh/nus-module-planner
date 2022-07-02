@@ -1,5 +1,7 @@
 package com.ashuh.nusmoduleplanner.timetable.presentation;
 
+import static java.util.Objects.requireNonNull;
+
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -19,10 +21,11 @@ public class LessonSelectDialogFragment extends DialogFragment implements
     private static final String TEXT_CLASS_INFO_FORMAT = "[%s] %s\n";
     private static final String TEXT_LESSON_INFO_FORMAT = "%s %s - %s %s\n";
 
+    @NonNull
     private final List<UiLesson> alternateLessons;
 
-    public LessonSelectDialogFragment(List<UiLesson> alternateLessons) {
-        this.alternateLessons = alternateLessons;
+    public LessonSelectDialogFragment(@NonNull List<UiLesson> alternateLessons) {
+        this.alternateLessons = requireNonNull(alternateLessons);
     }
 
     @NonNull

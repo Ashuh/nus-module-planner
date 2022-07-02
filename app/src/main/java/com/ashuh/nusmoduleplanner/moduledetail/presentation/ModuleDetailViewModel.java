@@ -1,5 +1,8 @@
 package com.ashuh.nusmoduleplanner.moduledetail.presentation;
 
+import static java.util.Objects.requireNonNull;
+
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
@@ -35,16 +38,20 @@ public class ModuleDetailViewModel extends ViewModel {
     private static final String AGE_TEXT = "%s %s ago";
     private static final String DURATION_FORMAT = "%s hrs";
 
+    @NonNull
     private final GetModuleWithPostsUseCase getModuleWithPostsUseCase;
+    @NonNull
     private final CreateModuleReadingUseCase createModuleReadingUseCase;
+    @NonNull
     private final LiveData<ModuleWithPosts> observableModuleWithPosts;
+    @NonNull
     private final LiveData<ModuleDetailState> observableState;
 
-    public ModuleDetailViewModel(GetModuleWithPostsUseCase getModuleWithPostsUseCase,
-                                 CreateModuleReadingUseCase createModuleReadingUseCase,
-                                 AcademicYear acadYear, String moduleCode) {
-        this.getModuleWithPostsUseCase = getModuleWithPostsUseCase;
-        this.createModuleReadingUseCase = createModuleReadingUseCase;
+    public ModuleDetailViewModel(@NonNull GetModuleWithPostsUseCase getModuleWithPostsUseCase,
+                                 @NonNull CreateModuleReadingUseCase createModuleReadingUseCase,
+                                 @NonNull AcademicYear acadYear, @NonNull String moduleCode) {
+        this.getModuleWithPostsUseCase = requireNonNull(getModuleWithPostsUseCase);
+        this.createModuleReadingUseCase = requireNonNull(createModuleReadingUseCase);
         observableModuleWithPosts = getModuleWithPostsUseCase.execute(acadYear, moduleCode);
         observableState = Transformations.map(observableModuleWithPosts, this::buildState);
     }

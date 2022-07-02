@@ -29,10 +29,8 @@ public class ModuleFulfillsCrossRefEntity {
 
     public ModuleFulfillsCrossRefEntity(@NonNull String fulfilledModuleCode,
                                         @NonNull String fulfillsModuleCode) {
-        requireNonNull(fulfilledModuleCode);
-        requireNonNull(fulfillsModuleCode);
-        this.fulfilledModuleCode = fulfilledModuleCode;
-        this.fulfillsModuleCode = fulfillsModuleCode;
+        this.fulfilledModuleCode = requireNonNull(fulfilledModuleCode);
+        this.fulfillsModuleCode = requireNonNull(fulfillsModuleCode);
     }
 
     @NonNull

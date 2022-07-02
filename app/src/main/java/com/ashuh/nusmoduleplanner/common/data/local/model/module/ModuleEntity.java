@@ -36,25 +36,16 @@ public class ModuleEntity {
                         @NonNull String department, @NonNull String faculty,
                         @NonNull String prerequisite, @NonNull String preclusion,
                         @NonNull String coRequisite, @NonNull String academicYear) {
-        requireNonNull(moduleCode);
-        requireNonNull(title);
-        requireNonNull(description);
-        requireNonNull(department);
-        requireNonNull(faculty);
-        requireNonNull(prerequisite);
-        requireNonNull(preclusion);
-        requireNonNull(coRequisite);
-        requireNonNull(academicYear);
-        this.moduleCode = moduleCode;
-        this.title = title;
-        this.description = description;
+        this.moduleCode =  requireNonNull(moduleCode);
+        this.title = requireNonNull(title);
+        this.description = requireNonNull(description);
         this.moduleCredit = moduleCredit;
-        this.department = department;
-        this.faculty = faculty;
-        this.prerequisite = prerequisite;
-        this.preclusion = preclusion;
-        this.coRequisite = coRequisite;
-        this.academicYear = academicYear;
+        this.department = requireNonNull(department);
+        this.faculty = requireNonNull(faculty);
+        this.prerequisite = requireNonNull(prerequisite);
+        this.preclusion = requireNonNull(preclusion);
+        this.coRequisite = requireNonNull(coRequisite);
+        this.academicYear = requireNonNull(academicYear);
     }
 
     @NonNull

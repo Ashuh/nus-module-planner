@@ -25,16 +25,11 @@ public class LessonOccurrence {
     public LessonOccurrence(@NonNull DayOfWeek day, @NonNull LocalTime startTime,
                             @NonNull LocalTime endTime, @NonNull Weeks weeks,
                             @NonNull String venue) {
-        requireNonNull(day);
-        requireNonNull(startTime);
-        requireNonNull(endTime);
-        requireNonNull(weeks);
-        requireNonNull(venue);
-        this.day = day;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.weeks = weeks;
-        this.venue = venue;
+        this.day = requireNonNull(day);
+        this.startTime = requireNonNull(startTime);
+        this.endTime = requireNonNull(endTime);
+        this.weeks = requireNonNull(weeks);
+        this.venue = requireNonNull(venue);
     }
 
     @NonNull

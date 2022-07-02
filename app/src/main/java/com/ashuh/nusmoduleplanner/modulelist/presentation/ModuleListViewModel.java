@@ -25,8 +25,11 @@ public class ModuleListViewModel extends ViewModel {
 
     @NonNull
     private final GetModuleInfoUseCase getModuleInfoUseCase;
+    @NonNull
     private final LiveData<List<ModuleInfo>> allModules;
+    @NonNull
     private final MediatorLiveData<ModuleListState> observableState;
+    @NonNull
     private final MutableLiveData<Predicate<ModuleInfo>> filterPredicate
             = new MutableLiveData<>(PREDICATE_SHOW_ALL);
 
@@ -49,7 +52,7 @@ public class ModuleListViewModel extends ViewModel {
         });
     }
 
-    public ModuleListState buildState(Collection<ModuleInfo> modules,
+    private ModuleListState buildState(Collection<ModuleInfo> modules,
                                       Predicate<ModuleInfo> predicate) {
         List<UiModuleInfo> uiModules = modules.stream()
                 .filter(predicate)
@@ -58,7 +61,7 @@ public class ModuleListViewModel extends ViewModel {
         return new ModuleListState(uiModules);
     }
 
-    public static UiModuleInfo mapModuleInfo(ModuleInfo moduleInfo) {
+    private static UiModuleInfo mapModuleInfo(ModuleInfo moduleInfo) {
         String moduleCode = moduleInfo.getModuleCode();
         String title = moduleInfo.getTitle();
         String department = moduleInfo.getDepartment();

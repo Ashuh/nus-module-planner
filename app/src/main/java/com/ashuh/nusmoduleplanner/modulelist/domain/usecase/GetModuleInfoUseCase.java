@@ -16,11 +16,11 @@ public class GetModuleInfoUseCase {
     private final ModuleRepository moduleRepository;
 
     public GetModuleInfoUseCase(@NonNull ModuleRepository moduleRepository) {
-        requireNonNull(moduleRepository);
-        this.moduleRepository = moduleRepository;
+        this.moduleRepository = requireNonNull(moduleRepository);
     }
 
-    public LiveData<List<ModuleInfo>> execute(AcademicYear academicYear) {
+    @NonNull
+    public LiveData<List<ModuleInfo>> execute(@NonNull AcademicYear academicYear) {
         return moduleRepository.getAllModuleInfo(academicYear.toString());
     }
 }
