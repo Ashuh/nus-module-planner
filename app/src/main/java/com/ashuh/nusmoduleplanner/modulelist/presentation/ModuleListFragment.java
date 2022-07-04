@@ -17,9 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ashuh.nusmoduleplanner.R;
 import com.ashuh.nusmoduleplanner.common.NusModulePlannerApplication;
 import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 public class ModuleListFragment extends Fragment implements SearchView.OnQueryTextListener,
         Observer<ModuleListState> {
+    private CircularProgressIndicator progressIndicator;
     private ModuleListAdapter adapter;
     private ModuleListViewModel viewModel;
 
@@ -45,6 +47,8 @@ public class ModuleListFragment extends Fragment implements SearchView.OnQueryTe
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        progressIndicator = view.findViewById(R.id.progress_indicator);
+
         SearchView searchView = view.findViewById(R.id.search_view);
         searchView.setOnQueryTextListener(this);
 
@@ -67,6 +71,11 @@ public class ModuleListFragment extends Fragment implements SearchView.OnQueryTe
 
     @Override
     public void onChanged(ModuleListState state) {
-        adapter.setModules(state.getModules());
+        if (state.isLoading()) {
+            progressIndicator.show();
+        } else {
+            progressIndicator.hide();
+            adapter.setModules(state.getModules());
+        }
     }
 }
