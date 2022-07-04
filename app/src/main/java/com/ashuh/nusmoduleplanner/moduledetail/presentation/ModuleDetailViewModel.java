@@ -4,7 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Transformations;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.ashuh.nusmoduleplanner.common.domain.model.module.AcademicYear;
@@ -45,7 +45,7 @@ public class ModuleDetailViewModel extends ViewModel {
     @NonNull
     private final LiveData<ModuleWithPosts> observableModuleWithPosts;
     @NonNull
-    private final LiveData<ModuleDetailState> observableState;
+    private final MediatorLiveData<ModuleDetailState> observableState;
 
     public ModuleDetailViewModel(@NonNull GetModuleWithPostsUseCase getModuleWithPostsUseCase,
                                  @NonNull CreateModuleReadingUseCase createModuleReadingUseCase,
@@ -53,7 +53,11 @@ public class ModuleDetailViewModel extends ViewModel {
         this.getModuleWithPostsUseCase = requireNonNull(getModuleWithPostsUseCase);
         this.createModuleReadingUseCase = requireNonNull(createModuleReadingUseCase);
         observableModuleWithPosts = getModuleWithPostsUseCase.execute(acadYear, moduleCode);
-        observableState = Transformations.map(observableModuleWithPosts, this::buildState);
+        observableState = new MediatorLiveData<>();
+        observableState.setValue(ModuleDetailState.loading());
+        observableState.addSource(observableModuleWithPosts, moduleWithPosts -> {
+            observableState.setValue(buildState(moduleWithPosts));
+        });
     }
 
     private ModuleDetailState buildState(ModuleWithPosts moduleWithPosts) {
