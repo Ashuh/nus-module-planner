@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -23,8 +24,9 @@ import com.ashuh.nusmoduleplanner.common.NusModulePlannerApplication;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonType;
 import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
-import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiTimetableLessonOccurrence;
 import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiModuleReading;
+import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiTimetableLessonOccurrence;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 import me.jlurena.revolvingweekview.WeekView;
 import me.jlurena.revolvingweekview.WeekViewEvent;
@@ -33,6 +35,8 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
         Observer<TimetableState> {
     public static final String ARG_SEMESTER = "semester";
 
+    private ConstraintLayout timetablePageContainer;
+    private CircularProgressIndicator progressIndicator;
     private TimetableView timetableView;
     private TimetableViewModel viewModel;
     private ModuleReadingAdapter adapter;
@@ -64,6 +68,8 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        timetablePageContainer = view.findViewById(R.id.timetable_page_container);
+        progressIndicator = view.findViewById(R.id.progress_indicator);
         timetableView = view.findViewById(R.id.revolving_weekview);
         timetableView.setOnEventClickListener(this);
         RecyclerView recyclerView = view.findViewById(R.id.timetable_recycler_view);
@@ -97,6 +103,15 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
         if (state == null) {
             return;
         }
+
+        if (state.isLoading()) {
+            timetablePageContainer.setVisibility(View.INVISIBLE);
+            progressIndicator.show();
+            return;
+        }
+
+        timetablePageContainer.setVisibility(View.VISIBLE);
+        progressIndicator.hide();
         adapter.setModuleReadings(state.getModuleReadings());
         timetableView.setAssignedModules(state.getLessonOccurrences());
     }
