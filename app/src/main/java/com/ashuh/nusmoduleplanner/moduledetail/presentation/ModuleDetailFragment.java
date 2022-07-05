@@ -22,7 +22,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,6 +38,7 @@ import com.ashuh.nusmoduleplanner.common.domain.repository.PostRepository;
 import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiExam;
 import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiModule;
 import com.ashuh.nusmoduleplanner.moduledetail.presentation.model.UiSemester;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,10 +49,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class ModuleDetailFragment extends Fragment {
+public class ModuleDetailFragment extends Fragment implements Observer<ModuleDetailState> {
     private static final String EXAM_HEADING_FORMAT = "%s Exam";
     private static final String EXAM_INFO_FORMAT = "%s • %s";
 
+    private CircularProgressIndicator mainProgressIndicator;
+    private CircularProgressIndicator postsProgressIndicator;
+    private NestedScrollView nestedScrollView;
     private TextView titleTextView;
     private TextView codeTextView;
     private TextView adminInfoTextView;
@@ -57,6 +63,7 @@ public class ModuleDetailFragment extends Fragment {
     private TextView descriptionTextView;
     private TextView moduleRequirementsTextView;
     private TextView examInfoTextView;
+    private RecyclerView recyclerView;
     private Button button;
     private DisqusPostAdapter postAdapter;
     private ModuleDetailViewModel viewModel;
@@ -86,6 +93,11 @@ public class ModuleDetailFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        mainProgressIndicator = view.findViewById(R.id.progress_indicator_main);
+        postsProgressIndicator = view.findViewById(R.id.progress_indicator_posts);
+
+        nestedScrollView = view.findViewById(R.id.nested_scroll__view);
+
         titleTextView = view.findViewById(R.id.module_title);
         codeTextView = view.findViewById(R.id.module_code);
         adminInfoTextView = view.findViewById(R.id.module_admin_info);
@@ -94,17 +106,34 @@ public class ModuleDetailFragment extends Fragment {
         moduleRequirementsTextView = view.findViewById(R.id.module_requirements);
         examInfoTextView = view.findViewById(R.id.exam_info);
         button = view.findViewById(R.id.add_to_timetable_button);
-        RecyclerView recyclerView = view.findViewById(R.id.disqus_posts);
+
+        recyclerView = view.findViewById(R.id.disqus_posts);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(postAdapter);
+        recyclerView.getChildAdapterPosition(recyclerView.getChildAt(0));
         observeViewModel();
     }
 
     private void observeViewModel() {
-        viewModel.getState().observe(getViewLifecycleOwner(), this::updateUi);
+        viewModel.getState().observe(getViewLifecycleOwner(), this);
     }
 
-    private void updateUi(ModuleDetailState state) {
+    @Override
+    public void onChanged(ModuleDetailState state) {
+        if (state.isLoadingModule()) {
+            mainProgressIndicator.show();
+            postsProgressIndicator.hide();
+            nestedScrollView.setVisibility(View.GONE);
+        } else {
+            mainProgressIndicator.hide();
+            nestedScrollView.setVisibility(View.VISIBLE);
+            if (state.isLoadingPosts()) {
+                postsProgressIndicator.show();
+            } else {
+                postsProgressIndicator.hide();
+            }
+        }
+
         state.getModule().ifPresent(this::updateModuleUi);
         postAdapter.setPosts(state.getPosts());
     }

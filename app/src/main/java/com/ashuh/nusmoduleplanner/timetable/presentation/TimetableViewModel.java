@@ -6,6 +6,7 @@ import android.graphics.Color;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
@@ -56,7 +57,7 @@ public class TimetableViewModel extends ViewModel {
     @NonNull
     private final DeleteModuleReadingUseCase deleteModuleReadingUseCase;
     @NonNull
-    private final LiveData<TimetableState> observableState;
+    private final MediatorLiveData<TimetableState> observableState;
     @NonNull
     private final Semester semester;
 
@@ -70,11 +71,19 @@ public class TimetableViewModel extends ViewModel {
         this.updateLessonNoUseCase = requireNonNull(updateLessonNoUseCase);
         this.deleteModuleReadingUseCase = requireNonNull(deleteModuleReadingUseCase);
         this.semester = requireNonNull(semester);
-        this.observableState = Transformations.map(getModuleReadingsUseCase.execute(semester),
-                TimetableViewModel::buildState);
+        observableState = new MediatorLiveData<>();
+        observableState.setValue(TimetableState.loading());
+        observableState.addSource(getModuleReadingsUseCase.execute(semester),
+                moduleReadings -> {
+                    TimetableState state = buildState(moduleReadings);
+                    observableState.setValue(state);
+                });
     }
 
     private static TimetableState buildState(Collection<ModuleReading> moduleReadings) {
+        if (moduleReadings == null) {
+            return TimetableState.loading();
+        }
         List<UiTimetableLessonOccurrence> uiTimetableLessonOccurrences = moduleReadings.stream()
                 .map(TimetableViewModel::buildTimetableOccurrences)
                 .flatMap(List::stream)
@@ -84,7 +93,7 @@ public class TimetableViewModel extends ViewModel {
                 .map(TimetableViewModel::mapModuleReading)
                 .collect(Collectors.toList());
 
-        return new TimetableState(uiTimetableLessonOccurrences, uiModuleReadings);
+        return new TimetableState(uiTimetableLessonOccurrences, uiModuleReadings, false);
     }
 
     private static List<UiTimetableLessonOccurrence> buildTimetableOccurrences(

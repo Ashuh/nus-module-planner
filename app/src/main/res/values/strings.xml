@@ -11,7 +11,7 @@
     <string name="menu_timetable">Timetable</string>
     <string name="menu_modules">Modules</string>
 
-    <string name="search_hint">Search for a moduleDetail code</string>
+    <string name="search_hint">Module code</string>
 
     <string name="module_card_title">%1$s %2$s</string>
     <string name="module_card_description">%1$s • %2$s</string>

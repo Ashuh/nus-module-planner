@@ -14,7 +14,7 @@
         android:theme="@style/Theme.NUSModulePlanner">
         <activity
             android:name=".common.MainActivity"
-            android:theme="@style/Theme.NUSModulePlanner.NoActionBar"
+            android:theme="@style/Theme.NUSModulePlanner.Starting"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,7 +1,6 @@
 package com.ashuh.nusmoduleplanner.modulelist.presentation;
 
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNullElse;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -15,7 +14,6 @@ import com.ashuh.nusmoduleplanner.modulelist.domain.usecase.GetModuleInfoUseCase
 import com.ashuh.nusmoduleplanner.modulelist.presentation.model.UiModuleInfo;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -34,8 +32,7 @@ public class ModuleListViewModel extends ViewModel {
             = new MutableLiveData<>(PREDICATE_SHOW_ALL);
 
     public ModuleListViewModel(@NonNull GetModuleInfoUseCase getModuleInfoUseCase) {
-        requireNonNull(getModuleInfoUseCase);
-        this.getModuleInfoUseCase = getModuleInfoUseCase;
+        this.getModuleInfoUseCase = requireNonNull(getModuleInfoUseCase);
         allModules = getModuleInfoUseCase.execute(AcademicYear.getCurrent());
 
         observableState = new MediatorLiveData<>();
@@ -45,20 +42,21 @@ public class ModuleListViewModel extends ViewModel {
             observableState.setValue(state);
         });
         observableState.addSource(filterPredicate, predicate -> {
-            List<ModuleInfo> unfiltered
-                    = requireNonNullElse(allModules.getValue(), Collections.emptyList());
-            ModuleListState state = buildState(unfiltered, predicate);
+            ModuleListState state = buildState(allModules.getValue(), predicate);
             observableState.setValue(state);
         });
     }
 
     private ModuleListState buildState(Collection<ModuleInfo> modules,
-                                      Predicate<ModuleInfo> predicate) {
+                                       Predicate<ModuleInfo> predicate) {
+        if (modules == null) {
+            return ModuleListState.loading();
+        }
         List<UiModuleInfo> uiModules = modules.stream()
                 .filter(predicate)
                 .map(ModuleListViewModel::mapModuleInfo)
                 .collect(Collectors.toList());
-        return new ModuleListState(uiModules);
+        return ModuleListState.loaded(uiModules);
     }
 
     private static UiModuleInfo mapModuleInfo(ModuleInfo moduleInfo) {
