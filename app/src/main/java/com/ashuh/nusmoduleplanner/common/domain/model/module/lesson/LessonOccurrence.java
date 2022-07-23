@@ -4,11 +4,11 @@ import static java.util.Objects.requireNonNull;
 
 import androidx.annotation.NonNull;
 
-
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Weeks;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.Objects;
 
 public class LessonOccurrence {
     @NonNull
@@ -55,5 +55,26 @@ public class LessonOccurrence {
     @NonNull
     public String getVenue() {
         return venue;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(day, startTime, endTime, weeks, venue);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        LessonOccurrence that = (LessonOccurrence) o;
+        return day == that.day
+                && startTime.equals(that.startTime)
+                && endTime.equals(that.endTime)
+                && weeks.equals(that.weeks)
+                && venue.equals(that.venue);
     }
 }

@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 import androidx.annotation.NonNull;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Workload {
     private static final int VALID_LIST_SIZE = 5;
@@ -47,5 +48,22 @@ public class Workload {
 
     public double getPreparationWorkload() {
         return workloads.get(INDEX_PREPARATION);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(workloads);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Workload workload = (Workload) o;
+        return workloads.equals(workload.workloads);
     }
 }

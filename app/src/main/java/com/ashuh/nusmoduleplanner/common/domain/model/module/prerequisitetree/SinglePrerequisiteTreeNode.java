@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 
 public class SinglePrerequisiteTreeNode implements PrerequisiteTreeNode {
@@ -30,6 +31,23 @@ public class SinglePrerequisiteTreeNode implements PrerequisiteTreeNode {
     @NonNull
     public String getPrerequisite() {
         return moduleCode;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(moduleCode);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        SinglePrerequisiteTreeNode that = (SinglePrerequisiteTreeNode) o;
+        return moduleCode.equals(that.moduleCode);
     }
 
     @NonNull

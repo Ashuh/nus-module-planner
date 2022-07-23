@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class Weeks {
@@ -95,5 +96,25 @@ public class Weeks {
     @NonNull
     public List<Integer> getWeeks() {
         return weeks;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(start, end, weekInterval, weeks);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Weeks weeks1 = (Weeks) o;
+        return Objects.equals(start, weeks1.start)
+                && Objects.equals(end, weeks1.end)
+                && Objects.equals(weekInterval, weeks1.weekInterval)
+                && weeks.equals(weeks1.weeks);
     }
 }

@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 public class Lesson implements Comparable<Lesson> {
     @NonNull
@@ -58,6 +59,26 @@ public class Lesson implements Comparable<Lesson> {
 
     @Override
     public int compareTo(Lesson lesson) {
-        return  lessonNo.compareTo(lesson.lessonNo);
+        return lessonNo.compareTo(lesson.lessonNo);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(lessonNo, lessonType, size, occurrences);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Lesson lesson = (Lesson) o;
+        return size == lesson.size
+                && lessonNo.equals(lesson.lessonNo)
+                && lessonType == lesson.lessonType
+                && occurrences.equals(lesson.occurrences);
     }
 }
