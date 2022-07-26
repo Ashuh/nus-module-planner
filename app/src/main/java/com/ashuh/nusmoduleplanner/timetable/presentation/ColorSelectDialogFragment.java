@@ -1,7 +1,5 @@
 package com.ashuh.nusmoduleplanner.timetable.presentation;
 
-import static java.util.Objects.requireNonNull;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
