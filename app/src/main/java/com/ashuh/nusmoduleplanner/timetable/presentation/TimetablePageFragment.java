@@ -56,7 +56,7 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
                 new TimetableViewModelFactory(moduleRepository, semester))
                 .get(TimetableViewModel.class);
         viewModel.getState().observe(this, this);
-        adapter = new ModuleReadingAdapter();
+        adapter = new ModuleReadingAdapter(semInt);
     }
 
     @Nullable

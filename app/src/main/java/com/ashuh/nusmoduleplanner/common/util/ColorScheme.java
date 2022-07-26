@@ -36,6 +36,11 @@ public enum ColorScheme {
     }
 
     @NonNull
+    public List<Color> getColors() {
+        return colors;
+    }
+
+    @NonNull
     public Color getRandomColor() {
         return colors.get((int) (Math.random() * colors.size()));
     }
