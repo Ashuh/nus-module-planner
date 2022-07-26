@@ -16,8 +16,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.ashuh.nusmoduleplanner.R;
+import com.ashuh.nusmoduleplanner.common.AppContainer;
 import com.ashuh.nusmoduleplanner.common.NusModulePlannerApplication;
 import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
+import com.ashuh.nusmoduleplanner.common.domain.repository.PreferencesRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,18 +33,19 @@ public class ColorSelectDialogFragment extends DialogFragment
     private ColorAdapter adapter;
 
     public ColorSelectDialogFragment(@NonNull String moduleCode, int semester) {
-        this.semester = requireNonNull(semester);
+        this.semester = semester;
         this.moduleCode = moduleCode;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ModuleRepository moduleRepository
-                = ((NusModulePlannerApplication) requireActivity().getApplication())
-                .appContainer.moduleRepository;
+        AppContainer container = ((NusModulePlannerApplication) requireActivity().getApplication())
+                .appContainer;
+        ModuleRepository moduleRepository = container.moduleRepository;
+        PreferencesRepository preferencesRepository = container.preferencesRepository;
         viewModel = new ViewModelProvider(this,
-                new ColorSelectViewModelFactory(moduleRepository))
+                new ColorSelectViewModelFactory(moduleRepository, preferencesRepository))
                 .get(ColorSelectViewModel.class);
         adapter = new ColorAdapter(requireContext(), R.layout.color_select_item, new ArrayList<>());
     }
