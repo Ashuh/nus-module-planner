@@ -210,4 +210,10 @@ public abstract class ModuleDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     protected abstract void insertWeeksWeekNumberCrossRef(WeeksWeekNumberCrossRefEntity crossRef);
+
+    @Query("UPDATE ModuleReadingEntity "
+            + "SET color = :color "
+            + "WHERE moduleCode = :moduleCode "
+            + "AND semester = :semester")
+    public abstract void updateColor(String moduleCode, Semester semester, int color);
 }

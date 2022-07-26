@@ -1,8 +1,10 @@
 package com.ashuh.nusmoduleplanner.common;
 
+import static com.ashuh.nusmoduleplanner.common.domain.repository.AppPreferencesRepository.PREFERENCE_FILE_KEY;
 import static java.util.Objects.requireNonNull;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 
@@ -17,14 +19,18 @@ import com.ashuh.nusmoduleplanner.common.data.remote.source.ModuleRemoteDataSour
 import com.ashuh.nusmoduleplanner.common.data.remote.source.PostRemoteDataSource;
 import com.ashuh.nusmoduleplanner.common.data.repository.AppModuleRepository;
 import com.ashuh.nusmoduleplanner.common.data.repository.AppPostRepository;
+import com.ashuh.nusmoduleplanner.common.domain.repository.AppPreferencesRepository;
 import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
 import com.ashuh.nusmoduleplanner.common.domain.repository.PostRepository;
+import com.ashuh.nusmoduleplanner.common.domain.repository.PreferencesRepository;
 
 public class AppContainer {
     @NonNull
     public ModuleRepository moduleRepository;
     @NonNull
     public PostRepository postRepository;
+    @NonNull
+    public PreferencesRepository preferencesRepository;
 
     public AppContainer(@NonNull Context context) {
         requireNonNull(context);
@@ -37,5 +43,9 @@ public class AppContainer {
         DisqusApi disqusApi = DisqusApiBuilder.getInstance().getApi();
         PostRemoteDataSource postRemoteDataSource = new PostRemoteDataSource(disqusApi);
         postRepository = new AppPostRepository(postRemoteDataSource);
+
+        SharedPreferences sharedPreferences = context
+                .getSharedPreferences(PREFERENCE_FILE_KEY, Context.MODE_PRIVATE);
+        preferencesRepository = new AppPreferencesRepository(sharedPreferences);
     }
 }

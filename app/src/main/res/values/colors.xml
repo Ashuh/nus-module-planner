@@ -12,20 +12,20 @@
     <color name="secondaryVariant">@color/amber_900</color>
 
     <color name="background">#FFFFFF</color>
-    <color name="onBackground">#000000</color>
     <color name="surface">#FFFFFF</color>
-    <color name="onSurface">#000000</color>
     <color name="error">#B00020</color>
-    <color name="onError">#FFFFFF</color>
     <color name="onPrimary">#FFFFFF</color>
     <color name="onSecondary">#000000</color>
+    <color name="onBackground">#000000</color>
+    <color name="onSurface">#000000</color>
+    <color name="onError">#FFFFFF</color>
 
     <color name="dark_background">#121212</color>
-    <color name="dark_onBackground">#FFFFFF</color>
-    <color name="dark_surface">#12121212</color>
-    <color name="dark_onSurface">#FFFFFF</color>
+    <color name="dark_surface">#121212</color>
     <color name="dark_error">#CF6679</color>
-    <color name="dark_onError">#000000</color>
     <color name="dark_onPrimary">#000000</color>
     <color name="dark_onSecondary">#000000</color>
+    <color name="dark_onBackground">#FFFFFF</color>
+    <color name="dark_onSurface">#FFFFFF</color>
+    <color name="dark_onError">#000000</color>
 </resources>

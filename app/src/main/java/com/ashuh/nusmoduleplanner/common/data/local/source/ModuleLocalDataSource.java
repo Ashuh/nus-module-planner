@@ -2,6 +2,8 @@ package com.ashuh.nusmoduleplanner.common.data.local.source;
 
 import static java.util.Objects.requireNonNull;
 
+import android.graphics.Color;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
@@ -60,5 +62,9 @@ public class ModuleLocalDataSource {
                                               @NonNull String newLessonNo) {
         executor.execute(() -> moduleDao.updateLessonNoMapping(moduleCode, semester,
                 lessonType, newLessonNo));
+    }
+
+    public void updateColor(String moduleCode, Semester semester, Color newColor) {
+        executor.execute(() -> moduleDao.updateColor(moduleCode, semester, newColor.toArgb()));
     }
 }
