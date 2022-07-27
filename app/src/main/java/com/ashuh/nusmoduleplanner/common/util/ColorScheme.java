@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum ColorScheme {
-
     EIGHTIES(Colors.EIGHTIES_RED,
             Colors.EIGHTIES_ORANGE,
             Colors.EIGHTIES_YELLOW,
@@ -28,10 +27,15 @@ public enum ColorScheme {
             Colors.GOOGLE_PURPLE,
             Colors.GOOGLE_PINK);
 
+    private static final int SIZE = 8;
+
     @NonNull
     private final List<Color> colors;
 
     ColorScheme(Color... colors) {
+        if (colors.length != SIZE) {
+            throw new IllegalArgumentException("ColorScheme must have exactly " + SIZE + " colors");
+        }
         this.colors = Arrays.asList(colors);
     }
 
@@ -40,8 +44,8 @@ public enum ColorScheme {
     }
 
     @NonNull
-    public Color getColor(int index) {
-        return colors.get(index % colors.size());
+    public Color getColor(@NonNull Index index) {
+        return colors.get(index.getValue());
     }
 
     @NonNull
@@ -59,6 +63,25 @@ public enum ColorScheme {
     public String toString() {
         String name = name();
         return name.charAt(0) + name.substring(1).toLowerCase();
+    }
+
+    public static class Index {
+        private final byte value;
+
+        public Index(byte value) {
+            if (value < 0 || value >= SIZE) {
+                throw new IllegalArgumentException("Index must be between 0 and " + (SIZE - 1));
+            }
+            this.value = value;
+        }
+
+        public static Index random() {
+            return new Index((byte) (Math.random() * SIZE));
+        }
+
+        public byte getValue() {
+            return value;
+        }
     }
 
     private static class Colors {

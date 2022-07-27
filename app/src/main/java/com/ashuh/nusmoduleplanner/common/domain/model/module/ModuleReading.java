@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.Lesson;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonType;
+import com.ashuh.nusmoduleplanner.common.util.ColorScheme;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,15 +21,16 @@ public class ModuleReading {
     private final Semester semester;
     @NonNull
     private final Map<LessonType, String> lessonTypeToLessonNo;
-    private final int colorId;
+    @NonNull
+    private final ColorScheme.Index colorId;
 
     public ModuleReading(@NonNull Module module, @NonNull Semester semester,
-                         @NonNull Map<LessonType, String> lessonTypeToLessonNo, int colorId) {
+                         @NonNull Map<LessonType, String> lessonTypeToLessonNo,
+                         @NonNull ColorScheme.Index colorId) {
         this.module = requireNonNull(module);
         this.semester = requireNonNull(semester);
         this.lessonTypeToLessonNo = requireNonNull(lessonTypeToLessonNo);
-        this.colorId = colorId;
-        assert colorId >= 0 && colorId < 8;
+        this.colorId = requireNonNull(colorId);
 
         if (!isValidReading(module, semester, lessonTypeToLessonNo)) {
             throw new IllegalArgumentException("Invalid ModuleReading");
@@ -56,7 +58,7 @@ public class ModuleReading {
     @NonNull
     public static ModuleReading withDefaultLessonMapping(@NonNull Module module,
                                                          @NonNull Semester semester,
-                                                         int color) {
+                                                         ColorScheme.Index color) {
         requireNonNull(module);
         requireNonNull(semester);
 
@@ -88,7 +90,8 @@ public class ModuleReading {
         return semester;
     }
 
-    public int getColorId() {
+    @NonNull
+    public ColorScheme.Index getColorId() {
         return colorId;
     }
 

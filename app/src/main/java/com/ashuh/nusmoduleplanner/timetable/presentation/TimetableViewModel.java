@@ -113,7 +113,7 @@ public class TimetableViewModel extends ViewModel {
     private static List<UiTimetableLessonOccurrence> buildTimetableOccurrences(
             ModuleReading moduleReading, ColorScheme colorScheme) {
         String moduleCode = moduleReading.getModule().getModuleCode();
-        int colorId = moduleReading.getColorId();
+        ColorScheme.Index colorId = moduleReading.getColorId();
         int colorInt = colorScheme.getColor(colorId).toArgb();
         return moduleReading.getAssignedLessons().stream()
                 .map(lesson -> buildTimetableOccurrences(lesson, moduleCode, colorInt))
@@ -130,7 +130,7 @@ public class TimetableViewModel extends ViewModel {
                 .map(Exam::getDate)
                 .map(DateUtil::formatZonedDateTimeForDisplay)
                 .orElse("");
-        int colorId = moduleReading.getColorId();
+        ColorScheme.Index colorId = moduleReading.getColorId();
         int colorInt = colorScheme.getColor(colorId).toArgb();
         return new UiModuleReading(moduleCode, title, moduleCredit, examDate, colorInt);
     }

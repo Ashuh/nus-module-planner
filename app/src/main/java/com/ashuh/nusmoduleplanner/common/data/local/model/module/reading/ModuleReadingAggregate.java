@@ -12,6 +12,7 @@ import com.ashuh.nusmoduleplanner.common.domain.model.module.Module;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.ModuleReading;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonType;
+import com.ashuh.nusmoduleplanner.common.util.ColorScheme;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +49,7 @@ public class ModuleReadingAggregate {
     @NonNull
     public static ModuleReadingAggregate fromDomain(@NonNull ModuleReading moduleReading) {
         Semester semester = moduleReading.getSemester();
-        int colorId = moduleReading.getColorId();
+        byte colorId = moduleReading.getColorId().getValue();
         String moduleCode = moduleReading.getModule().getModuleCode();
         ModuleReadingEntity moduleReadingEntity
                 = new ModuleReadingEntity(moduleCode, semester, colorId);
@@ -67,7 +68,7 @@ public class ModuleReadingAggregate {
     public ModuleReading toDomain() {
         Module module = moduleAggregate.toDomain();
         Semester semester = moduleReading.getSemester();
-        int colorId = moduleReading.getColorId();
+        ColorScheme.Index colorId = new ColorScheme.Index(moduleReading.getColorId());
 
         Map<LessonType, String> lessonTypeToLessonNo = new HashMap<>();
         lessonNoMappings.forEach(mapping -> {

@@ -2,8 +2,6 @@ package com.ashuh.nusmoduleplanner.moduledetail.domain.usecase;
 
 import static java.util.Objects.requireNonNull;
 
-import android.graphics.Color;
-
 import androidx.annotation.NonNull;
 
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Module;
@@ -21,8 +19,7 @@ public class CreateModuleReadingUseCase {
     }
 
     public void execute(@NonNull Module module, @NonNull Semester semester) {
-        Color color = ColorScheme.GOOGLE.getRandomColor();
-        int colorId =  0;
+        ColorScheme.Index colorId = ColorScheme.Index.random();
         ModuleReading moduleReading =
                 ModuleReading.withDefaultLessonMapping(module, semester, colorId);
         moduleRepository.storeModuleReading(moduleReading);

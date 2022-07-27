@@ -28,12 +28,12 @@ public class ModuleReadingEntity {
     private final String moduleCode;
     @NonNull
     private final Semester semester;
-    private final int colorId;
+    private final byte colorId;
     @PrimaryKey(autoGenerate = true)
     private long id;
 
     public ModuleReadingEntity(@NonNull String moduleCode, @NonNull Semester semester,
-                               int colorId) {
+                               byte colorId) {
         this.moduleCode = requireNonNull(moduleCode);
         this.semester = requireNonNull(semester);
         this.colorId = colorId;
@@ -57,7 +57,7 @@ public class ModuleReadingEntity {
         return semester;
     }
 
-    public int getColorId() {
+    public byte getColorId() {
         return colorId;
     }
 }
