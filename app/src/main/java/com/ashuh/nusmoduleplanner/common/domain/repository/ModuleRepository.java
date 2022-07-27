@@ -1,7 +1,5 @@
 package com.ashuh.nusmoduleplanner.common.domain.repository;
 
-import android.graphics.Color;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
@@ -32,6 +30,5 @@ public interface ModuleRepository {
     void updateLessonNoMapping(@NonNull String moduleCode, @NonNull Semester semType,
                                @NonNull LessonType lessonType, @NonNull String newLessonNo);
 
-    void updateColor(@NonNull String moduleCode, @NonNull Semester semester,
-                     @NonNull Color newColor);
+    void updateColor(@NonNull String moduleCode, @NonNull Semester semester, int newColorId);
 }

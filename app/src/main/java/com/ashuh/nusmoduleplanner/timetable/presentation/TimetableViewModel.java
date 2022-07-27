@@ -2,8 +2,6 @@ package com.ashuh.nusmoduleplanner.timetable.presentation;
 
 import static java.util.Objects.requireNonNull;
 
-import android.graphics.Color;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
@@ -18,9 +16,11 @@ import com.ashuh.nusmoduleplanner.common.domain.model.module.Weeks;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.Lesson;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonOccurrence;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonType;
+import com.ashuh.nusmoduleplanner.common.util.ColorScheme;
 import com.ashuh.nusmoduleplanner.common.util.DateUtil;
 import com.ashuh.nusmoduleplanner.timetable.domain.usecase.DeleteModuleReadingUseCase;
 import com.ashuh.nusmoduleplanner.timetable.domain.usecase.GetAlternateLessonsUseCase;
+import com.ashuh.nusmoduleplanner.timetable.domain.usecase.GetColorSchemeUseCase;
 import com.ashuh.nusmoduleplanner.timetable.domain.usecase.GetModuleReadingsUseCase;
 import com.ashuh.nusmoduleplanner.timetable.domain.usecase.UpdateLessonNoUseCase;
 import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiLesson;
@@ -57,6 +57,8 @@ public class TimetableViewModel extends ViewModel {
     @NonNull
     private final DeleteModuleReadingUseCase deleteModuleReadingUseCase;
     @NonNull
+    private final GetColorSchemeUseCase getColorSchemeUseCase;
+    @NonNull
     private final MediatorLiveData<TimetableState> observableState;
     @NonNull
     private final Semester semester;
@@ -65,48 +67,62 @@ public class TimetableViewModel extends ViewModel {
                               @NonNull GetAlternateLessonsUseCase getAlternateLessonsUseCase,
                               @NonNull UpdateLessonNoUseCase updateLessonNoUseCase,
                               @NonNull DeleteModuleReadingUseCase deleteModuleReadingUseCase,
+                              @NonNull GetColorSchemeUseCase getColorSchemeUseCase,
                               @NonNull Semester semester) {
         this.getModuleReadingsUseCase = requireNonNull(getModuleReadingsUseCase);
         this.getAlternateLessonsUseCase = requireNonNull(getAlternateLessonsUseCase);
         this.updateLessonNoUseCase = requireNonNull(updateLessonNoUseCase);
         this.deleteModuleReadingUseCase = requireNonNull(deleteModuleReadingUseCase);
+        this.getColorSchemeUseCase = getColorSchemeUseCase;
         this.semester = requireNonNull(semester);
         observableState = new MediatorLiveData<>();
         observableState.setValue(TimetableState.loading());
-        observableState.addSource(getModuleReadingsUseCase.execute(semester),
-                moduleReadings -> {
-                    TimetableState state = buildState(moduleReadings);
-                    observableState.setValue(state);
-                });
+
+        LiveData<List<ModuleReading>> observableModuleReadings
+                = getModuleReadingsUseCase.execute(semester);
+        LiveData<ColorScheme> observableColorScheme = getColorSchemeUseCase.execute();
+
+        observableState.addSource(observableColorScheme, colorScheme -> {
+            TimetableState state = buildState(observableModuleReadings.getValue(), colorScheme);
+            observableState.setValue(state);
+        });
+
+        observableState.addSource(observableModuleReadings, moduleReadings -> {
+            TimetableState state = buildState(moduleReadings, observableColorScheme.getValue());
+            observableState.setValue(state);
+        });
     }
 
-    private static TimetableState buildState(Collection<ModuleReading> moduleReadings) {
+    private static TimetableState buildState(Collection<ModuleReading> moduleReadings,
+                                             ColorScheme colorScheme) {
         if (moduleReadings == null) {
             return TimetableState.loading();
         }
         List<UiTimetableLessonOccurrence> uiTimetableLessonOccurrences = moduleReadings.stream()
-                .map(TimetableViewModel::buildTimetableOccurrences)
+                .map(moduleReading -> buildTimetableOccurrences(moduleReading, colorScheme))
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
 
         List<UiModuleReading> uiModuleReadings = moduleReadings.stream()
-                .map(TimetableViewModel::mapModuleReading)
+                .map(moduleReading -> mapModuleReading(moduleReading, colorScheme))
                 .collect(Collectors.toList());
 
         return new TimetableState(uiTimetableLessonOccurrences, uiModuleReadings, false);
     }
 
     private static List<UiTimetableLessonOccurrence> buildTimetableOccurrences(
-            ModuleReading moduleReading) {
+            ModuleReading moduleReading, ColorScheme colorScheme) {
         String moduleCode = moduleReading.getModule().getModuleCode();
-        Color color = moduleReading.getColor();
+        int colorId = moduleReading.getColorId();
+        int colorInt = colorScheme.getColor(colorId).toArgb();
         return moduleReading.getAssignedLessons().stream()
-                .map(lesson -> buildTimetableOccurrences(lesson, moduleCode, color))
+                .map(lesson -> buildTimetableOccurrences(lesson, moduleCode, colorInt))
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
     }
 
-    private static UiModuleReading mapModuleReading(ModuleReading moduleReading) {
+    private static UiModuleReading mapModuleReading(ModuleReading moduleReading,
+                                                    ColorScheme colorScheme) {
         String moduleCode = moduleReading.getModule().getModuleCode();
         String title = moduleReading.getModule().getTitle();
         String moduleCredit = moduleReading.getModule().getModuleCredit().toString();
@@ -114,25 +130,25 @@ public class TimetableViewModel extends ViewModel {
                 .map(Exam::getDate)
                 .map(DateUtil::formatZonedDateTimeForDisplay)
                 .orElse("");
-        int color = moduleReading.getColor().toArgb();
-        return new UiModuleReading(moduleCode, title, moduleCredit, examDate, color);
+        int colorId = moduleReading.getColorId();
+        int colorInt = colorScheme.getColor(colorId).toArgb();
+        return new UiModuleReading(moduleCode, title, moduleCredit, examDate, colorInt);
     }
 
     private static List<UiTimetableLessonOccurrence> buildTimetableOccurrences(Lesson lesson,
                                                                                String moduleCode,
-                                                                               Color color) {
+                                                                               int color) {
         LessonType lessonType = lesson.getLessonType();
         String lessonNo = lesson.getLessonNo();
         return lesson.getOccurrences().stream()
                 .map(occurrence -> TimetableViewModel.buildTimetableLessonOccurrence(occurrence,
-                        moduleCode,
-                        lessonType, lessonNo, color))
+                        moduleCode, lessonType, lessonNo, color))
                 .collect(Collectors.toList());
     }
 
     private static UiTimetableLessonOccurrence buildTimetableLessonOccurrence(
             LessonOccurrence occurrence, String moduleCode,
-            LessonType lessonType, String lessonNo, Color color) {
+            LessonType lessonType, String lessonNo, int color) {
         DayTime startTime = convertTime(occurrence.getDay(), occurrence.getStartTime());
         DayTime endTime = convertTime(occurrence.getDay(), occurrence.getEndTime());
         String name = String.format(FORMAT_LESSON_OCCURRENCE_NAME, moduleCode,
@@ -140,7 +156,7 @@ public class TimetableViewModel extends ViewModel {
         UiTimetableLessonOccurrence uiOccurrence
                 = new UiTimetableLessonOccurrence(name, occurrence.getVenue(), startTime,
                 endTime, moduleCode, lessonType, lessonNo);
-        uiOccurrence.setColor(color.toArgb());
+        uiOccurrence.setColor(color);
         return uiOccurrence;
     }
 

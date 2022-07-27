@@ -5,6 +5,8 @@ import static java.util.Objects.requireNonNull;
 import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.ashuh.nusmoduleplanner.common.util.ColorScheme;
 
@@ -15,6 +17,7 @@ public class AppPreferencesRepository implements PreferencesRepository {
             = "color_scheme";
 
     private final SharedPreferences sharedPreferences;
+    static SharedPreferences.OnSharedPreferenceChangeListener listener;
 
     public AppPreferencesRepository(@NonNull SharedPreferences sharedPreferences) {
         this.sharedPreferences = requireNonNull(sharedPreferences);
@@ -22,10 +25,22 @@ public class AppPreferencesRepository implements PreferencesRepository {
 
     @NonNull
     @Override
-    public ColorScheme getColorScheme() {
+    public LiveData<ColorScheme> getColorScheme() {
         String colorSchemeName = sharedPreferences
                 .getString(COLOR_SCHEME_KEY, ColorScheme.GOOGLE.name());
-        return ColorScheme.valueOf(colorSchemeName);
+        MutableLiveData<ColorScheme> observableColorScheme
+                = new MutableLiveData<>(ColorScheme.valueOf(colorSchemeName));
+
+        listener = (sharedPreferences, key) -> {
+            if (key.equals(COLOR_SCHEME_KEY)) {
+                String newColorScheme = sharedPreferences.getString(COLOR_SCHEME_KEY,
+                        ColorScheme.GOOGLE.name());
+                observableColorScheme.setValue(ColorScheme.valueOf(newColorScheme));
+            }
+        };
+        sharedPreferences.registerOnSharedPreferenceChangeListener(listener);
+
+        return observableColorScheme;
     }
 
     @Override

@@ -6,7 +6,7 @@ import android.graphics.Color;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
@@ -29,16 +29,14 @@ public class ColorSelectViewModel extends ViewModel {
     }
 
     public LiveData<List<Integer>> getSelectedColorSchemeColors() {
-        // TODO: temporary implementation
-        List<Integer> colorInts = getColorSchemeUseCase.execute().getColors().stream()
-                .map(Color::toArgb)
-                .collect(Collectors.toList());
-        return new MutableLiveData<>(colorInts);
+        return Transformations.map(getColorSchemeUseCase.execute(),
+                colorScheme -> colorScheme.getColors().stream()
+                        .map(Color::toArgb)
+                        .collect(Collectors.toList()));
     }
 
-    public void updateColor(@NonNull String moduleCode, int semester, int newColor) {
+    public void updateColor(@NonNull String moduleCode, int semester, int newColorId) {
         Semester domainSemester = Semester.fromInt(semester);
-        Color domainColor = Color.valueOf(newColor);
-        updateColorUseCase.execute(moduleCode, domainSemester, domainColor);
+        updateColorUseCase.execute(moduleCode, domainSemester, newColorId);
     }
 }

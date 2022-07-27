@@ -2,8 +2,6 @@ package com.ashuh.nusmoduleplanner.common.data.repository;
 
 import static java.util.Objects.requireNonNull;
 
-import android.graphics.Color;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
@@ -80,10 +78,10 @@ public class AppModuleRepository implements ModuleRepository {
     }
 
     @Override
-    public void updateColor(String moduleCode, Semester semester, Color newColor) {
+    public void updateColor(@NonNull String moduleCode, @NonNull Semester semester,
+                            int newColorId) {
         requireNonNull(moduleCode);
         requireNonNull(semester);
-        requireNonNull(newColor);
-        localDataSource.updateColor(moduleCode, semester, newColor);
+        localDataSource.updateColor(moduleCode, semester, newColorId);
     }
 }

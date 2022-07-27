@@ -22,8 +22,9 @@ public class CreateModuleReadingUseCase {
 
     public void execute(@NonNull Module module, @NonNull Semester semester) {
         Color color = ColorScheme.GOOGLE.getRandomColor();
+        int colorId =  0;
         ModuleReading moduleReading =
-                ModuleReading.withDefaultLessonMapping(module, semester, color);
+                ModuleReading.withDefaultLessonMapping(module, semester, colorId);
         moduleRepository.storeModuleReading(moduleReading);
     }
 }

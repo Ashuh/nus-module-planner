@@ -15,8 +15,7 @@ import java.util.List;
 
 public class ColorAdapter extends ArrayAdapter<Integer> {
 
-    public ColorAdapter(@NonNull Context context, int resource,
-                        @NonNull List<Integer> objects) {
+    public ColorAdapter(@NonNull Context context, int resource, @NonNull List<Integer> objects) {
         super(context, resource, objects);
     }
 

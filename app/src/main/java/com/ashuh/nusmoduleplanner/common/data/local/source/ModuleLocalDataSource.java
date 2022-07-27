@@ -64,7 +64,7 @@ public class ModuleLocalDataSource {
                 lessonType, newLessonNo));
     }
 
-    public void updateColor(String moduleCode, Semester semester, Color newColor) {
-        executor.execute(() -> moduleDao.updateColor(moduleCode, semester, newColor.toArgb()));
+    public void updateColor(String moduleCode, Semester semester, int newColorId) {
+        executor.execute(() -> moduleDao.updateColor(moduleCode, semester, newColorId));
     }
 }

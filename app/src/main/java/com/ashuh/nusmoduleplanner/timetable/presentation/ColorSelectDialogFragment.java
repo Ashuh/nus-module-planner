@@ -72,8 +72,7 @@ public class ColorSelectDialogFragment extends DialogFragment
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        int color = (int) parent.getItemAtPosition(position);
-        viewModel.updateColor(moduleCode, semester, color);
+        viewModel.updateColor(moduleCode, semester, position);
         dismiss();
     }
 }

@@ -2,8 +2,6 @@ package com.ashuh.nusmoduleplanner.common.domain.model.module;
 
 import static java.util.Objects.requireNonNull;
 
-import android.graphics.Color;
-
 import androidx.annotation.NonNull;
 
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.Lesson;
@@ -22,16 +20,15 @@ public class ModuleReading {
     private final Semester semester;
     @NonNull
     private final Map<LessonType, String> lessonTypeToLessonNo;
-    @NonNull
-    private final Color color;
+    private final int colorId;
 
     public ModuleReading(@NonNull Module module, @NonNull Semester semester,
-                         @NonNull Map<LessonType, String> lessonTypeToLessonNo,
-                         @NonNull Color color) {
+                         @NonNull Map<LessonType, String> lessonTypeToLessonNo, int colorId) {
         this.module = requireNonNull(module);
         this.semester = requireNonNull(semester);
         this.lessonTypeToLessonNo = requireNonNull(lessonTypeToLessonNo);
-        this.color = requireNonNull(color);
+        this.colorId = colorId;
+        assert colorId >= 0 && colorId < 8;
 
         if (!isValidReading(module, semester, lessonTypeToLessonNo)) {
             throw new IllegalArgumentException("Invalid ModuleReading");
@@ -59,10 +56,9 @@ public class ModuleReading {
     @NonNull
     public static ModuleReading withDefaultLessonMapping(@NonNull Module module,
                                                          @NonNull Semester semester,
-                                                         @NonNull Color color) {
+                                                         int color) {
         requireNonNull(module);
         requireNonNull(semester);
-        requireNonNull(color);
 
         ModuleSemesterDatum datum = module.getSemesterDatum(semester)
                 .orElseThrow(() -> new IllegalArgumentException(
@@ -92,9 +88,8 @@ public class ModuleReading {
         return semester;
     }
 
-    @NonNull
-    public Color getColor() {
-        return color;
+    public int getColorId() {
+        return colorId;
     }
 
     @NonNull

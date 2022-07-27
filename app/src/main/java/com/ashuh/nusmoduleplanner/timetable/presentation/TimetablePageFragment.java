@@ -24,6 +24,7 @@ import com.ashuh.nusmoduleplanner.common.NusModulePlannerApplication;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonType;
 import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
+import com.ashuh.nusmoduleplanner.common.domain.repository.PreferencesRepository;
 import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiModuleReading;
 import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiTimetableLessonOccurrence;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
@@ -52,8 +53,11 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
         ModuleRepository moduleRepository
                 = ((NusModulePlannerApplication) requireActivity().getApplication())
                 .appContainer.moduleRepository;
+        PreferencesRepository preferenceRepository
+                = ((NusModulePlannerApplication) requireActivity().getApplication())
+                .appContainer.preferencesRepository;
         viewModel = new ViewModelProvider(this,
-                new TimetableViewModelFactory(moduleRepository, semester))
+                new TimetableViewModelFactory(moduleRepository, preferenceRepository, semester))
                 .get(TimetableViewModel.class);
         viewModel.getState().observe(this, this);
         adapter = new ModuleReadingAdapter(semInt);
