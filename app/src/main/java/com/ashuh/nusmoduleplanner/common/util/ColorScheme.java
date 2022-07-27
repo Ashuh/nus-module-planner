@@ -54,6 +54,13 @@ public enum ColorScheme {
         return colors.get((int) (Math.random() * colors.size()));
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        String name = name();
+        return name.charAt(0) + name.substring(1).toLowerCase();
+    }
+
     private static class Colors {
         private static final Color GOOGLE_RED = Color.valueOf(0xFFCC342B);
         private static final Color GOOGLE_ORANGE = Color.valueOf(0xFFF96A38);
