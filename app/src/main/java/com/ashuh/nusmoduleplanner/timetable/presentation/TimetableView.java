@@ -4,18 +4,12 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 
-import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiTimetableLessonOccurrence;
-
 import org.threeten.bp.DayOfWeek;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import me.jlurena.revolvingweekview.DateTimeInterpreter;
 import me.jlurena.revolvingweekview.WeekView;
-import me.jlurena.revolvingweekview.WeekViewEvent;
 
 public class TimetableView extends WeekView {
     private static final int HOUR_TIMETABLE_START = 8;
@@ -24,8 +18,6 @@ public class TimetableView extends WeekView {
 
     private static final int TEXT_SIZE = 12;
     private static final int TEXT_SIZE_EVENT = 10;
-
-    private List<UiTimetableLessonOccurrence> lessonOccurrences;
 
     public TimetableView(Context context) {
         super(context);
@@ -48,7 +40,6 @@ public class TimetableView extends WeekView {
                         getResources().getDisplayMetrics()));
 
         setDateTimeInterpreter(new TimetableDateTimeInterpreter());
-        setWeekViewLoader(new TimetableLoader());
     }
 
     public TimetableView(Context context, AttributeSet attrs) {
@@ -59,11 +50,6 @@ public class TimetableView extends WeekView {
     public TimetableView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
-    }
-
-    public void setAssignedModules(List<UiTimetableLessonOccurrence> occurrences) {
-        this.lessonOccurrences = occurrences;
-        notifyDatasetChanged();
     }
 
     private static class TimetableDateTimeInterpreter implements DateTimeInterpreter {
@@ -80,13 +66,6 @@ public class TimetableView extends WeekView {
             int hourConverted = (hour % HOUR_NOON == 0) ? HOUR_NOON : hour % HOUR_NOON;
             return String.format(Locale.ENGLISH, TEXT_TIME_FORMAT, hourConverted, minutes,
                     hour < HOUR_NOON ? "AM" : "PM");
-        }
-    }
-
-    private class TimetableLoader implements WeekViewLoader {
-        @Override
-        public List<? extends WeekViewEvent> onWeekViewLoad() {
-            return Objects.requireNonNullElse(lessonOccurrences, Collections.emptyList());
         }
     }
 }
