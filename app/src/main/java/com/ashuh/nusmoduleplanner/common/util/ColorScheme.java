@@ -9,23 +9,23 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum ColorScheme {
-    EIGHTIES(Colors.EIGHTIES_RED,
-            Colors.EIGHTIES_ORANGE,
-            Colors.EIGHTIES_YELLOW,
-            Colors.EIGHTIES_GREEN,
-            Colors.EIGHTIES_DARK_BLUE,
-            Colors.EIGHTIES_LIGHT_BLUE,
-            Colors.EIGHTIES_PURPLE,
-            Colors.EIGHTIES_PINK),
+    EIGHTIES(Color.valueOf(0xFFF2777A),
+            Color.valueOf(0xFFf99157),
+            Color.valueOf(0xFFFFCC66),
+            Color.valueOf(0xFF99CC99),
+            Color.valueOf(0xFF66CCCC),
+            Color.valueOf(0xFF6699CC),
+            Color.valueOf(0xFFCC99CC),
+            Color.valueOf(0xFFD27B53)),
 
-    GOOGLE(Colors.GOOGLE_RED,
-            Colors.GOOGLE_ORANGE,
-            Colors.GOOGLE_YELLOW,
-            Colors.GOOGLE_GREEN,
-            Colors.GOOGLE_DARK_BLUE,
-            Colors.GOOGLE_LIGHT_BLUE,
-            Colors.GOOGLE_PURPLE,
-            Colors.GOOGLE_PINK);
+    GOOGLE(Color.valueOf(0xFFCC342B),
+            Color.valueOf(0xFFF96A38),
+            Color.valueOf(0xFFFBA922),
+            Color.valueOf(0xFF198844),
+            Color.valueOf(0xFF3971ED),
+            Color.valueOf(0xFF79A4F9),
+            Color.valueOf(0xFFA36AC7),
+            Color.valueOf(0xFFEC9998));
 
     private static final int SIZE = 8;
 
@@ -82,25 +82,5 @@ public enum ColorScheme {
         public byte getValue() {
             return value;
         }
-    }
-
-    private static class Colors {
-        private static final Color GOOGLE_RED = Color.valueOf(0xFFCC342B);
-        private static final Color GOOGLE_ORANGE = Color.valueOf(0xFFF96A38);
-        private static final Color GOOGLE_YELLOW = Color.valueOf(0xFFFBA922);
-        private static final Color GOOGLE_GREEN = Color.valueOf(0xFF198844);
-        private static final Color GOOGLE_DARK_BLUE = Color.valueOf(0xFF3971ED);
-        private static final Color GOOGLE_LIGHT_BLUE = Color.valueOf(0xFF79A4F9);
-        private static final Color GOOGLE_PURPLE = Color.valueOf(0xFFA36AC7);
-        private static final Color GOOGLE_PINK = Color.valueOf(0xFFEC9998);
-
-        private static final Color EIGHTIES_RED = Color.valueOf(0xFFF2777A);
-        private static final Color EIGHTIES_ORANGE = Color.valueOf(0xFFf99157);
-        private static final Color EIGHTIES_YELLOW = Color.valueOf(0xFFFFCC66);
-        private static final Color EIGHTIES_GREEN = Color.valueOf(0xFF99CC99);
-        private static final Color EIGHTIES_DARK_BLUE = Color.valueOf(0xFF66CCCC);
-        private static final Color EIGHTIES_LIGHT_BLUE = Color.valueOf(0xFF6699CC);
-        private static final Color EIGHTIES_PURPLE = Color.valueOf(0xFFCC99CC);
-        private static final Color EIGHTIES_PINK = Color.valueOf(0xFFD27B53);
     }
 }
