@@ -12,10 +12,8 @@ import com.ashuh.nusmoduleplanner.common.domain.repository.PreferencesRepository
 import com.ashuh.nusmoduleplanner.common.util.ColorScheme;
 
 public class AppPreferencesRepository implements PreferencesRepository {
-    public static final String PREFERENCE_FILE_KEY
-            = "com.ashuh.nusmoduleplanner.PREFERENCE_FILE_KEY";
-    private static final String COLOR_SCHEME_KEY
-            = "color_scheme";
+    public static final String PREFERENCE_FILE_KEY = "com.ashuh.nusmoduleplanner.preferences";
+    private static final String COLOR_SCHEME_KEY = "color_scheme";
 
     private final SharedPreferences sharedPreferences;
     static SharedPreferences.OnSharedPreferenceChangeListener listener;
