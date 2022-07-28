@@ -1,6 +1,6 @@
 package com.ashuh.nusmoduleplanner.common;
 
-import static com.ashuh.nusmoduleplanner.common.domain.repository.AppPreferencesRepository.PREFERENCE_FILE_KEY;
+import static com.ashuh.nusmoduleplanner.common.data.repository.AppPreferencesRepository.PREFERENCE_FILE_KEY;
 import static java.util.Objects.requireNonNull;
 
 import android.content.Context;
@@ -19,7 +19,7 @@ import com.ashuh.nusmoduleplanner.common.data.remote.source.ModuleRemoteDataSour
 import com.ashuh.nusmoduleplanner.common.data.remote.source.PostRemoteDataSource;
 import com.ashuh.nusmoduleplanner.common.data.repository.AppModuleRepository;
 import com.ashuh.nusmoduleplanner.common.data.repository.AppPostRepository;
-import com.ashuh.nusmoduleplanner.common.domain.repository.AppPreferencesRepository;
+import com.ashuh.nusmoduleplanner.common.data.repository.AppPreferencesRepository;
 import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
 import com.ashuh.nusmoduleplanner.common.domain.repository.PostRepository;
 import com.ashuh.nusmoduleplanner.common.domain.repository.PreferencesRepository;

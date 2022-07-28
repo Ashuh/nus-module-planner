@@ -1,4 +1,4 @@
-package com.ashuh.nusmoduleplanner.common.domain.repository;
+package com.ashuh.nusmoduleplanner.common.data.repository;
 
 import static java.util.Objects.requireNonNull;
 
@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.ashuh.nusmoduleplanner.common.domain.repository.PreferencesRepository;
 import com.ashuh.nusmoduleplanner.common.util.ColorScheme;
 
 public class AppPreferencesRepository implements PreferencesRepository {

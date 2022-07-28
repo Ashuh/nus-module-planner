@@ -1,6 +1,6 @@
 package com.ashuh.nusmoduleplanner.settings;
 
-import static com.ashuh.nusmoduleplanner.common.domain.repository.AppPreferencesRepository.PREFERENCE_FILE_KEY;
+import static com.ashuh.nusmoduleplanner.common.data.repository.AppPreferencesRepository.PREFERENCE_FILE_KEY;
 
 import android.os.Bundle;
 import android.view.Menu;
