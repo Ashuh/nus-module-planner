@@ -15,7 +15,6 @@ import com.ashuh.nusmoduleplanner.timetable.domain.usecase.GetColorSchemeUseCase
 import com.ashuh.nusmoduleplanner.timetable.domain.usecase.GetModuleReadingsUseCase;
 import com.ashuh.nusmoduleplanner.timetable.domain.usecase.UpdateLessonNoUseCase;
 
-
 public class TimetableViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     private final ModuleRepository moduleRepository;
