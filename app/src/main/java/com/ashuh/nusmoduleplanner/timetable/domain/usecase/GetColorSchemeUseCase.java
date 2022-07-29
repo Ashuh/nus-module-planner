@@ -10,14 +10,14 @@ import com.ashuh.nusmoduleplanner.common.util.ColorScheme;
 
 public class GetColorSchemeUseCase {
     @NonNull
-    private final SharedPreferencesManager preferenceRepository;
+    private final SharedPreferencesManager sharedPreferencesManager;
 
-    public GetColorSchemeUseCase(@NonNull SharedPreferencesManager preferenceRepository) {
-        this.preferenceRepository = requireNonNull(preferenceRepository);
+    public GetColorSchemeUseCase(@NonNull SharedPreferencesManager sharedPreferencesManager) {
+        this.sharedPreferencesManager = requireNonNull(sharedPreferencesManager);
     }
 
     @NonNull
     public LiveData<ColorScheme> execute() {
-        return preferenceRepository.getColorScheme();
+        return sharedPreferencesManager.getColorScheme();
     }
 }
