@@ -6,8 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.ashuh.nusmoduleplanner.common.data.preferences.SharedPreferencesManager;
 import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
-import com.ashuh.nusmoduleplanner.common.domain.repository.PreferencesRepository;
 import com.ashuh.nusmoduleplanner.timetable.domain.usecase.GetColorSchemeUseCase;
 import com.ashuh.nusmoduleplanner.timetable.domain.usecase.UpdateColorUseCase;
 
@@ -15,10 +15,10 @@ public class ColorSelectViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     private final ModuleRepository moduleRepository;
     @NonNull
-    private final PreferencesRepository preferenceRepository;
+    private final SharedPreferencesManager preferenceRepository;
 
     public ColorSelectViewModelFactory(@NonNull ModuleRepository moduleRepository,
-                                       @NonNull PreferencesRepository preferenceRepository) {
+                                       @NonNull SharedPreferencesManager preferenceRepository) {
         this.moduleRepository = requireNonNull(moduleRepository);
         this.preferenceRepository = requireNonNull(preferenceRepository);
     }

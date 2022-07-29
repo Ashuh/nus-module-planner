@@ -21,10 +21,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ashuh.nusmoduleplanner.R;
 import com.ashuh.nusmoduleplanner.common.MainActivity;
 import com.ashuh.nusmoduleplanner.common.NusModulePlannerApplication;
+import com.ashuh.nusmoduleplanner.common.data.preferences.SharedPreferencesManager;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonType;
 import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
-import com.ashuh.nusmoduleplanner.common.domain.repository.PreferencesRepository;
 import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiModuleReading;
 import com.ashuh.nusmoduleplanner.timetable.presentation.model.UiTimetableLessonOccurrence;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
@@ -54,9 +54,9 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
         ModuleRepository moduleRepository
                 = ((NusModulePlannerApplication) requireActivity().getApplication())
                 .appContainer.moduleRepository;
-        PreferencesRepository preferenceRepository
+        SharedPreferencesManager preferenceRepository
                 = ((NusModulePlannerApplication) requireActivity().getApplication())
-                .appContainer.preferencesRepository;
+                .appContainer.sharedPreferencesManager;
         viewModel = new ViewModelProvider(this,
                 new TimetableViewModelFactory(moduleRepository, preferenceRepository, semester))
                 .get(TimetableViewModel.class);

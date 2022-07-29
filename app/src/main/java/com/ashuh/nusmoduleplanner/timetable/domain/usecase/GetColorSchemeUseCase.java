@@ -5,14 +5,14 @@ import static java.util.Objects.requireNonNull;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
-import com.ashuh.nusmoduleplanner.common.domain.repository.PreferencesRepository;
+import com.ashuh.nusmoduleplanner.common.data.preferences.SharedPreferencesManager;
 import com.ashuh.nusmoduleplanner.common.util.ColorScheme;
 
 public class GetColorSchemeUseCase {
     @NonNull
-    private final PreferencesRepository preferenceRepository;
+    private final SharedPreferencesManager preferenceRepository;
 
-    public GetColorSchemeUseCase(@NonNull PreferencesRepository preferenceRepository) {
+    public GetColorSchemeUseCase(@NonNull SharedPreferencesManager preferenceRepository) {
         this.preferenceRepository = requireNonNull(preferenceRepository);
     }
 
