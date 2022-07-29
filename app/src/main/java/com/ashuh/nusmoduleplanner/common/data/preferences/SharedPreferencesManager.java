@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 
 import com.ashuh.nusmoduleplanner.common.util.ColorScheme;
 
@@ -15,7 +15,6 @@ public class SharedPreferencesManager {
     private static final String COLOR_SCHEME_KEY = "color_scheme";
 
     private final SharedPreferences sharedPreferences;
-    static SharedPreferences.OnSharedPreferenceChangeListener listener;
 
     public SharedPreferencesManager(@NonNull SharedPreferences sharedPreferences) {
         this.sharedPreferences = requireNonNull(sharedPreferences);
@@ -23,21 +22,10 @@ public class SharedPreferencesManager {
 
     @NonNull
     public LiveData<ColorScheme> getColorScheme() {
-        String colorSchemeName = sharedPreferences
-                .getString(COLOR_SCHEME_KEY, ColorScheme.GOOGLE.name());
-        MutableLiveData<ColorScheme> observableColorScheme
-                = new MutableLiveData<>(ColorScheme.valueOf(colorSchemeName));
-
-        listener = (sharedPreferences, key) -> {
-            if (key.equals(COLOR_SCHEME_KEY)) {
-                String newColorScheme = sharedPreferences.getString(COLOR_SCHEME_KEY,
-                        ColorScheme.GOOGLE.name());
-                observableColorScheme.setValue(ColorScheme.valueOf(newColorScheme));
-            }
-        };
-        sharedPreferences.registerOnSharedPreferenceChangeListener(listener);
-
-        return observableColorScheme;
+        SharedPreferenceStringLiveData observableColorSchemeName
+                = new SharedPreferenceStringLiveData(sharedPreferences, COLOR_SCHEME_KEY,
+                ColorScheme.GOOGLE.name());
+        return Transformations.map(observableColorSchemeName, ColorScheme::valueOf);
     }
 
     public void setColorScheme(@NonNull ColorScheme colorScheme) {
