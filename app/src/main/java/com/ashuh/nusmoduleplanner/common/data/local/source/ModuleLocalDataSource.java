@@ -2,8 +2,6 @@ package com.ashuh.nusmoduleplanner.common.data.local.source;
 
 import static java.util.Objects.requireNonNull;
 
-import android.graphics.Color;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
