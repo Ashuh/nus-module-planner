@@ -16,8 +16,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.ashuh.nusmoduleplanner.R;
 import com.ashuh.nusmoduleplanner.common.AppContainer;
 import com.ashuh.nusmoduleplanner.common.NusModulePlannerApplication;
+import com.ashuh.nusmoduleplanner.common.data.preferences.SharedPreferencesManager;
 import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
-import com.ashuh.nusmoduleplanner.common.domain.repository.PreferencesRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,9 +41,9 @@ public class ColorSelectDialogFragment extends DialogFragment
         AppContainer container = ((NusModulePlannerApplication) requireActivity().getApplication())
                 .appContainer;
         ModuleRepository moduleRepository = container.moduleRepository;
-        PreferencesRepository preferencesRepository = container.preferencesRepository;
+        SharedPreferencesManager sharedPreferencesManager = container.sharedPreferencesManager;
         viewModel = new ViewModelProvider(this,
-                new ColorSelectViewModelFactory(moduleRepository, preferencesRepository))
+                new ColorSelectViewModelFactory(moduleRepository, sharedPreferencesManager))
                 .get(ColorSelectViewModel.class);
         adapter = new ColorAdapter(requireContext(), R.layout.color_select_item, new ArrayList<>());
     }
@@ -72,8 +72,7 @@ public class ColorSelectDialogFragment extends DialogFragment
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        int color = (int) parent.getItemAtPosition(position);
-        viewModel.updateColor(moduleCode, semester, color);
+        viewModel.updateColor(moduleCode, semester, position);
         dismiss();
     }
 }

@@ -2,8 +2,6 @@ package com.ashuh.nusmoduleplanner.common.data.repository;
 
 import static java.util.Objects.requireNonNull;
 
-import android.graphics.Color;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
@@ -15,6 +13,7 @@ import com.ashuh.nusmoduleplanner.common.domain.model.module.ModuleReading;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonType;
 import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
+import com.ashuh.nusmoduleplanner.common.util.ColorScheme.Index;
 
 import java.util.List;
 
@@ -80,10 +79,11 @@ public class AppModuleRepository implements ModuleRepository {
     }
 
     @Override
-    public void updateColor(String moduleCode, Semester semester, Color newColor) {
+    public void updateColor(@NonNull String moduleCode, @NonNull Semester semester,
+                            @NonNull Index newColorId) {
         requireNonNull(moduleCode);
         requireNonNull(semester);
-        requireNonNull(newColor);
-        localDataSource.updateColor(moduleCode, semester, newColor);
+        requireNonNull(newColorId);
+        localDataSource.updateColor(moduleCode, semester, newColorId.getValue());
     }
 }

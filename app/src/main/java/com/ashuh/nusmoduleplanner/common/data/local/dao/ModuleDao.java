@@ -64,7 +64,7 @@ public abstract class ModuleDao {
     @Transaction
     public void insertModuleReading(ModuleReadingAggregate moduleReadingAggregate) {
         insertModule(moduleReadingAggregate.getModuleAggregate());
-        long id = insertModuleReading(moduleReadingAggregate.getTimetableEntry());
+        long id = insertModuleReading(moduleReadingAggregate.getModuleReading());
 
         moduleReadingAggregate.getLessonNoMappings().forEach(mapping -> {
             mapping.setOwnerId(id);
@@ -212,8 +212,8 @@ public abstract class ModuleDao {
     protected abstract void insertWeeksWeekNumberCrossRef(WeeksWeekNumberCrossRefEntity crossRef);
 
     @Query("UPDATE ModuleReadingEntity "
-            + "SET color = :color "
+            + "SET colorId = :colorId "
             + "WHERE moduleCode = :moduleCode "
             + "AND semester = :semester")
-    public abstract void updateColor(String moduleCode, Semester semester, int color);
+    public abstract void updateColor(String moduleCode, Semester semester, int colorId);
 }

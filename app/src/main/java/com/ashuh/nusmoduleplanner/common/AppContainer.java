@@ -1,6 +1,6 @@
 package com.ashuh.nusmoduleplanner.common;
 
-import static com.ashuh.nusmoduleplanner.common.domain.repository.AppPreferencesRepository.PREFERENCE_FILE_KEY;
+import static com.ashuh.nusmoduleplanner.common.data.preferences.SharedPreferencesManager.PREFERENCE_FILE_KEY;
 import static java.util.Objects.requireNonNull;
 
 import android.content.Context;
@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import com.ashuh.nusmoduleplanner.common.data.local.dao.ModuleDao;
 import com.ashuh.nusmoduleplanner.common.data.local.database.AppDatabase;
 import com.ashuh.nusmoduleplanner.common.data.local.source.ModuleLocalDataSource;
+import com.ashuh.nusmoduleplanner.common.data.preferences.SharedPreferencesManager;
 import com.ashuh.nusmoduleplanner.common.data.remote.api.DisqusApi;
 import com.ashuh.nusmoduleplanner.common.data.remote.api.DisqusApiBuilder;
 import com.ashuh.nusmoduleplanner.common.data.remote.api.NusModsApi;
@@ -19,10 +20,8 @@ import com.ashuh.nusmoduleplanner.common.data.remote.source.ModuleRemoteDataSour
 import com.ashuh.nusmoduleplanner.common.data.remote.source.PostRemoteDataSource;
 import com.ashuh.nusmoduleplanner.common.data.repository.AppModuleRepository;
 import com.ashuh.nusmoduleplanner.common.data.repository.AppPostRepository;
-import com.ashuh.nusmoduleplanner.common.domain.repository.AppPreferencesRepository;
 import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
 import com.ashuh.nusmoduleplanner.common.domain.repository.PostRepository;
-import com.ashuh.nusmoduleplanner.common.domain.repository.PreferencesRepository;
 
 public class AppContainer {
     @NonNull
@@ -30,7 +29,7 @@ public class AppContainer {
     @NonNull
     public PostRepository postRepository;
     @NonNull
-    public PreferencesRepository preferencesRepository;
+    public SharedPreferencesManager sharedPreferencesManager;
 
     public AppContainer(@NonNull Context context) {
         requireNonNull(context);
@@ -46,6 +45,6 @@ public class AppContainer {
 
         SharedPreferences sharedPreferences = context
                 .getSharedPreferences(PREFERENCE_FILE_KEY, Context.MODE_PRIVATE);
-        preferencesRepository = new AppPreferencesRepository(sharedPreferences);
+        sharedPreferencesManager = new SharedPreferencesManager(sharedPreferences);
     }
 }

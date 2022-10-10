@@ -2,12 +2,11 @@ package com.ashuh.nusmoduleplanner.common.domain.model.module;
 
 import static java.util.Objects.requireNonNull;
 
-import android.graphics.Color;
-
 import androidx.annotation.NonNull;
 
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.Lesson;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonType;
+import com.ashuh.nusmoduleplanner.common.util.ColorScheme;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,15 +22,15 @@ public class ModuleReading {
     @NonNull
     private final Map<LessonType, String> lessonTypeToLessonNo;
     @NonNull
-    private final Color color;
+    private final ColorScheme.Index colorId;
 
     public ModuleReading(@NonNull Module module, @NonNull Semester semester,
                          @NonNull Map<LessonType, String> lessonTypeToLessonNo,
-                         @NonNull Color color) {
+                         @NonNull ColorScheme.Index colorId) {
         this.module = requireNonNull(module);
         this.semester = requireNonNull(semester);
         this.lessonTypeToLessonNo = requireNonNull(lessonTypeToLessonNo);
-        this.color = requireNonNull(color);
+        this.colorId = requireNonNull(colorId);
 
         if (!isValidReading(module, semester, lessonTypeToLessonNo)) {
             throw new IllegalArgumentException("Invalid ModuleReading");
@@ -59,10 +58,9 @@ public class ModuleReading {
     @NonNull
     public static ModuleReading withDefaultLessonMapping(@NonNull Module module,
                                                          @NonNull Semester semester,
-                                                         @NonNull Color color) {
+                                                         ColorScheme.Index color) {
         requireNonNull(module);
         requireNonNull(semester);
-        requireNonNull(color);
 
         ModuleSemesterDatum datum = module.getSemesterDatum(semester)
                 .orElseThrow(() -> new IllegalArgumentException(
@@ -93,8 +91,8 @@ public class ModuleReading {
     }
 
     @NonNull
-    public Color getColor() {
-        return color;
+    public ColorScheme.Index getColorId() {
+        return colorId;
     }
 
     @NonNull

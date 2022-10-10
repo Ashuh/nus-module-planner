@@ -33,4 +33,12 @@
             android:id="@+id/action_nav_module_detail_self"
             app:destination="@id/nav_module_detail" />
     </fragment>
+
+    <fragment
+        android:id="@+id/nav_settings_main"
+        android:name="com.ashuh.nusmoduleplanner.settings.SettingsFragment"
+        android:label="Settings" />
+
+    <action android:id="@+id/action_global_nav_settings" app:destination="@id/nav_settings_main" />
+
 </navigation>

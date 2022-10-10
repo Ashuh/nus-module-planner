@@ -2,12 +2,11 @@ package com.ashuh.nusmoduleplanner.timetable.domain.usecase;
 
 import static java.util.Objects.requireNonNull;
 
-import android.graphics.Color;
-
 import androidx.annotation.NonNull;
 
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
+import com.ashuh.nusmoduleplanner.common.util.ColorScheme.Index;
 
 public class UpdateColorUseCase {
     @NonNull
@@ -17,8 +16,7 @@ public class UpdateColorUseCase {
         this.moduleRepository = requireNonNull(moduleRepository);
     }
 
-    public void execute(@NonNull String moduleCode, @NonNull Semester semester,
-                        @NonNull Color newColor) {
-        moduleRepository.updateColor(moduleCode, semester, newColor);
+    public void execute(@NonNull String moduleCode, @NonNull Semester semester, int newColorId) {
+        moduleRepository.updateColor(moduleCode, semester, new Index(newColorId));
     }
 }

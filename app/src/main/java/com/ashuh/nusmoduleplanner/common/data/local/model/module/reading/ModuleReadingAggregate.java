@@ -2,8 +2,6 @@ package com.ashuh.nusmoduleplanner.common.data.local.model.module.reading;
 
 import static java.util.Objects.requireNonNull;
 
-import android.graphics.Color;
-
 import androidx.annotation.NonNull;
 import androidx.room.Embedded;
 import androidx.room.Relation;
@@ -14,6 +12,7 @@ import com.ashuh.nusmoduleplanner.common.domain.model.module.Module;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.ModuleReading;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonType;
+import com.ashuh.nusmoduleplanner.common.util.ColorScheme;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +22,7 @@ import java.util.Map;
 public class ModuleReadingAggregate {
     @NonNull
     @Embedded
-    private final ModuleReadingEntity timetableEntry;
+    private final ModuleReadingEntity moduleReading;
     @NonNull
     @Relation(
             parentColumn = "id",
@@ -39,10 +38,10 @@ public class ModuleReadingAggregate {
     )
     private final ModuleAggregate moduleAggregate;
 
-    public ModuleReadingAggregate(@NonNull ModuleReadingEntity timetableEntry,
+    public ModuleReadingAggregate(@NonNull ModuleReadingEntity moduleReading,
                                   @NonNull List<LessonNoMappingEntity> lessonNoMappings,
                                   @NonNull ModuleAggregate moduleAggregate) {
-        this.timetableEntry = requireNonNull(timetableEntry);
+        this.moduleReading = requireNonNull(moduleReading);
         this.lessonNoMappings = requireNonNull(lessonNoMappings);
         this.moduleAggregate = requireNonNull(moduleAggregate);
     }
@@ -50,10 +49,10 @@ public class ModuleReadingAggregate {
     @NonNull
     public static ModuleReadingAggregate fromDomain(@NonNull ModuleReading moduleReading) {
         Semester semester = moduleReading.getSemester();
-        int color = moduleReading.getColor().toArgb();
+        int colorId = moduleReading.getColorId().getValue();
         String moduleCode = moduleReading.getModule().getModuleCode();
         ModuleReadingEntity moduleReadingEntity
-                = new ModuleReadingEntity(moduleCode, semester, color);
+                = new ModuleReadingEntity(moduleCode, semester, colorId);
 
         List<LessonNoMappingEntity> mappings = new ArrayList<>();
         moduleReading.getLessonNoMapping().forEach((lessonType, lessonNo) -> {
@@ -68,8 +67,8 @@ public class ModuleReadingAggregate {
     @NonNull
     public ModuleReading toDomain() {
         Module module = moduleAggregate.toDomain();
-        Semester semester = timetableEntry.getSemester();
-        Color color = Color.valueOf(timetableEntry.getColor());
+        Semester semester = moduleReading.getSemester();
+        ColorScheme.Index colorId = new ColorScheme.Index(moduleReading.getColorId());
 
         Map<LessonType, String> lessonTypeToLessonNo = new HashMap<>();
         lessonNoMappings.forEach(mapping -> {
@@ -77,12 +76,12 @@ public class ModuleReadingAggregate {
             String lessonNo = mapping.getLessonNo();
             lessonTypeToLessonNo.put(lessonType, lessonNo);
         });
-        return new ModuleReading(module, semester, lessonTypeToLessonNo, color);
+        return new ModuleReading(module, semester, lessonTypeToLessonNo, colorId);
     }
 
     @NonNull
-    public ModuleReadingEntity getTimetableEntry() {
-        return timetableEntry;
+    public ModuleReadingEntity getModuleReading() {
+        return moduleReading;
     }
 
     @NonNull

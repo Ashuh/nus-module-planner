@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ashuh.nusmoduleplanner.R;
 import com.ashuh.nusmoduleplanner.common.MainActivity;
 import com.ashuh.nusmoduleplanner.common.NusModulePlannerApplication;
+import com.ashuh.nusmoduleplanner.common.data.preferences.SharedPreferencesManager;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonType;
 import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
@@ -40,6 +41,7 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
     private TimetableView timetableView;
     private TimetableViewModel viewModel;
     private ModuleReadingAdapter adapter;
+    private TimetableLoader loader;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,11 +54,15 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
         ModuleRepository moduleRepository
                 = ((NusModulePlannerApplication) requireActivity().getApplication())
                 .appContainer.moduleRepository;
+        SharedPreferencesManager preferenceRepository
+                = ((NusModulePlannerApplication) requireActivity().getApplication())
+                .appContainer.sharedPreferencesManager;
         viewModel = new ViewModelProvider(this,
-                new TimetableViewModelFactory(moduleRepository, semester))
+                new TimetableViewModelFactory(moduleRepository, preferenceRepository, semester))
                 .get(TimetableViewModel.class);
         viewModel.getState().observe(this, this);
         adapter = new ModuleReadingAdapter(semInt);
+        loader = new TimetableLoader();
     }
 
     @Nullable
@@ -72,6 +78,7 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
         progressIndicator = view.findViewById(R.id.progress_indicator);
         timetableView = view.findViewById(R.id.revolving_weekview);
         timetableView.setOnEventClickListener(this);
+        timetableView.setWeekViewLoader(loader);
         RecyclerView recyclerView = view.findViewById(R.id.timetable_recycler_view);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -113,7 +120,8 @@ public class TimetablePageFragment extends Fragment implements WeekView.EventCli
         timetablePageContainer.setVisibility(View.VISIBLE);
         progressIndicator.hide();
         adapter.setModuleReadings(state.getModuleReadings());
-        timetableView.setAssignedModules(state.getLessonOccurrences());
+        loader.setOccurrences(state.getLessonOccurrences());
+        timetableView.notifyDatasetChanged();
     }
 
     public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
