@@ -49,7 +49,7 @@ public class ModuleReadingAggregate {
     @NonNull
     public static ModuleReadingAggregate fromDomain(@NonNull ModuleReading moduleReading) {
         Semester semester = moduleReading.getSemester();
-        byte colorId = moduleReading.getColorId().getValue();
+        int colorId = moduleReading.getColorId().getValue();
         String moduleCode = moduleReading.getModule().getModuleCode();
         ModuleReadingEntity moduleReadingEntity
                 = new ModuleReadingEntity(moduleCode, semester, colorId);

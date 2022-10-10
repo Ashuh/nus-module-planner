@@ -161,9 +161,9 @@ public enum ColorScheme {
     }
 
     public static class Index {
-        private final byte value;
+        private final int value;
 
-        public Index(byte value) {
+        public Index(int value) {
             if (value < 0 || value >= SIZE) {
                 throw new IllegalArgumentException("Index must be between 0 and " + (SIZE - 1));
             }
@@ -174,7 +174,7 @@ public enum ColorScheme {
             return new Index((byte) (Math.random() * SIZE));
         }
 
-        public byte getValue() {
+        public int getValue() {
             return value;
         }
     }
