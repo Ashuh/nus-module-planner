@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
+import com.ashuh.nusmoduleplanner.common.util.ColorScheme.Index;
 
 public class UpdateColorUseCase {
     @NonNull
@@ -16,6 +17,6 @@ public class UpdateColorUseCase {
     }
 
     public void execute(@NonNull String moduleCode, @NonNull Semester semester, int newColorId) {
-        moduleRepository.updateColor(moduleCode, semester, newColorId);
+        moduleRepository.updateColor(moduleCode, semester, new Index(newColorId));
     }
 }

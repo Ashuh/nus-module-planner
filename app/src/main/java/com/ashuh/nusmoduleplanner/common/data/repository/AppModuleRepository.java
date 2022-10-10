@@ -13,6 +13,7 @@ import com.ashuh.nusmoduleplanner.common.domain.model.module.ModuleReading;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.Semester;
 import com.ashuh.nusmoduleplanner.common.domain.model.module.lesson.LessonType;
 import com.ashuh.nusmoduleplanner.common.domain.repository.ModuleRepository;
+import com.ashuh.nusmoduleplanner.common.util.ColorScheme.Index;
 
 import java.util.List;
 
@@ -79,9 +80,10 @@ public class AppModuleRepository implements ModuleRepository {
 
     @Override
     public void updateColor(@NonNull String moduleCode, @NonNull Semester semester,
-                            int newColorId) {
+                            @NonNull Index newColorId) {
         requireNonNull(moduleCode);
         requireNonNull(semester);
-        localDataSource.updateColor(moduleCode, semester, newColorId);
+        requireNonNull(newColorId);
+        localDataSource.updateColor(moduleCode, semester, newColorId.getValue());
     }
 }
