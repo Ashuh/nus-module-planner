@@ -40,7 +40,6 @@ import java.util.stream.Collectors;
 import me.jlurena.revolvingweekview.DayTime;
 
 public class TimetableViewModel extends ViewModel {
-    private static final String FORMAT_LESSON_OCCURRENCE_NAME = "%s\n[%s] %s";
     private static final String FORMAT_DATE_RANGE = "%s-%s";
     private static final String FORMAT_SINGLE_WEEK = "Week %d";
     private static final String FORMAT_CONTINUOUS_WEEKS = "Weeks %d-%d";
@@ -151,13 +150,8 @@ public class TimetableViewModel extends ViewModel {
             LessonType lessonType, String lessonNo, int color) {
         DayTime startTime = convertTime(occurrence.getDay(), occurrence.getStartTime());
         DayTime endTime = convertTime(occurrence.getDay(), occurrence.getEndTime());
-        String name = String.format(FORMAT_LESSON_OCCURRENCE_NAME, moduleCode,
-                lessonType.getShortName(), lessonNo);
-        UiTimetableLessonOccurrence uiOccurrence
-                = new UiTimetableLessonOccurrence(name, occurrence.getVenue(), startTime,
-                endTime, moduleCode, lessonType, lessonNo);
-        uiOccurrence.setColor(color);
-        return uiOccurrence;
+        return UiTimetableLessonOccurrence.create(occurrence.getVenue(), startTime, endTime,
+                moduleCode, lessonType, lessonNo, color);
     }
 
     private static DayTime convertTime(DayOfWeek day, LocalTime time) {

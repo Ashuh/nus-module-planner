@@ -12,11 +12,14 @@ import androidx.gridlayout.widget.GridLayout;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 
+import com.ashuh.nusmoduleplanner.R;
 import com.ashuh.nusmoduleplanner.common.util.ColorScheme;
+import com.ashuh.nusmoduleplanner.timetable.presentation.TimetableView;
 
 public class ColorSchemePreference extends Preference {
     private static final int MARGIN_DP = 4;
 
+    private final TimetableSampleDataLoader loader = new TimetableSampleDataLoader();
     private ColorScheme colorScheme;
 
     public ColorSchemePreference(@NonNull Context context, @Nullable AttributeSet attrs) {
@@ -31,9 +34,12 @@ public class ColorSchemePreference extends Preference {
 
     @Override
     public void onBindViewHolder(@NonNull PreferenceViewHolder holder) {
-        GridLayout gridLayout = (GridLayout) holder.itemView;
+        TimetableView timetableView = (TimetableView) holder.findViewById(R.id.timetable);
+        GridLayout gridLayout = (GridLayout) holder.findViewById(R.id.grid);
 
         if (gridLayout.getChildCount() == 0) {
+            timetableView.setWeekViewLoader(loader);
+
             for (int i = 0; i < ColorScheme.values().length; i++) {
                 ColorScheme colorScheme = ColorScheme.values()[i];
                 ColorSchemeView colorSchemeView = generateColorSchemeView(colorScheme, i);
@@ -45,6 +51,15 @@ public class ColorSchemePreference extends Preference {
                 child.setSelected(this.colorScheme == child.getColorScheme());
             }
         }
+
+        loader.setColorScheme(colorScheme);
+        timetableView.notifyDatasetChanged();
+    }
+
+    @Override
+    protected void onSetInitialValue(@Nullable Object defaultValue) {
+        ColorScheme colorScheme = ColorScheme.valueOf(getPersistedString((String) defaultValue));
+        setColorScheme(colorScheme);
     }
 
     private ColorSchemeView generateColorSchemeView(ColorScheme colorScheme, int index) {
@@ -78,11 +93,5 @@ public class ColorSchemePreference extends Preference {
                 MARGIN_DP,
                 getContext().getResources().getDisplayMetrics()
         );
-    }
-
-    @Override
-    protected void onSetInitialValue(@Nullable Object defaultValue) {
-        ColorScheme colorScheme = ColorScheme.valueOf(getPersistedString((String) defaultValue));
-        setColorScheme(colorScheme);
     }
 }
