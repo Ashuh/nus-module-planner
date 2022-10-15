@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.ashuh.nusmoduleplanner.timetable.presentation.TimetableView
+        android:id="@+id/timetable"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        app:dayBackgroundColor="#05000000"
+        app:eventTextColor="@android:color/white"
+        app:eventTextSize="10sp"
+        app:headerColumnPadding="8dp"
+        app:headerColumnTextColor="?android:attr/textColorPrimary"
+        app:headerRowBackgroundColor="?android:attr/colorBackground"
+        app:headerRowPadding="12dp"
+        app:horizontalFlingEnabled="false"
+        app:horizontalScrollingEnabled="false"
+        app:hourHeight="20dp"
+        app:hourSeparatorColor="#00FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:maxTime="16"
+        app:minTime="10"
+        app:noOfVisibleDays="5"
+        app:overlappingEventGap="2dp"
+        app:showHeaderBottomLine="true"
+        app:textSize="12sp"
+        app:todayBackgroundColor="#1848adff"
+        tools:weekendHeaderTextColor="#FFFFFF" />
+
+    <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/grid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        app:columnCount="2"
+        app:layout_constraintTop_toBottomOf="@id/timetable" />
+</androidx.constraintlayout.widget.ConstraintLayout>

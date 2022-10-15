@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <SwitchPreferenceCompat
         app:key="notifications"
-        app:title="Enable message notifications"/>
+        app:title="Enable message notifications" />
 
     <Preference
         app:key="feedback"
-        app:title="Send feedback"
-        app:summary="Report technical issues or suggest new features"/>
+        app:summary="Report technical issues or suggest new features"
+        app:title="Send feedback" />
 
-    <ListPreference
+    <Preference
         app:key="color_scheme"
-        app:summary="Select a color scheme"
-        app:title="Color Scheme" />
-
+        app:summary="Liven up your timetable with different color schemes!"
+        app:title="Theme"
+        android:icon="@drawable/ic_outline_palette_24"/>
 </PreferenceScreen>

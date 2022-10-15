@@ -19,6 +19,7 @@
     <color name="onBackground">#000000</color>
     <color name="onSurface">#000000</color>
     <color name="onError">#FFFFFF</color>
+    <color name="colorOnBackgroundSelected">#d3d6db</color>
 
     <color name="dark_background">#121212</color>
     <color name="dark_surface">#121212</color>
@@ -28,4 +29,5 @@
     <color name="dark_onBackground">#FFFFFF</color>
     <color name="dark_onSurface">#FFFFFF</color>
     <color name="dark_onError">#000000</color>
+    <color name="dark_colorOnBackgroundSelected">#474747</color>
 </resources>
